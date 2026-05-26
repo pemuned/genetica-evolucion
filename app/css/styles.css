@@ -291,6 +291,19 @@ body.a11y-high-contrast .ref-list li::before {
     color: #ffffff;
 }
 
+body.a11y-high-contrast .prelab-slider-nav,
+body.a11y-high-contrast .prelab-tab-btn,
+body.a11y-high-contrast .prelab-arrow-btn,
+body.a11y-high-contrast .prelab-tab-btn::after {
+    border-color: #ffffff !important;
+    background: #07131d !important;
+    color: #ffffff !important;
+}
+
+body.a11y-high-contrast .prelab-tab-btn.is-active::after {
+    background: #ffffff !important;
+}
+
 /* ============================================================
    TYPOGRAPHY
    ============================================================ */
@@ -482,6 +495,187 @@ hr {
     margin-bottom: 0;
 }
 
+/* ============================================================
+   PRELABORATORIO SLIDER
+   ============================================================ */
+.prelab-slider {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.prelab-slider-card {
+    padding-bottom: 36px;
+    min-height: 500px;
+}
+
+.prelab-slide {
+    display: none;
+}
+
+.prelab-slide.visible {
+    display: block;
+}
+
+.prelab-slider-nav {
+    display: grid;
+    grid-template-columns: minmax(130px, 160px) 1fr minmax(130px, 160px);
+    align-items: center;
+    gap: 14px;
+    padding: 10px 14px;
+    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.34);
+    background: var(--color-card-bg);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.prelab-arrow-container {
+    display: flex;
+    align-items: center;
+}
+
+.prelab-arrow-container#prelab-prev-btn {
+    justify-content: start;
+}
+
+.prelab-arrow-container#prelab-next-btn {
+    justify-content: end;
+}
+
+.prelab-arrow-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius-nav);
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffffff;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-speed) ease,
+        border-color var(--transition-speed) ease,
+        transform var(--transition-speed) ease,
+        color var(--transition-speed) ease;
+}
+
+.prelab-arrow-btn:hover:not(:disabled) {
+    background: rgba(173, 190, 181, 0.2);
+    border-color: rgba(255, 255, 255, 0.72);
+    transform: translateY(-1px);
+}
+
+.prelab-arrow-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.prelab-arrow-btn.prelab-arrow-btn--hint:not(:disabled) {
+    animation: prelab-next-hint-pulse 2.2s ease-in-out infinite;
+    border-color: rgba(173, 190, 181, 0.72);
+    box-shadow: 0 0 0 0 rgba(173, 190, 181, 0.24);
+}
+
+@keyframes prelab-next-hint-pulse {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 0 0 0 rgba(173, 190, 181, 0.26);
+    }
+
+    45% {
+        transform: translateY(0) scale(1.05);
+        box-shadow: 0 0 0 10px rgba(173, 190, 181, 0);
+    }
+}
+
+.prelab-arrow-icon {
+    display: inline-flex;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 0px solid rgba(255, 255, 255, 0.28);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.prelab-arrow-icon {
+    filter: url("#hand-drawn-filter");
+}
+
+.prelab-tab-list {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.prelab-tab-btn {
+    flex: 1 1 auto;
+    min-width: 100px;
+    max-width: 160px;
+    padding: 6px 10px 9px;
+    border: 0px solid rgba(255, 255, 255, 0.38);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.88);
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-align: center;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-speed) ease,
+        border-color var(--transition-speed) ease,
+        color var(--transition-speed) ease,
+        transform var(--transition-speed) ease;
+}
+
+.prelab-tab-btn::after {
+    content: '';
+    display: block;
+    width: min(54px, 70%);
+    height: 14px;
+    margin: 7px auto 0;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.66);
+    border: 1px solid rgba(255, 255, 255, 0.36);
+}
+
+.prelab-tab-btn:hover {
+    border-color: rgba(255, 255, 255, 0.65);
+    background: rgba(255, 255, 255, 0.13);
+}
+
+.prelab-tab-btn.is-active {
+    background: rgba(173, 190, 181, 0.18);
+    color: #ffffff;
+    border-color: rgba(173, 190, 181, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.38);
+}
+
+.prelab-tab-btn.is-active::after {
+    background: rgba(173, 190, 181, 0.75);
+    border-color: rgba(255, 255, 255, 0.8);
+}
+
+.prelab-tab-btn:focus-visible,
+.prelab-arrow-btn:focus-visible {
+    outline: 3px solid #f8ff9a;
+    outline-offset: 2px;
+}
+
 /* References & Credits list */
 .ref-list {
     list-style: none;
@@ -618,6 +812,10 @@ hr {
         animation: none;
     }
 
+    .prelab-arrow-btn.prelab-arrow-btn--hint:not(:disabled) {
+        animation: none;
+    }
+
     .mouse-item {
         animation: none;
     }
@@ -688,6 +886,48 @@ hr {
 
     68% {
         transform: scaleX(var(--mouse-flip)) translateY(1px) rotate(0.7deg);
+    }
+}
+
+/* ============================================================
+   RESPONSIVE  —  ≤ 980px  (prelab slider dots)
+   ============================================================ */
+@media (max-width: 980px) {
+    .prelab-tab-btn {
+        flex: 0 0 14px;
+        min-width: 14px;
+        max-width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        padding: 0;
+        font-size: 0;
+        background: rgba(255, 255, 255, 0.22);
+        border: 1.5px solid rgba(255, 255, 255, 0.45);
+        transition:
+            background-color var(--transition-speed) ease,
+            border-color var(--transition-speed) ease,
+            transform var(--transition-speed) ease;
+    }
+
+    .prelab-tab-btn::after {
+        display: none;
+    }
+
+    .prelab-tab-btn:hover {
+        background: rgba(255, 255, 255, 0.42);
+        border-color: rgba(255, 255, 255, 0.7);
+        transform: scale(1.2);
+    }
+
+    .prelab-tab-btn.is-active {
+        background: var(--color-accent);
+        border-color: var(--color-accent);
+        transform: scale(1.3);
+    }
+
+    .prelab-tab-list {
+        gap: 10px;
+        justify-content: center;
     }
 }
 
@@ -849,6 +1089,16 @@ hr {
     .a11y-btn {
         font-size: 0.78rem;
         padding: 6px 8px;
+    }
+
+    .prelab-slider-nav {
+        grid-template-columns: minmax(60px, auto) 1fr minmax(60px, auto);
+        gap: 10px;
+        padding: 10px 12px;
+    }
+
+    .prelab-slider-card {
+        padding-bottom: 24px;
     }
 }
 

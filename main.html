@@ -2,15 +2,49 @@
 <html lang="es">
 
 <head>
+    <!-- meta description -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Genética y Evolución – Clona tu propio ratón" />
+    <meta name="title" content="Genética y Evolución – Clona tu propio ratón" />
+    <meta name="keywords" content="biotecnología, genética, evolución, clonación, laboratorio, prelaboratorio, autoevaluación" />
+    <meta name="author"
+        content="Programa de Producción Electrónica Multimedial (PEM) - Universidad Estatal a Distancia (UNED)">
+    <!-- og -->
+    <meta property="og:title" content="Genética y Evolución – Clona tu propio ratón">
+    <meta property="og:description"
+        content="Este material está diseñado especialmente para personas docentes de biología, brindando una herramienta dinámica y enriquecedora para la enseñanza de conceptos clave de genética y evolución. Su propósito es brindar un espacio interactivo en el que las personas educadoras puedan explorar, experimentar y descubrir métodos innovadores para abordar la genética y evolución en el contexto de la vida cotidiana.">
+    <meta property="og:image" content="https://multimedia.uned.ac.cr/pem/genetica-y-evolucion/og-image.png">
+    <meta property="og:url" content="https://multimedia.uned.ac.cr/pem/genetica-y-evolucion/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_ES">
+    <meta property="og:site_name" content="Genética y Evolución – Clona tu propio ratón">
+
     <title>Genética y Evolución – Clona tu propio ratón</title>
-    <link rel="icon" href="app/img/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="app/css/styles.css" />
 </head>
 
 <body>
+
+    <svg width="0" height="0" aria-hidden="true" focusable="false"
+        style="position:absolute; left:-9999px; overflow:hidden;">
+        <filter xmlns="http://www.w3.org/2000/svg" id="hand-drawn-filter" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence id="prefix__turb" type="fractalNoise" baseFrequency="0.02 0.06" numOctaves="2" seed="2"
+                result="turb">
+                <animate attributeName="seed" from="2" to="20" dur="4s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in2="turb" in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G" />
+            <feComponentTransfer>
+                <feFuncR type="table" tableValues="0 0.5 1" />
+                <feFuncG type="table" tableValues="0 0.5 1" />
+                <feFuncB type="table" tableValues="0 0.5 1" />
+                <feFuncA type="table" tableValues="0 0.5 1" />
+            </feComponentTransfer>
+            <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" />
+            <feComposite in2="SourceGraphic" operator="in" />
+        </filter>
+    </svg>
 
     <div class="app-layout">
         <!-- ======================================================
@@ -113,36 +147,118 @@
             <section id="pre-lab" class="content-section" role="region" aria-labelledby="pre-lab-title">
                 <h2 class="section-title" id="pre-lab-title">Prelaboratorio</h2>
 
-                <div class="content-card">
-                    <h3 class="card-heading">
-                        Conceptos previos y preparación experimental
-                    </h3>
-                    <div class="card-body">
-                        <p>
-                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Volutpat
-                            diam ut venenatis tellus in metus vulputate eu. Faucibus vitae
-                            aliquet nec ullamcorper sit amet risus nullam. Id aliquet risus
-                            feugiat in ante metus dictum at tempor. Fermentum iaculis eu non
-                            diam phasellus vestibulum lorem sed risus. Aliquet eget sit amet
-                            tellus cras adipiscing enim eu.
-                        </p>
-                        <p>
-                            Diam volutpat commodo sed egestas egestas. Purus gravida quis
-                            blandit turpis cursus in hac habitasse platea. Blandit libero
-                            volutpat sed cras ornare arcu dui vivamus arcu. Nulla facilisi
-                            nullam vehicula ipsum a arcu cursus vitae. Diam sit amet nisl
-                            suscipit adipiscing bibendum est ultricies integer. Quam
-                            pellentesque nec nam aliquam sem et tortor consequat id. Porta
-                            lorem mollis aliquam ut porttitor leo a diam sollicitudin.
-                        </p>
-                        <p>
-                            Vulputate enim nulla aliquet porttitor lacus. Erat imperdiet sed
-                            euismod nisi porta lorem. Proin nibh nisl condimentum id
-                            venenatis a condimentum vitae. Aliquam id diam maecenas
-                            ultricies mi eget mauris pharetra et. Nibh nisl condimentum id
-                            venenatis a condimentum vitae sapien pellentesque.
-                        </p>
+                <div class="prelab-slider" role="region" aria-label="Subsecciones de prelaboratorio">
+                    <div class="content-card prelab-slider-card">
+                        <article class="prelab-slide visible" id="prelab-slide-1" role="tabpanel"
+                            aria-labelledby="prelab-tab-1">
+                            <h3 class="card-heading">Objetivo general</h3>
+                            <div class="card-body">
+                                <p>
+                                    Presenta la meta central del prelaboratorio y explica por
+                                    qué esta etapa es clave antes de iniciar el trabajo
+                                    práctico.
+                                </p>
+                                <p>
+                                    Define qué debe comprender el estudiantado sobre
+                                    biotecnología y clonación para llegar al laboratorio con
+                                    un marco conceptual claro.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="prelab-slide" id="prelab-slide-2" role="tabpanel" aria-labelledby="prelab-tab-2"
+                            aria-hidden="true">
+                            <h3 class="card-heading">Logros esperados</h3>
+                            <div class="card-body">
+                                <p>
+                                    Describe los resultados de aprendizaje esperados al
+                                    completar la fase previa, incluyendo comprensión de
+                                    conceptos y manejo de vocabulario técnico.
+                                </p>
+                                <p>
+                                    Incluye indicadores observables para verificar que cada
+                                    persona está lista para avanzar a actividades
+                                    experimentales.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="prelab-slide" id="prelab-slide-3" role="tabpanel" aria-labelledby="prelab-tab-3"
+                            aria-hidden="true">
+                            <h3 class="card-heading">Guía de lectura</h3>
+                            <div class="card-body">
+                                <p>
+                                    Resume los apartados y materiales sugeridos para repasar
+                                    antes de la práctica, priorizando fundamentos de genética
+                                    molecular y técnicas básicas.
+                                </p>
+                                <p>
+                                    Recomienda una secuencia de lectura para conectar teoría,
+                                    contexto ético y aplicación experimental de manera
+                                    progresiva.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="prelab-slide" id="prelab-slide-4" role="tabpanel" aria-labelledby="prelab-tab-4"
+                            aria-hidden="true">
+                            <h3 class="card-heading">Desarrollo temático</h3>
+                            <div class="card-body">
+                                <p>
+                                    Organiza los contenidos de la sección en bloques para
+                                    facilitar la transición hacia el laboratorio y la
+                                    autoevaluación posterior.
+                                </p>
+                                <p>
+                                    Integra conceptos, habilidades y preguntas orientadoras
+                                    que funcionarán como puente para las actividades de
+                                    aplicación.
+                                </p>
+                            </div>
+                        </article>
                     </div>
+
+                    <div class="prelab-slider-nav" role="navigation"
+                        aria-label="Navegación de subsecciones prelaboratorio">
+                        <div class="prelab-arrow-container" id="prelab-prev-btn">
+                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="prev"
+                                aria-label="Ir a subsección anterior" title="Anterior">
+                                <span class="prelab-arrow-icon" aria-hidden="true">
+                                    <img src="app/img/arrow-left.svg" alt="Flecha apuntando a la izquierda">
+                                </span>
+                            </button>
+                        </div>
+
+                        <div class="prelab-tab-list" role="tablist" aria-label="Subsecciones de prelaboratorio">
+                            <button class="prelab-tab-btn is-active" id="prelab-tab-1" type="button" role="tab"
+                                aria-selected="true" aria-controls="prelab-slide-1" tabindex="0" data-prelab-tab="0">
+                                Objetivo general
+                            </button>
+                            <button class="prelab-tab-btn" id="prelab-tab-2" type="button" role="tab"
+                                aria-selected="false" aria-controls="prelab-slide-2" tabindex="-1" data-prelab-tab="1">
+                                Logros esperados
+                            </button>
+                            <button class="prelab-tab-btn" id="prelab-tab-3" type="button" role="tab"
+                                aria-selected="false" aria-controls="prelab-slide-3" tabindex="-1" data-prelab-tab="2">
+                                Guía de lectura
+                            </button>
+                            <button class="prelab-tab-btn" id="prelab-tab-4" type="button" role="tab"
+                                aria-selected="false" aria-controls="prelab-slide-4" tabindex="-1" data-prelab-tab="3">
+                                Desarrollo temático
+                            </button>
+                        </div>
+
+                        <div class="prelab-arrow-container" id="prelab-next-btn">
+                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="next"
+                                aria-label="Ir a subsección siguiente" title="Siguiente">
+                                <span class="prelab-arrow-icon" aria-hidden="true">
+                                    <img src="app/img/arrow-right.svg" alt="Flecha apuntando a la derecha">
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="screen-reader-only" id="prelab-slider-status" aria-live="polite"></p>
                 </div>
             </section>
 
@@ -150,36 +266,114 @@
             <section id="lab" class="content-section" role="region" aria-labelledby="lab-title">
                 <h2 class="section-title" id="lab-title">Laboratorio</h2>
 
-                <div class="content-card">
-                    <h3 class="card-heading">
-                        Procedimiento y actividades de laboratorio
-                    </h3>
-                    <div class="card-body">
-                        <p>
-                            Amet risus nullam eget felis eget nunc lobortis mattis. Viverra
-                            aliquet eget sit amet tellus cras adipiscing enim. Pretium
-                            vulputate sapien nec sagittis aliquam. Lectus arcu bibendum at
-                            varius vel pharetra vel. Eget arcu dictum varius duis at
-                            consectetur lorem donec. Dolor sed viverra ipsum nunc aliquet
-                            bibendum enim facilisis. Sed blandit libero volutpat sed cras
-                            ornare arcu dui.
-                        </p>
-                        <p>
-                            Egestas fringilla phasellus faucibus scelerisque eleifend donec
-                            pretium. Ipsum faucibus vitae aliquet nec ullamcorper sit amet
-                            risus. Blandit turpis cursus in hac habitasse platea dictumst
-                            quisque sagittis. Ornare quam viverra orci sagittis eu volutpat
-                            odio facilisis. Arcu non odio euismod lacinia at quis risus sed.
-                        </p>
-                        <p>
-                            Tortor vitae purus faucibus ornare suspendisse sed nisi.
-                            Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at
-                            augue. Sodales ut etiam sit amet nisl purus in mollis nunc.
-                            Bibendum arcu vitae elementum curabitur vitae nunc sed velit
-                            dignissim. Adipiscing at in tellus integer feugiat scelerisque
-                            varius morbi enim.
-                        </p>
+                <div class="prelab-slider" role="region" aria-label="Subsecciones de laboratorio">
+                    <div class="content-card prelab-slider-card">
+                        <article class="prelab-slide visible" id="lab-slide-1" role="tabpanel"
+                            aria-labelledby="lab-tab-1">
+                            <h3 class="card-heading">Materiales</h3>
+                            <div class="card-body">
+                                <p>
+                                    Presenta los recursos, insumos y equipos necesarios para
+                                    desarrollar la práctica de laboratorio de forma segura y
+                                    ordenada.
+                                </p>
+                                <p>
+                                    Incluye recomendaciones de preparación previa para verificar
+                                    disponibilidad y estado de cada material antes de iniciar.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="prelab-slide" id="lab-slide-2" role="tabpanel" aria-labelledby="lab-tab-2"
+                            aria-hidden="true">
+                            <h3 class="card-heading">Procedimiento</h3>
+                            <div class="card-body">
+                                <p>
+                                    Describe la secuencia paso a paso de la actividad,
+                                    priorizando el seguimiento metodológico y los puntos de
+                                    control clave durante la ejecución.
+                                </p>
+                                <p>
+                                    Señala momentos para registrar observaciones y evidencias
+                                    que permitan contrastar resultados al finalizar.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="prelab-slide" id="lab-slide-3" role="tabpanel" aria-labelledby="lab-tab-3"
+                            aria-hidden="true">
+                            <h3 class="card-heading">Simulación</h3>
+                            <div class="card-body">
+                                <p>
+                                    Propone una actividad de simulación para anticipar decisiones
+                                    experimentales, identificar variables y reducir errores en la
+                                    práctica real.
+                                </p>
+                                <p>
+                                    Facilita la comprensión del comportamiento esperado del
+                                    experimento antes de manipular muestras y equipos.
+                                </p>
+                            </div>
+                        </article>
+
+                        <article class="prelab-slide" id="lab-slide-4" role="tabpanel" aria-labelledby="lab-tab-4"
+                            aria-hidden="true">
+                            <h3 class="card-heading">Reflexión</h3>
+                            <div class="card-body">
+                                <p>
+                                    Invita a analizar críticamente los hallazgos obtenidos,
+                                    relacionándolos con los objetivos de aprendizaje y el marco
+                                    conceptual de genética y evolución.
+                                </p>
+                                <p>
+                                    Integra preguntas orientadoras para valorar mejoras del
+                                    proceso y proponer nuevas rutas de exploración.
+                                </p>
+                            </div>
+                        </article>
                     </div>
+
+                    <div class="prelab-slider-nav" role="navigation"
+                        aria-label="Navegación de subsecciones de laboratorio">
+                        <div class="prelab-arrow-container" id="lab-prev-btn">
+                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="prev"
+                                aria-label="Ir a subsección anterior" title="Anterior">
+                                <span class="prelab-arrow-icon" aria-hidden="true">
+                                    <img src="app/img/arrow-left.svg" alt="Flecha apuntando a la izquierda">
+                                </span>
+                            </button>
+                        </div>
+
+                        <div class="prelab-tab-list" role="tablist" aria-label="Subsecciones de laboratorio">
+                            <button class="prelab-tab-btn is-active" id="lab-tab-1" type="button" role="tab"
+                                aria-selected="true" aria-controls="lab-slide-1" tabindex="0" data-prelab-tab="0">
+                                Materiales
+                            </button>
+                            <button class="prelab-tab-btn" id="lab-tab-2" type="button" role="tab" aria-selected="false"
+                                aria-controls="lab-slide-2" tabindex="-1" data-prelab-tab="1">
+                                Procedimiento
+                            </button>
+                            <button class="prelab-tab-btn" id="lab-tab-3" type="button" role="tab" aria-selected="false"
+                                aria-controls="lab-slide-3" tabindex="-1" data-prelab-tab="2">
+                                Simulación
+                            </button>
+                            <button class="prelab-tab-btn" id="lab-tab-4" type="button" role="tab" aria-selected="false"
+                                aria-controls="lab-slide-4" tabindex="-1" data-prelab-tab="3">
+                                Reflexión
+                            </button>
+                        </div>
+
+                        <div class="prelab-arrow-container" id="lab-next-btn">
+                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="next"
+                                aria-label="Ir a subsección siguiente" title="Siguiente">
+                                <span class="prelab-arrow-icon" aria-hidden="true">
+                                    <img src="app/img/arrow-right.svg" alt="Flecha apuntando a la derecha">
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p class="screen-reader-only" id="lab-slider-status" aria-live="polite"></p>
                 </div>
             </section>
 
@@ -264,7 +458,7 @@
 
                 <div class="content-card">
                     <h3 class="card-heading">Equipo de desarrollo y colaboradores</h3>
-                    <img src="app/img/logo_uned_blanco.svg" alt="Foto del equipo de desarrollo" id="credits-logo"/>
+                    <img src="app/img/logo-uned-white.svg" alt="Foto del equipo de desarrollo" id="credits-logo" />
                     <div class="card-body">
                         <ul class="ref-list">
                             <li>
@@ -291,40 +485,6 @@
         <!-- /main-content -->
     </div>
     <!-- /app-layout -->
-
-    <section class="a11y-toolbar" aria-label="Barra de accesibilidad">
-        <button class="a11y-btn" type="button" data-a11y-action="decrease-font" aria-label="Disminuir tamaño de letra"
-            title="Texto más pequeño (Alt+-)">
-            <span aria-hidden="true">A-</span>
-        </button>
-        <button class="a11y-btn" type="button" data-a11y-action="increase-font" aria-label="Aumentar tamaño de letra"
-            title="Texto más grande (Alt++)">
-            <span aria-hidden="true">A+</span>
-        </button>
-        <button class="a11y-btn" type="button" data-a11y-action="toggle-contrast" aria-pressed="false"
-            aria-label="Activar alto contraste" title="Alto contraste (Alt+C)">
-            <svg class="a11y-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8" />
-                <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" opacity="0.45" />
-            </svg>
-            <span class="a11y-label">Contraste</span>
-        </button>
-        <button class="a11y-btn" type="button" data-a11y-action="reset" aria-label="Restablecer accesibilidad"
-            title="Restablecer (Alt+0)">
-            <svg class="a11y-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path d="M4.8 12a7.2 7.2 0 0 1 12.2-5.2" fill="none" stroke="currentColor" stroke-width="2.05"
-                    stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M16.9 4.2h2.7v2.7" fill="none" stroke="currentColor" stroke-width="2.05" stroke-linecap="round"
-                    stroke-linejoin="round" />
-                <path d="M19.2 12a7.2 7.2 0 0 1-12.2 5.2" fill="none" stroke="currentColor" stroke-width="2.05"
-                    stroke-linecap="round" stroke-linejoin="round" />
-                <path d="M7.1 19.8H4.4v-2.7" fill="none" stroke="currentColor" stroke-width="2.05"
-                    stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <span class="a11y-label">Restablecer</span>
-        </button>
-        <p class="screen-reader-only" id="a11y-status" aria-live="polite"></p>
-    </section>
 
     <script src="app/js/accessibility.js"></script>
     <script src="app/js/app.js"></script>
