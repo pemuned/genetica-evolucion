@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <defs>
+    <pattern id="cell-tile" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+      <!-- Outer membrane ring -->
+      <circle cx="40" cy="40" r="30" fill="none" stroke="rgba(77,217,234,0.18)" stroke-width="1.5"/>
+      <!-- Inner nucleus -->
+      <circle cx="40" cy="40" r="11" fill="none" stroke="rgba(77,217,234,0.22)" stroke-width="1.2"/>
+      <!-- Small organelle dots -->
+      <circle cx="27" cy="32" r="2.2" fill="none" stroke="rgba(77,217,234,0.14)" stroke-width="1"/>
+      <circle cx="52" cy="48" r="2.2" fill="none" stroke="rgba(77,217,234,0.14)" stroke-width="1"/>
+      <circle cx="50" cy="28" r="1.5" fill="none" stroke="rgba(77,217,234,0.10)" stroke-width="0.8"/>
+      <circle cx="30" cy="52" r="1.5" fill="none" stroke="rgba(77,217,234,0.10)" stroke-width="0.8"/>
+    </pattern>
+  </defs>
+  <rect width="80" height="80" fill="url(#cell-tile)"/>
+</svg>
