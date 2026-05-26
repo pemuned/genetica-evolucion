@@ -96,6 +96,8 @@ body {
     font-weight: 400;
     line-height: 1.7;
     min-height: 100dvh;
+    position: relative;
+    overflow-x: hidden;
     color: var(--color-card-text);
 
     /* Gradient base */
@@ -110,6 +112,78 @@ body {
         linear-gradient(145deg, #0a2b3a 0%, var(--color-bg-mid) 34%, #0d3850 68%, #184d67 100%);
     background-repeat: repeat, no-repeat;
     background-attachment: fixed, fixed;
+}
+
+/* Subtle neo-biological animated glow layer */
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    inset: -12%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body::before {
+    background:
+        radial-gradient(42% 36% at 18% 24%, rgba(96, 225, 236, 0.20) 0%, transparent 72%),
+        radial-gradient(38% 34% at 82% 22%, rgba(80, 179, 214, 0.18) 0%, transparent 70%),
+        radial-gradient(48% 42% at 68% 78%, rgba(84, 203, 173, 0.16) 0%, transparent 76%),
+        radial-gradient(34% 30% at 26% 84%, rgba(54, 157, 193, 0.14) 0%, transparent 75%);
+    filter: blur(7px);
+    transform-origin: 50% 50%;
+    mix-blend-mode: screen;
+    opacity: 0.85;
+    animation: bio-bg-drift 24s ease-in-out infinite alternate;
+}
+
+body::after {
+    background:
+        radial-gradient(120% 85% at 50% 10%, rgba(110, 233, 246, 0.085) 0%, transparent 62%),
+        linear-gradient(125deg, rgba(120, 236, 245, 0.05) 0%, transparent 38%, rgba(85, 204, 184, 0.045) 62%, transparent 100%),
+        conic-gradient(from 0deg at 50% 50%, rgba(120, 236, 245, 0.04), transparent 30%, rgba(120, 236, 245, 0.035), transparent 70%, rgba(120, 236, 245, 0.04));
+    filter: blur(1px);
+    mix-blend-mode: screen;
+    opacity: 0.78;
+    animation: bio-bg-breathe 12s ease-in-out infinite;
+}
+
+@keyframes bio-bg-drift {
+    0% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate3d(2.8%, -2.2%, 0) scale(1.05);
+    }
+
+    100% {
+        transform: translate3d(-2.1%, 1.8%, 0) scale(1.04);
+    }
+}
+
+@keyframes bio-bg-breathe {
+
+    0%,
+    100% {
+        opacity: 0.56;
+    }
+
+    50% {
+        opacity: 0.95;
+    }
+}
+
+body>* {
+    position: relative;
+    z-index: 1;
+}
+
+/* CREDITS */
+
+#credits-logo {
+    width: 120px;
+    margin: 20px;
 }
 
 /* ============================================================
@@ -376,6 +450,7 @@ hr {
     color: var(--color-accent);
     margin-bottom: 32px;
     letter-spacing: -0.01em;
+    text-shadow: 2px 2px 2px rgba(26, 26, 26, 0.8);
 }
 
 /* ============================================================
@@ -386,8 +461,8 @@ hr {
     border: 2px solid var(--color-card-border);
     border-radius: var(--radius-card);
     padding: 40px 44px;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
 
 .card-heading {
@@ -546,6 +621,11 @@ hr {
     .mouse-item {
         animation: none;
     }
+
+    body::before,
+    body::after {
+        animation: none;
+    }
 }
 
 .mouse-pattern-strip {
@@ -571,7 +651,7 @@ hr {
     display: block;
     flex: 0 0 clamp(110px, 9vw, 148px);
     height: clamp(110px, 9vw, 148px);
-    background-image: url('../img/mouse-trasnparent.png');
+    background-image: url('../img/mouse-transparent.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
