@@ -1,214 +1,331 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Genética y Evolución – Clona tu propio ratón" />
-  <title>Genética y Evolución – Clona tu propio ratón</title>
-  <link rel="stylesheet" href="app/css/styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Genética y Evolución – Clona tu propio ratón" />
+    <title>Genética y Evolución – Clona tu propio ratón</title>
+    <link rel="stylesheet" href="app/css/styles.css" />
 </head>
+
 <body>
 
-  <div class="app-layout">
-
-    <!-- ======================================================
-         SIDEBAR
+    <div class="app-layout">
+        <!-- ======================================================
+        SIDEBAR
     ====================================================== -->
-    <aside class="sidebar" role="navigation" aria-label="Navegación principal">
+        <aside class="sidebar" role="navigation" aria-label="Navegación principal">
+            <div class="brand-box" aria-label="Título del sitio">
+                <p class="brand-subtitle">Genética y evolución</p>
+                <hr>
+                <h1 class="brand-title">Clona tu propio ratón</h1>
+            </div>
 
-      <div class="brand-box" aria-label="Título del sitio">
-        <p class="brand-subtitle">Genética y evolución</p>
-        <h1 class="brand-title">Clona tu propio ratón</h1>
-      </div>
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+                aria-controls="sidebar-nav" type="button">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
 
-      <button
-        class="hamburger-btn"
-        id="hamburger-btn"
-        aria-label="Abrir menú"
-        aria-expanded="false"
-        aria-controls="sidebar-nav"
-        type="button"
-      >
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-      </button>
+            <nav class="sidebar-nav" id="sidebar-nav">
+                <button class="nav-btn active" data-target="introduction" aria-current="page" type="button">
+                    Introducción
+                </button>
 
-      <nav class="sidebar-nav" id="sidebar-nav">
-        <button
-          class="nav-btn active"
-          data-target="introduction"
-          aria-current="page"
-          type="button"
-        >Introducción</button>
+                <button class="nav-btn" data-target="pre-lab" type="button">
+                    Prelaboratorio
+                </button>
 
-        <button
-          class="nav-btn"
-          data-target="pre-lab"
-          type="button"
-        >Prelaboratorio</button>
+                <button class="nav-btn" data-target="lab" type="button">
+                    Laboratorio
+                </button>
 
-        <button
-          class="nav-btn"
-          data-target="lab"
-          type="button"
-        >Laboratorio</button>
+                <button class="nav-btn" data-target="self-evaluation" type="button">
+                    Autoevaluación
+                </button>
 
-        <button
-          class="nav-btn"
-          data-target="self-evaluation"
-          type="button"
-        >Autoevaluación</button>
+                <button class="nav-btn" data-target="references" type="button">
+                    Referencias
+                </button>
 
-        <button
-          class="nav-btn"
-          data-target="references"
-          type="button"
-        >Referencias</button>
+                <button class="nav-btn" data-target="credits" type="button">
+                    Créditos
+                </button>
+            </nav>
+        </aside>
 
-        <button
-          class="nav-btn"
-          data-target="credits"
-          type="button"
-        >Créditos</button>
-      </nav>
-
-    </aside>
-
-    <!-- ======================================================
-         MAIN CONTENT
+        <!-- ======================================================
+        MAIN CONTENT
     ====================================================== -->
-    <main class="main-content" id="main-content">
+        <main class="main-content" id="main-content">
+            <!-- ---- INTRODUCCIÓN ---- -->
+            <section id="introduction" class="content-section visible" role="region"
+                aria-labelledby="introduction-title">
+                <h2 class="section-title" id="introduction-title">Introducción</h2>
 
-      <!-- ---- INTRODUCCIÓN ---- -->
-      <section
-        id="introduction"
-        class="content-section visible"
-        role="region"
-        aria-labelledby="introduction-title"
-      >
-        <h2 class="section-title" id="introduction-title">Introducción</h2>
+                <div class="content-card">
+                    <h3 class="card-heading">
+                        ¿Qué es la biotecnología y cuáles son sus aplicaciones?
+                    </h3>
+                    <div class="card-body">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur. Ac libero nec augue at
+                            phasellus in quam. At justo ut vel sed massa fermentum lorem.
+                            Malesuada fermentum nunc est a faucibus. Morbi vitae dui egestas
+                            lorem nunc. Facilisis id sit dui lectus mus. Quisque ornare ut
+                            lectus scelerisque mollis enim. Aliquam vehicula ac felis
+                            aliquam. Cursus in ullamcorper mattis nulla. Enim porttitor odio
+                            id at vitae libero neque sit cursus. Sed auctor ultricies rutrum
+                            volutpat viverra nunc. Volutpat dictumst risus aliquet urna.
+                        </p>
+                        <p>
+                            Proin arcu at odio aliquam in laoreet. Egestas malesuada morbi
+                            tincidunt purus odio. Sagittis sed platea neque ante congue
+                            euismod massa cursus. Eget faucibus diam tempor sed donec eu vel
+                            quam. Eget adipiscing massa tempus orci egestas. Eget erat elit
+                            neque ut eget risus risus bibendum fermentum. Sed orci lobortis
+                            elementum pulvinar orci. Eget amet consectetur magna dui mauris
+                            semper pellentesque interdum. Non dignissim sed adipiscing dui
+                            lorem tincidunt morbi praesent. Aliquet et aliquam a tellus
+                            hendrerit scelerisque. Id amet amet cras eget eget. Integer
+                            pellentesque ut elementum ullamcorper. Cras quis ullamcorper
+                            quam imperdiet erat scelerisque vitae. Ac convallis gravida
+                            lectus vitae in interdum rhoncus. Sed sapien egestas sagittis
+                            commodo posuere nulla volutpat tellus tellus.
+                        </p>
+                        <p>
+                            Porttitor curabitur lorem phasellus quis. Iaculis suscipit ac
+                            egestas tempor neque odio. Et nulla nisi varius sapien tristique
+                            ut ut suspendisse etiam. Tristique varius elit tortor elementum
+                            suspendisse. Massa at blandit arcu lectus. Diam magna aenean
+                            quisque elementum et feugiat tempor eleifend. Magna eget amet
+                            arcu aenean sit diam sed. Enim risus aenean faucibus massa
+                            pretium facilisis aliquet. Diam nisl elit sed mattis.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-        <div class="content-card">
-          <h3 class="card-heading">¿Qué es la biotecnología y cuáles son sus aplicaciones?</h3>
-          <div class="card-body">
-            <p>Lorem ipsum dolor sit amet consectetur. Ac libero nec augue at phasellus in quam. At justo ut vel sed massa fermentum lorem. Malesuada fermentum nunc est a faucibus. Morbi vitae dui egestas lorem nunc. Facilisis id sit dui lectus mus. Quisque ornare ut lectus scelerisque mollis enim. Aliquam vehicula ac felis aliquam. Cursus in ullamcorper mattis nulla. Enim porttitor odio id at vitae libero neque sit cursus. Sed auctor ultricies rutrum volutpat viverra nunc. Volutpat dictumst risus aliquet urna.</p>
-            <p>Proin arcu at odio aliquam in laoreet. Egestas malesuada morbi tincidunt purus odio. Sagittis sed platea neque ante congue euismod massa cursus. Eget faucibus diam tempor sed donec eu vel quam. Eget adipiscing massa tempus orci egestas. Eget erat elit neque ut eget risus risus bibendum fermentum. Sed orci lobortis elementum pulvinar orci. Eget amet consectetur magna dui mauris semper pellentesque interdum. Non dignissim sed adipiscing dui lorem tincidunt morbi praesent. Aliquet et aliquam a tellus hendrerit scelerisque. Id amet amet cras eget eget. Integer pellentesque ut elementum ullamcorper. Cras quis ullamcorper quam imperdiet erat scelerisque vitae. Ac convallis gravida lectus vitae in interdum rhoncus. Sed sapien egestas sagittis commodo posuere nulla volutpat tellus tellus.</p>
-            <p>Porttitor curabitur lorem phasellus quis. Iaculis suscipit ac egestas tempor neque odio. Et nulla nisi varius sapien tristique ut ut suspendisse etiam. Tristique varius elit tortor elementum suspendisse. Massa at blandit arcu lectus. Diam magna aenean quisque elementum et feugiat tempor eleifend. Magna eget amet arcu aenean sit diam sed. Enim risus aenean faucibus massa pretium facilisis aliquet. Diam nisl elit sed mattis.</p>
-          </div>
-        </div>
-      </section>
+            <!-- ---- PRELABORATORIO ---- -->
+            <section id="pre-lab" class="content-section" role="region" aria-labelledby="pre-lab-title">
+                <h2 class="section-title" id="pre-lab-title">Prelaboratorio</h2>
 
-      <!-- ---- PRELABORATORIO ---- -->
-      <section
-        id="pre-lab"
-        class="content-section"
-        role="region"
-        aria-labelledby="pre-lab-title"
-      >
-        <h2 class="section-title" id="pre-lab-title">Prelaboratorio</h2>
+                <div class="content-card">
+                    <h3 class="card-heading">
+                        Conceptos previos y preparación experimental
+                    </h3>
+                    <div class="card-body">
+                        <p>
+                            Lorem ipsum dolor sit amet consectetur adipiscing elit. Volutpat
+                            diam ut venenatis tellus in metus vulputate eu. Faucibus vitae
+                            aliquet nec ullamcorper sit amet risus nullam. Id aliquet risus
+                            feugiat in ante metus dictum at tempor. Fermentum iaculis eu non
+                            diam phasellus vestibulum lorem sed risus. Aliquet eget sit amet
+                            tellus cras adipiscing enim eu.
+                        </p>
+                        <p>
+                            Diam volutpat commodo sed egestas egestas. Purus gravida quis
+                            blandit turpis cursus in hac habitasse platea. Blandit libero
+                            volutpat sed cras ornare arcu dui vivamus arcu. Nulla facilisi
+                            nullam vehicula ipsum a arcu cursus vitae. Diam sit amet nisl
+                            suscipit adipiscing bibendum est ultricies integer. Quam
+                            pellentesque nec nam aliquam sem et tortor consequat id. Porta
+                            lorem mollis aliquam ut porttitor leo a diam sollicitudin.
+                        </p>
+                        <p>
+                            Vulputate enim nulla aliquet porttitor lacus. Erat imperdiet sed
+                            euismod nisi porta lorem. Proin nibh nisl condimentum id
+                            venenatis a condimentum vitae. Aliquam id diam maecenas
+                            ultricies mi eget mauris pharetra et. Nibh nisl condimentum id
+                            venenatis a condimentum vitae sapien pellentesque.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-        <div class="content-card">
-          <h3 class="card-heading">Conceptos previos y preparación experimental</h3>
-          <div class="card-body">
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Volutpat diam ut venenatis tellus in metus vulputate eu. Faucibus vitae aliquet nec ullamcorper sit amet risus nullam. Id aliquet risus feugiat in ante metus dictum at tempor. Fermentum iaculis eu non diam phasellus vestibulum lorem sed risus. Aliquet eget sit amet tellus cras adipiscing enim eu.</p>
-            <p>Diam volutpat commodo sed egestas egestas. Purus gravida quis blandit turpis cursus in hac habitasse platea. Blandit libero volutpat sed cras ornare arcu dui vivamus arcu. Nulla facilisi nullam vehicula ipsum a arcu cursus vitae. Diam sit amet nisl suscipit adipiscing bibendum est ultricies integer. Quam pellentesque nec nam aliquam sem et tortor consequat id. Porta lorem mollis aliquam ut porttitor leo a diam sollicitudin.</p>
-            <p>Vulputate enim nulla aliquet porttitor lacus. Erat imperdiet sed euismod nisi porta lorem. Proin nibh nisl condimentum id venenatis a condimentum vitae. Aliquam id diam maecenas ultricies mi eget mauris pharetra et. Nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque.</p>
-          </div>
-        </div>
-      </section>
+            <!-- ---- LABORATORIO ---- -->
+            <section id="lab" class="content-section" role="region" aria-labelledby="lab-title">
+                <h2 class="section-title" id="lab-title">Laboratorio</h2>
 
-      <!-- ---- LABORATORIO ---- -->
-      <section
-        id="lab"
-        class="content-section"
-        role="region"
-        aria-labelledby="lab-title"
-      >
-        <h2 class="section-title" id="lab-title">Laboratorio</h2>
+                <div class="content-card">
+                    <h3 class="card-heading">
+                        Procedimiento y actividades de laboratorio
+                    </h3>
+                    <div class="card-body">
+                        <p>
+                            Amet risus nullam eget felis eget nunc lobortis mattis. Viverra
+                            aliquet eget sit amet tellus cras adipiscing enim. Pretium
+                            vulputate sapien nec sagittis aliquam. Lectus arcu bibendum at
+                            varius vel pharetra vel. Eget arcu dictum varius duis at
+                            consectetur lorem donec. Dolor sed viverra ipsum nunc aliquet
+                            bibendum enim facilisis. Sed blandit libero volutpat sed cras
+                            ornare arcu dui.
+                        </p>
+                        <p>
+                            Egestas fringilla phasellus faucibus scelerisque eleifend donec
+                            pretium. Ipsum faucibus vitae aliquet nec ullamcorper sit amet
+                            risus. Blandit turpis cursus in hac habitasse platea dictumst
+                            quisque sagittis. Ornare quam viverra orci sagittis eu volutpat
+                            odio facilisis. Arcu non odio euismod lacinia at quis risus sed.
+                        </p>
+                        <p>
+                            Tortor vitae purus faucibus ornare suspendisse sed nisi.
+                            Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at
+                            augue. Sodales ut etiam sit amet nisl purus in mollis nunc.
+                            Bibendum arcu vitae elementum curabitur vitae nunc sed velit
+                            dignissim. Adipiscing at in tellus integer feugiat scelerisque
+                            varius morbi enim.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-        <div class="content-card">
-          <h3 class="card-heading">Procedimiento y actividades de laboratorio</h3>
-          <div class="card-body">
-            <p>Amet risus nullam eget felis eget nunc lobortis mattis. Viverra aliquet eget sit amet tellus cras adipiscing enim. Pretium vulputate sapien nec sagittis aliquam. Lectus arcu bibendum at varius vel pharetra vel. Eget arcu dictum varius duis at consectetur lorem donec. Dolor sed viverra ipsum nunc aliquet bibendum enim facilisis. Sed blandit libero volutpat sed cras ornare arcu dui.</p>
-            <p>Egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Ipsum faucibus vitae aliquet nec ullamcorper sit amet risus. Blandit turpis cursus in hac habitasse platea dictumst quisque sagittis. Ornare quam viverra orci sagittis eu volutpat odio facilisis. Arcu non odio euismod lacinia at quis risus sed.</p>
-            <p>Tortor vitae purus faucibus ornare suspendisse sed nisi. Ullamcorper dignissim cras tincidunt lobortis feugiat vivamus at augue. Sodales ut etiam sit amet nisl purus in mollis nunc. Bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim. Adipiscing at in tellus integer feugiat scelerisque varius morbi enim.</p>
-          </div>
-        </div>
-      </section>
+            <!-- ---- AUTOEVALUACIÓN ---- -->
+            <section id="self-evaluation" class="content-section" role="region" aria-labelledby="self-evaluation-title">
+                <h2 class="section-title" id="self-evaluation-title">
+                    Autoevaluación
+                </h2>
 
-      <!-- ---- AUTOEVALUACIÓN ---- -->
-      <section
-        id="self-evaluation"
-        class="content-section"
-        role="region"
-        aria-labelledby="self-evaluation-title"
-      >
-        <h2 class="section-title" id="self-evaluation-title">Autoevaluación</h2>
+                <div class="content-card">
+                    <h3 class="card-heading">Evalúa tu comprensión del tema</h3>
+                    <div class="card-body">
+                        <p>
+                            Nibh nisl condimentum id venenatis a condimentum vitae sapien.
+                            Congue eu consequat ac felis donec et odio. Morbi tincidunt
+                            ornare massa eget egestas purus viverra. Mi quis hendrerit dolor
+                            magna eget est lorem. Velit dignissim sodales ut eu sem integer
+                            vitae justo.
+                        </p>
+                        <p>
+                            Senectus et netus et malesuada fames ac turpis egestas integer.
+                            Posuere morbi leo urna molestie at elementum eu facilisis. Nulla
+                            porttitor massa id neque aliquam vestibulum morbi blandit. Arcu
+                            cursus vitae congue mauris rhoncus aenean vel. Proin fermentum
+                            leo vel orci porta non pulvinar neque.
+                        </p>
+                        <p>
+                            Ullamcorper malesuada proin libero nunc consequat interdum
+                            varius sit. Nullam non nisi est sit amet facilisis magna. Diam
+                            vel quam elementum pulvinar etiam non quam lacus. Pellentesque
+                            id nibh tortor id aliquet lectus proin nibh nisl. Commodo
+                            ullamcorper a lacus vestibulum sed arcu non odio.
+                        </p>
+                    </div>
+                </div>
+            </section>
 
-        <div class="content-card">
-          <h3 class="card-heading">Evalúa tu comprensión del tema</h3>
-          <div class="card-body">
-            <p>Nibh nisl condimentum id venenatis a condimentum vitae sapien. Congue eu consequat ac felis donec et odio. Morbi tincidunt ornare massa eget egestas purus viverra. Mi quis hendrerit dolor magna eget est lorem. Velit dignissim sodales ut eu sem integer vitae justo.</p>
-            <p>Senectus et netus et malesuada fames ac turpis egestas integer. Posuere morbi leo urna molestie at elementum eu facilisis. Nulla porttitor massa id neque aliquam vestibulum morbi blandit. Arcu cursus vitae congue mauris rhoncus aenean vel. Proin fermentum leo vel orci porta non pulvinar neque.</p>
-            <p>Ullamcorper malesuada proin libero nunc consequat interdum varius sit. Nullam non nisi est sit amet facilisis magna. Diam vel quam elementum pulvinar etiam non quam lacus. Pellentesque id nibh tortor id aliquet lectus proin nibh nisl. Commodo ullamcorper a lacus vestibulum sed arcu non odio.</p>
-          </div>
-        </div>
-      </section>
+            <!-- ---- REFERENCIAS ---- -->
+            <section id="references" class="content-section" role="region" aria-labelledby="references-title">
+                <h2 class="section-title" id="references-title">Referencias</h2>
 
-      <!-- ---- REFERENCIAS ---- -->
-      <section
-        id="references"
-        class="content-section"
-        role="region"
-        aria-labelledby="references-title"
-      >
-        <h2 class="section-title" id="references-title">Referencias</h2>
+                <div class="content-card">
+                    <h3 class="card-heading">Fuentes bibliográficas y documentales</h3>
+                    <div class="card-body">
+                        <ul class="ref-list">
+                            <li>
+                                Lorem, I. (2020).
+                                <em>Biotecnología y sus aplicaciones modernas</em>. Editorial
+                                Científica. pp. 45–78.
+                            </li>
+                            <li>
+                                Ipsum, D., &amp; Dolor, S. (2019). Clonación somática en
+                                mamíferos: avances recientes.
+                                <em>Revista de Biología Molecular</em>, 34(2), 112–130.
+                            </li>
+                            <li>
+                                Consectetur, A. (2021).
+                                <em>Ingeniería genética: principios y técnicas</em> (3.ª ed.).
+                                Universidad Nacional.
+                            </li>
+                            <li>
+                                Adipiscing, E., Sed, D., &amp; Eiusmod, T. (2022). CRISPR-Cas9
+                                y el futuro de la edición genómica.
+                                <em>Nature Reviews Genetics</em>, 23(4), 220–238.
+                            </li>
+                            <li>
+                                Labore, M. (2018). Ética en la clonación de organismos
+                                superiores. <em>Bioética Internacional</em>, 15(1), 5–21.
+                            </li>
+                            <li>
+                                Aliqua, U. (2023).
+                                <em>Manual de técnicas de laboratorio en biología molecular</em>. Ediciones UNAM.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
 
-        <div class="content-card">
-          <h3 class="card-heading">Fuentes bibliográficas y documentales</h3>
-          <div class="card-body">
-            <ul class="ref-list">
-              <li>Lorem, I. (2020). <em>Biotecnología y sus aplicaciones modernas</em>. Editorial Científica. pp. 45–78.</li>
-              <li>Ipsum, D., &amp; Dolor, S. (2019). Clonación somática en mamíferos: avances recientes. <em>Revista de Biología Molecular</em>, 34(2), 112–130.</li>
-              <li>Consectetur, A. (2021). <em>Ingeniería genética: principios y técnicas</em> (3.ª ed.). Universidad Nacional.</li>
-              <li>Adipiscing, E., Sed, D., &amp; Eiusmod, T. (2022). CRISPR-Cas9 y el futuro de la edición genómica. <em>Nature Reviews Genetics</em>, 23(4), 220–238.</li>
-              <li>Labore, M. (2018). Ética en la clonación de organismos superiores. <em>Bioética Internacional</em>, 15(1), 5–21.</li>
-              <li>Aliqua, U. (2023). <em>Manual de técnicas de laboratorio en biología molecular</em>. Ediciones UNAM.</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+            <!-- ---- CRÉDITOS ---- -->
+            <section id="credits" class="content-section" role="region" aria-labelledby="credits-title">
+                <h2 class="section-title" id="credits-title">Créditos</h2>
 
-      <!-- ---- CRÉDITOS ---- -->
-      <section
-        id="credits"
-        class="content-section"
-        role="region"
-        aria-labelledby="credits-title"
-      >
-        <h2 class="section-title" id="credits-title">Créditos</h2>
+                <div class="content-card">
+                    <h3 class="card-heading">Equipo de desarrollo y colaboradores</h3>
+                    <div class="card-body">
+                        <ul class="ref-list">
+                            <li>
+                                <strong>Coordinación académica:</strong> Lorem Ipsum Dolor
+                            </li>
+                            <li>
+                                <strong>Diseño instruccional:</strong> Sit Amet Consectetur
+                            </li>
+                            <li><strong>Desarrollo web:</strong> Adipiscing Elit Sed</li>
+                            <li><strong>Ilustraciones:</strong> Do Eiusmod Tempor</li>
+                            <li>
+                                <strong>Revisión científica:</strong> Incididunt Ut Labore
+                            </li>
+                            <li>
+                                <strong>Institución:</strong> Universidad Lorem Ipsum,
+                                Facultad de Ciencias
+                            </li>
+                            <li><strong>Año:</strong> 2026</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <!-- /main-content -->
+    </div>
+    <!-- /app-layout -->
 
-        <div class="content-card">
-          <h3 class="card-heading">Equipo de desarrollo y colaboradores</h3>
-          <div class="card-body">
-            <ul class="ref-list">
-              <li><strong>Coordinación académica:</strong> Lorem Ipsum Dolor</li>
-              <li><strong>Diseño instruccional:</strong> Sit Amet Consectetur</li>
-              <li><strong>Desarrollo web:</strong> Adipiscing Elit Sed</li>
-              <li><strong>Ilustraciones:</strong> Do Eiusmod Tempor</li>
-              <li><strong>Revisión científica:</strong> Incididunt Ut Labore</li>
-              <li><strong>Institución:</strong> Universidad Lorem Ipsum, Facultad de Ciencias</li>
-              <li><strong>Año:</strong> 2026</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+    <section class="a11y-toolbar" aria-label="Barra de accesibilidad">
+        <button class="a11y-btn" type="button" data-a11y-action="decrease-font" aria-label="Disminuir tamaño de letra"
+            title="Texto más pequeño (Alt+-)">
+            <span aria-hidden="true">A-</span>
+        </button>
+        <button class="a11y-btn" type="button" data-a11y-action="increase-font" aria-label="Aumentar tamaño de letra"
+            title="Texto más grande (Alt++)">
+            <span aria-hidden="true">A+</span>
+        </button>
+        <button class="a11y-btn" type="button" data-a11y-action="toggle-contrast" aria-pressed="false"
+            aria-label="Activar alto contraste" title="Alto contraste (Alt+C)">
+            <svg class="a11y-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8" />
+                <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" opacity="0.45" />
+            </svg>
+            <span class="a11y-label">Contraste</span>
+        </button>
+        <button class="a11y-btn" type="button" data-a11y-action="reset" aria-label="Restablecer accesibilidad"
+            title="Restablecer (Alt+0)">
+            <svg class="a11y-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M4.8 12a7.2 7.2 0 0 1 12.2-5.2" fill="none" stroke="currentColor" stroke-width="2.05"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M16.9 4.2h2.7v2.7" fill="none" stroke="currentColor" stroke-width="2.05" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                <path d="M19.2 12a7.2 7.2 0 0 1-12.2 5.2" fill="none" stroke="currentColor" stroke-width="2.05"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M7.1 19.8H4.4v-2.7" fill="none" stroke="currentColor" stroke-width="2.05"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <span class="a11y-label">Restablecer</span>
+        </button>
+        <p class="screen-reader-only" id="a11y-status" aria-live="polite"></p>
+    </section>
 
-    </main><!-- /main-content -->
-
-  </div><!-- /app-layout -->
-
-  <script src="app/js/app.js"></script>
+    <script src="app/js/accessibility.js"></script>
+    <script src="app/js/app.js"></script>
 </body>
+
 </html>
