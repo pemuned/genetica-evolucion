@@ -135,7 +135,11 @@ function initSlider(sliderRoot) {
 
     tabs.forEach((tab, tabIndex) => {
       const isActive = tabIndex === currentIndex;
+      const isPrev = tabIndex === currentIndex - 1;
+      const isNext = tabIndex === currentIndex + 1;
       tab.classList.toggle("is-active", isActive);
+      tab.classList.toggle("is-prev", isPrev);
+      tab.classList.toggle("is-next", isNext);
       tab.setAttribute("aria-selected", String(isActive));
       tab.tabIndex = isActive ? 0 : -1;
     });

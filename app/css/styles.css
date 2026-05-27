@@ -940,10 +940,19 @@ hr {
 }
 
 /* ============================================================
-   RESPONSIVE  —  ≤ 980px  (prelab slider dots)
+   RESPONSIVE  —  ≤ 980px  (prelab slider: active label + flanking dots)
    ============================================================ */
 @media (max-width: 980px) {
+
+    /* Hide all tabs by default; only active and adjacent shown */
     .prelab-tab-btn {
+        display: none;
+    }
+
+    /* Adjacent (prev/next) tabs render as small indicator dots */
+    .prelab-tab-btn.is-prev,
+    .prelab-tab-btn.is-next {
+        display: block;
         flex: 0 0 14px;
         min-width: 14px;
         max-width: 14px;
@@ -959,25 +968,44 @@ hr {
             transform var(--transition-speed) ease;
     }
 
-    .prelab-tab-btn::after {
+    .prelab-tab-btn.is-prev::after,
+    .prelab-tab-btn.is-next::after {
         display: none;
     }
 
-    .prelab-tab-btn:hover {
+    .prelab-tab-btn.is-prev:hover,
+    .prelab-tab-btn.is-next:hover {
         background: rgba(255, 255, 255, 0.42);
         border-color: rgba(255, 255, 255, 0.7);
         transform: scale(1.2);
     }
 
+    /* Active tab: show with full desktop-style label */
     .prelab-tab-btn.is-active {
-        background: var(--color-accent);
-        border-color: var(--color-accent);
-        transform: scale(1.3);
+        display: block;
+        flex: 1 1 auto;
+        min-width: 100px;
+        max-width: 160px;
+        height: auto;
+        border-radius: 11px;
+        padding: 6px 10px 9px;
+        font-size: 0.8rem;
+        background: none;
+        color: #ffffff;
+        border: 0px solid rgba(255, 255, 255, 0.38);
+        transform: none;
+    }
+
+    .prelab-tab-btn.is-active::after {
+        display: block;
+        background: rgba(173, 190, 181, 0.75);
+        border-color: rgba(255, 255, 255, 0.8);
     }
 
     .prelab-tab-list {
         gap: 10px;
         justify-content: center;
+        align-items: center;
     }
 }
 
