@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Genética y Evolución – Clona tu propio ratón" />
     <meta name="title" content="Genética y Evolución – Clona tu propio ratón" />
-    <meta name="keywords" content="biotecnología, genética, evolución, clonación, laboratorio, prelaboratorio, autoevaluación" />
+    <meta name="keywords"
+        content="biotecnología, genética, evolución, clonación, laboratorio, prelaboratorio, autoevaluación" />
     <meta name="author"
         content="Programa de Producción Electrónica Multimedial (PEM) - Universidad Estatal a Distancia (UNED)">
     <!-- og -->
@@ -27,35 +28,16 @@
 
 <body>
 
-    <svg width="0" height="0" aria-hidden="true" focusable="false"
-        style="position:absolute; left:-9999px; overflow:hidden;">
-        <filter xmlns="http://www.w3.org/2000/svg" id="hand-drawn-filter" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence id="prefix__turb" type="fractalNoise" baseFrequency="0.02 0.06" numOctaves="2" seed="2"
-                result="turb">
-                <animate attributeName="seed" from="2" to="20" dur="4s" repeatCount="indefinite" />
-            </feTurbulence>
-            <feDisplacementMap in2="turb" in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G" />
-            <feComponentTransfer>
-                <feFuncR type="table" tableValues="0 0.5 1" />
-                <feFuncG type="table" tableValues="0 0.5 1" />
-                <feFuncB type="table" tableValues="0 0.5 1" />
-                <feFuncA type="table" tableValues="0 0.5 1" />
-            </feComponentTransfer>
-            <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" />
-            <feComposite in2="SourceGraphic" operator="in" />
-        </filter>
-    </svg>
-
     <div class="app-layout">
         <!-- ======================================================
         SIDEBAR
     ====================================================== -->
         <aside class="sidebar" role="navigation" aria-label="Navegación principal">
-            <div class="brand-box" aria-label="Título del sitio">
+            <a class="brand-box" href="index.html" aria-label="Ir al inicio">
                 <p class="brand-subtitle">Genética y evolución</p>
                 <hr>
                 <h1 class="brand-title">Clona tu propio ratón</h1>
-            </div>
+            </a>
 
             <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
                 aria-controls="sidebar-nav" type="button">
@@ -65,27 +47,28 @@
             </button>
 
             <nav class="sidebar-nav" id="sidebar-nav">
-                <button class="nav-btn active" data-target="introduction" aria-current="page" type="button">
+                <button class="nav-btn active spray-border" data-target="introduction" aria-current="page"
+                    type="button">
                     Introducción
                 </button>
 
-                <button class="nav-btn" data-target="pre-lab" type="button">
+                <button class="nav-btn spray-border" data-target="pre-lab" type="button">
                     Prelaboratorio
                 </button>
 
-                <button class="nav-btn" data-target="lab" type="button">
+                <button class="nav-btn spray-border" data-target="lab" type="button">
                     Laboratorio
                 </button>
 
-                <button class="nav-btn" data-target="self-evaluation" type="button">
+                <button class="nav-btn spray-border" data-target="self-evaluation" type="button">
                     Autoevaluación
                 </button>
 
-                <button class="nav-btn" data-target="references" type="button">
+                <button class="nav-btn spray-border" data-target="references" type="button">
                     Referencias
                 </button>
 
-                <button class="nav-btn" data-target="credits" type="button">
+                <button class="nav-btn spray-border" data-target="credits" type="button">
                     Créditos
                 </button>
             </nav>
@@ -100,7 +83,7 @@
                 aria-labelledby="introduction-title">
                 <h2 class="section-title" id="introduction-title">Introducción</h2>
 
-                <div class="content-card">
+                <div class="content-card spray-border">
                     <h3 class="card-heading">
                         ¿Qué es la biotecnología y cuáles son sus aplicaciones?
                     </h3>
@@ -148,7 +131,7 @@
                 <h2 class="section-title" id="pre-lab-title">Prelaboratorio</h2>
 
                 <div class="prelab-slider" role="region" aria-label="Subsecciones de prelaboratorio">
-                    <div class="content-card prelab-slider-card">
+                    <div class="content-card prelab-slider-card spray-border">
                         <article class="prelab-slide visible" id="prelab-slide-1" role="tabpanel"
                             aria-labelledby="prelab-tab-1">
                             <h3 class="card-heading">Objetivo general</h3>
@@ -218,10 +201,10 @@
                         </article>
                     </div>
 
-                    <div class="prelab-slider-nav" role="navigation"
+                    <div class="prelab-slider-nav spray-border" role="navigation"
                         aria-label="Navegación de subsecciones prelaboratorio">
                         <div class="prelab-arrow-container" id="prelab-prev-btn">
-                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="prev"
+                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="prev"
                                 aria-label="Ir a subsección anterior" title="Anterior">
                                 <span class="prelab-arrow-icon" aria-hidden="true">
                                     <img src="app/img/arrow-left.svg" alt="Flecha apuntando a la izquierda">
@@ -249,7 +232,7 @@
                         </div>
 
                         <div class="prelab-arrow-container" id="prelab-next-btn">
-                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="next"
+                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="next"
                                 aria-label="Ir a subsección siguiente" title="Siguiente">
                                 <span class="prelab-arrow-icon" aria-hidden="true">
                                     <img src="app/img/arrow-right.svg" alt="Flecha apuntando a la derecha">
@@ -267,7 +250,7 @@
                 <h2 class="section-title" id="lab-title">Laboratorio</h2>
 
                 <div class="prelab-slider" role="region" aria-label="Subsecciones de laboratorio">
-                    <div class="content-card prelab-slider-card">
+                    <div class="content-card prelab-slider-card spray-border">
                         <article class="prelab-slide visible" id="lab-slide-1" role="tabpanel"
                             aria-labelledby="lab-tab-1">
                             <h3 class="card-heading">Materiales</h3>
@@ -333,10 +316,10 @@
                         </article>
                     </div>
 
-                    <div class="prelab-slider-nav" role="navigation"
+                    <div class="prelab-slider-nav spray-border" role="navigation"
                         aria-label="Navegación de subsecciones de laboratorio">
                         <div class="prelab-arrow-container" id="lab-prev-btn">
-                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="prev"
+                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="prev"
                                 aria-label="Ir a subsección anterior" title="Anterior">
                                 <span class="prelab-arrow-icon" aria-hidden="true">
                                     <img src="app/img/arrow-left.svg" alt="Flecha apuntando a la izquierda">
@@ -364,7 +347,7 @@
                         </div>
 
                         <div class="prelab-arrow-container" id="lab-next-btn">
-                            <button class="prelab-arrow-btn" type="button" data-prelab-nav="next"
+                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="next"
                                 aria-label="Ir a subsección siguiente" title="Siguiente">
                                 <span class="prelab-arrow-icon" aria-hidden="true">
                                     <img src="app/img/arrow-right.svg" alt="Flecha apuntando a la derecha">
@@ -383,7 +366,7 @@
                     Autoevaluación
                 </h2>
 
-                <div class="content-card">
+                <div class="content-card spray-border">
                     <h3 class="card-heading">Evalúa tu comprensión del tema</h3>
                     <div class="card-body">
                         <p>
@@ -415,7 +398,7 @@
             <section id="references" class="content-section" role="region" aria-labelledby="references-title">
                 <h2 class="section-title" id="references-title">Referencias</h2>
 
-                <div class="content-card">
+                <div class="content-card spray-border">
                     <h3 class="card-heading">Fuentes bibliográficas y documentales</h3>
                     <div class="card-body">
                         <ul class="ref-list">
@@ -456,7 +439,7 @@
             <section id="credits" class="content-section" role="region" aria-labelledby="credits-title">
                 <h2 class="section-title" id="credits-title">Créditos</h2>
 
-                <div class="content-card">
+                <div class="content-card spray-border">
                     <h3 class="card-heading">Equipo de desarrollo y colaboradores</h3>
                     <img src="app/img/logo-uned-white.svg" alt="Foto del equipo de desarrollo" id="credits-logo" />
                     <div class="card-body">
@@ -486,6 +469,7 @@
     </div>
     <!-- /app-layout -->
 
+    <script src="app/js/svg-filters.js"></script>
     <script src="app/js/accessibility.js"></script>
     <script src="app/js/app.js"></script>
 </body>

@@ -29,27 +29,6 @@
 
 <body>
 
-  <svg width="0" height="0" aria-hidden="true" focusable="false"
-    style="position:absolute; left:-9999px; overflow:hidden;">
-    <filter xmlns="http://www.w3.org/2000/svg" id="hand-drawn-filter" x="-20%" y="-20%" width="140%" height="140%">
-      <feTurbulence id="prefix__turb" type="fractalNoise" baseFrequency="0.02 0.06" numOctaves="2" seed="2"
-        result="turb">
-        <animate attributeName="seed" from="2" to="20" dur="4s" repeatCount="indefinite" />
-      </feTurbulence>
-      <feDisplacementMap in2="turb" in="SourceGraphic" scale="5" xChannelSelector="R" yChannelSelector="G" />
-      <feComponentTransfer>
-        <feFuncR type="table" tableValues="0 0.5 1" />
-        <feFuncG type="table" tableValues="0 0.5 1" />
-        <feFuncB type="table" tableValues="0 0.5 1" />
-        <feFuncA type="table" tableValues="0 0.5 1" />
-      </feComponentTransfer>
-      <feColorMatrix values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0" />
-      <feComposite in2="SourceGraphic" operator="in" />
-    </filter>
-  </svg>
-
-
-
   <div class="frontbox-layout" id="frontbox-content">
     <section class="frontbox-card" aria-label="frontbox principal">
       <p class="frontbox-subtitle">Genética y evolución</p>
@@ -76,6 +55,7 @@
     </section>
   </div>
 
+  <script src="app/js/svg-filters.js"></script>
   <script src="app/js/accessibility.js"></script>
 
 </body>

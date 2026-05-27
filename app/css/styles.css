@@ -304,6 +304,55 @@ body.a11y-high-contrast .prelab-tab-btn.is-active::after {
     background: #ffffff !important;
 }
 
+/* SPRAY BORDER */
+
+.spray-border {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/*
+    CAPA DEL BORDE
+*/
+
+.spray-border::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: white;
+    filter: url(#spray-noise);
+    opacity: .75;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    /*
+    máscara:
+    crea un borde completo
+  */
+    padding: 2px;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    mask-composite: exclude;
+
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+
+    -webkit-mask-composite: xor;
+}
+
+.nav-btn.spray-border.active::after,
+.nav-btn.spray-border[aria-current="page"]::after,
+.content-card.spray-border::after,
+.prelab-slider-nav.spray-border::after,
+.prelab-arrow-btn.spray-border::after {
+    filter: url(#spray-hand-drawn);
+    padding: 3.5px;
+}
+
 /* ============================================================
    TYPOGRAPHY
    ============================================================ */
@@ -350,6 +399,7 @@ h3 {
     text-align: center;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
+    text-decoration: none;
 }
 
 .brand-subtitle {
@@ -380,7 +430,7 @@ h3 {
     width: 100%;
     padding: 13px 22px;
     background: var(--color-card-bg);
-    border: 2px solid var(--color-nav-border);
+    border: 0px solid var(--color-nav-border);
     border-radius: var(--radius-nav);
     color: var(--color-nav-text);
     font-family: var(--font-main);
@@ -471,7 +521,7 @@ hr {
    ============================================================ */
 .content-card {
     background: var(--color-card-bg);
-    border: 2px solid var(--color-card-border);
+    border: 0px solid var(--color-card-border);
     border-radius: var(--radius-card);
     padding: 40px 44px;
     backdrop-filter: blur(2px);
@@ -524,7 +574,7 @@ hr {
     gap: 14px;
     padding: 10px 14px;
     border-radius: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.34);
+    border: 0px solid rgba(255, 255, 255, 0.34);
     background: var(--color-card-bg);
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
@@ -549,7 +599,7 @@ hr {
     justify-content: center;
     gap: 10px;
     padding: 8px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    border: 0px solid rgba(255, 255, 255, 0.4);
     border-radius: var(--radius-nav);
     background: rgba(255, 255, 255, 0.04);
     color: #ffffff;
@@ -627,7 +677,7 @@ hr {
     padding: 6px 10px 9px;
     border: 0px solid rgba(255, 255, 255, 0.38);
     border-radius: 11px;
-    background: rgba(255, 255, 255, 0.03);
+    background: none;
     color: rgba(255, 255, 255, 0.88);
     font-family: var(--font-main);
     font-size: 0.8rem;
@@ -659,10 +709,10 @@ hr {
 }
 
 .prelab-tab-btn.is-active {
-    background: rgba(173, 190, 181, 0.18);
+    background: none;
     color: #ffffff;
     border-color: rgba(173, 190, 181, 0.92);
-    border: 1px solid rgba(255, 255, 255, 0.38);
+    border: 0px solid rgba(255, 255, 255, 0.38);
 }
 
 .prelab-tab-btn.is-active::after {
