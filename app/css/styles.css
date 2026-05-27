@@ -330,7 +330,7 @@ body.a11y-high-contrast .prelab-tab-btn.is-active::after {
     máscara:
     crea un borde completo
   */
-    padding: 2px;
+    padding: 1px;
     mask:
         linear-gradient(#000 0 0) content-box,
         linear-gradient(#000 0 0);
@@ -350,7 +350,7 @@ body.a11y-high-contrast .prelab-tab-btn.is-active::after {
 .prelab-slider-nav.spray-border::after,
 .prelab-arrow-btn.spray-border::after {
     filter: url(#spray-hand-drawn);
-    padding: 3.5px;
+    padding: 2px;
 }
 
 /* ============================================================
