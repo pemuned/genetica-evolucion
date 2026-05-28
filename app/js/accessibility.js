@@ -16,31 +16,37 @@ let settings = { ...defaultSettings };
 function buildToolbarMarkup() {
   return `
     <section class="a11y-toolbar" aria-label="Barra de accesibilidad">
-      <button class="a11y-btn" type="button" data-a11y-action="decrease-font" aria-label="Disminuir tamaño de letra"
-        title="Texto más pequeño (Alt+-)">
-        <span aria-hidden="true">A-</span>
+      <button class="a11y-toggle" type="button" data-a11y-toggle aria-expanded="false"
+        aria-controls="a11y-options" aria-label="Mostrar opciones de accesibilidad" title="Accesibilidad">
+        <img class="a11y-toggle-icon" src="app/img/web/accessibility.svg" alt="" aria-hidden="true" />
       </button>
-      <button class="a11y-btn" type="button" data-a11y-action="increase-font" aria-label="Aumentar tamaño de letra"
-        title="Texto más grande (Alt++)">
-        <span aria-hidden="true">A+</span>
-      </button>
-      <button class="a11y-btn" type="button" data-a11y-action="toggle-contrast" aria-pressed="false"
-        aria-label="Activar alto contraste" title="Alto contraste (Alt+C)">
-        <svg class="a11y-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8" />
-          <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" opacity="0.45" />
-        </svg>
-        <span class="a11y-label">Contraste</span>
-      </button>
-      <button class="a11y-btn" type="button" data-a11y-action="reset" aria-label="Restablecer accesibilidad"
-        title="Restablecer (Alt+0)">
+      <div class="a11y-options" id="a11y-options" hidden>
+        <button class="a11y-btn" type="button" data-a11y-action="decrease-font" aria-label="Disminuir tamaño de letra"
+          title="Texto más pequeño (Alt+-)">
+          <span aria-hidden="true">A-</span>
+        </button>
+        <button class="a11y-btn" type="button" data-a11y-action="increase-font" aria-label="Aumentar tamaño de letra"
+          title="Texto más grande (Alt++)">
+          <span aria-hidden="true">A+</span>
+        </button>
+        <button class="a11y-btn" type="button" data-a11y-action="toggle-contrast" aria-pressed="false"
+          aria-label="Activar alto contraste" title="Alto contraste (Alt+C)">
+          <svg class="a11y-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" opacity="0.45" />
+          </svg>
+          <span class="a11y-label">Contraste</span>
+        </button>
+        <button class="a11y-btn" type="button" data-a11y-action="reset" aria-label="Restablecer accesibilidad"
+          title="Restablecer (Alt+0)">
           <svg class="a11y-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" 
           stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
           <g id="SVGRepo_iconCarrier"> 
           <g clip-path="url(#clip0_429_11071)"> 
           <path d="M12 2.99982C16.9706 2.99982 21 7.02925 21 11.9998C21 16.9704 16.9706 20.9998 12 20.9998C7.02944 20.9998 3 16.9704 3 11.9998C3 9.17255 4.30367 6.64977 6.34267 4.99982" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M3 4.49982H7V8.49982" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_429_11071"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
-        <span class="a11y-label">Restablecer</span>
-      </button>
+          <span class="a11y-label">Restablecer</span>
+        </button>
+      </div>
       <p class="screen-reader-only" id="a11y-status" aria-live="polite"></p>
     </section>
   `;
@@ -75,6 +81,31 @@ function loadSettings() {
 
 function saveSettings() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+}
+
+function setOptionsVisibility(isOpen, { announce = false } = {}) {
+  const toolbar = document.querySelector(".a11y-toolbar");
+  const options = document.getElementById("a11y-options");
+  const toggleBtn = document.querySelector("[data-a11y-toggle]");
+  if (!toolbar || !options || !toggleBtn) return;
+
+  options.hidden = !isOpen;
+  toolbar.classList.toggle("is-open", isOpen);
+  toggleBtn.setAttribute("aria-expanded", String(isOpen));
+  toggleBtn.setAttribute(
+    "aria-label",
+    isOpen
+      ? "Ocultar opciones de accesibilidad"
+      : "Mostrar opciones de accesibilidad",
+  );
+
+  if (announce) {
+    announceStatus(
+      isOpen
+        ? "Opciones de accesibilidad visibles."
+        : "Opciones de accesibilidad ocultas.",
+    );
+  }
 }
 
 function updatePressedStates() {
@@ -169,9 +200,28 @@ function registerButtonEvents() {
   if (!toolbar) return;
 
   toolbar.addEventListener("click", (event) => {
+    const toggleBtn = event.target.closest("[data-a11y-toggle]");
+    if (toggleBtn) {
+      const isExpanded = toggleBtn.getAttribute("aria-expanded") === "true";
+      setOptionsVisibility(!isExpanded, { announce: true });
+      return;
+    }
+
     const target = event.target.closest("[data-a11y-action]");
     if (!target) return;
     handleAction(target.dataset.a11yAction);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!toolbar.classList.contains("is-open")) return;
+    if (toolbar.contains(event.target)) return;
+    setOptionsVisibility(false);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    if (!toolbar.classList.contains("is-open")) return;
+    setOptionsVisibility(false, { announce: true });
   });
 }
 

@@ -44,7 +44,7 @@
     --color-nav-active-bg: rgba(255, 255, 255, 0.13);
     --color-nav-active-border: rgba(255, 255, 255, 0.5);
 
-    --color-link: rgba(173, 190, 181, 0.92);
+    --color-link: #ede9c7;
 
     --color-card-bg: rgba(0, 0, 0, 0.3);
     --color-card-border: rgba(255, 255, 255, 0.4);
@@ -105,7 +105,7 @@ body {
     /* Gradient base */
     background-color: var(--color-bg-mid);
     background-image:
-        url('../img/cell-bg.svg'),
+        url('../web/img/cell-bg.svg'),
         radial-gradient(55% 45% at 12% 18%, rgba(33, 112, 145, 0.58) 0%, rgba(33, 112, 145, 0.22) 42%, transparent 76%),
         radial-gradient(48% 42% at 82% 14%, rgba(20, 86, 120, 0.52) 0%, rgba(20, 86, 120, 0.20) 44%, transparent 78%),
         radial-gradient(62% 50% at 68% 70%, rgba(11, 58, 84, 0.62) 0%, rgba(11, 58, 84, 0.24) 46%, transparent 80%),
@@ -204,7 +204,15 @@ a {
     bottom: 14px;
     z-index: 1400;
     display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.a11y-options {
+    display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     padding: 8px;
     border-radius: 12px;
@@ -212,6 +220,42 @@ a {
     border: 1px solid rgba(255, 255, 255, 0.22);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
+}
+
+.a11y-options[hidden] {
+    display: none;
+}
+
+.a11y-toggle {
+    width: 56px;
+    height: 56px;
+    padding: 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(4, 14, 22, 0.9);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: transform var(--transition-speed) ease, background var(--transition-speed) ease;
+}
+
+.a11y-toggle:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.a11y-toolbar.is-open .a11y-toggle {
+    background: rgba(173, 190, 181, 0.28);
+}
+
+.a11y-toggle-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 }
 
 .a11y-btn {
@@ -240,6 +284,7 @@ a {
 }
 
 .a11y-btn:focus-visible,
+.a11y-toggle:focus-visible,
 .btn-enter:focus-visible,
 .nav-btn:focus-visible,
 .hamburger-btn:focus-visible {
@@ -270,7 +315,8 @@ body.a11y-high-contrast .content-card,
 body.a11y-high-contrast .frontbox-card,
 body.a11y-high-contrast .nav-btn,
 body.a11y-high-contrast .mouse-pattern-strip,
-body.a11y-high-contrast .a11y-toolbar {
+body.a11y-high-contrast .a11y-options,
+body.a11y-high-contrast .a11y-toggle {
     background: #07131d !important;
     border-color: #ffffff !important;
     backdrop-filter: none !important;
@@ -455,6 +501,7 @@ h3 {
     letter-spacing: 0.01em;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
+    position: relative;
 }
 
 .nav-btn:hover {
@@ -467,7 +514,62 @@ h3 {
     background-color: var(--color-nav-active-bg);
     border-color: var(--color-nav-active-border);
     color: #ffffff;
+    text-shadow: 1px 1px 1px rgba(26, 26, 26, 0.95);
     border: none;
+    animation: nav-active-glow 3.5s ease-in-out infinite;
+}
+
+.nav-btn.active::before {
+    content: '';
+    position: absolute;
+    top: -130%;
+    left: -35%;
+    width: 45%;
+    height: 320%;
+    background: linear-gradient(120deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.36) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-260%) skewX(-18deg);
+    opacity: 0;
+    pointer-events: none;
+    animation: nav-active-reflection 3.5s ease-in-out infinite;
+}
+
+@keyframes nav-active-glow {
+
+    0%,
+    64%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+
+    82% {
+        box-shadow: 0 0 16px rgba(255, 255, 255, 0.34);
+    }
+}
+
+@keyframes nav-active-reflection {
+
+    0%,
+    60% {
+        transform: translateX(-260%) skewX(-18deg);
+        opacity: 0;
+    }
+
+    70% {
+        opacity: 0.56;
+    }
+
+    97% {
+        transform: translateX(360%) skewX(-18deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateX(360%) skewX(-18deg);
+        opacity: 0;
+    }
 }
 
 /* Hamburger button — hidden on desktop */
@@ -973,7 +1075,7 @@ hr {
     display: block;
     flex: 0 0 clamp(110px, 9vw, 148px);
     height: clamp(110px, 9vw, 148px);
-    background-image: url('../img/mouse-transparent.png');
+    background-image: url('../web/img/mouse-transparent.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -1231,10 +1333,13 @@ hr {
     }
 
     .a11y-toolbar {
-        left: 12px;
         right: 12px;
         bottom: 12px;
-        justify-content: center;
+        align-items: flex-end;
+    }
+
+    .a11y-options {
+        max-width: calc(100vw - 24px);
         flex-wrap: wrap;
     }
 
