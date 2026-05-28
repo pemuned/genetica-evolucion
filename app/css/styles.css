@@ -44,6 +44,8 @@
     --color-nav-active-bg: rgba(255, 255, 255, 0.13);
     --color-nav-active-border: rgba(255, 255, 255, 0.5);
 
+    --color-link: rgba(173, 190, 181, 0.92);
+
     --color-card-bg: rgba(0, 0, 0, 0.3);
     --color-card-border: rgba(255, 255, 255, 0.4);
     --color-card-heading: #ffffff;
@@ -177,6 +179,13 @@ body::after {
 body>* {
     position: relative;
     z-index: 1;
+}
+
+/* LINKS */
+
+a {
+    color: var(--color-link);
+    text-decoration: underline;
 }
 
 /* CREDITS */
@@ -545,6 +554,35 @@ hr {
     margin-bottom: 0;
 }
 
+/* Content tables */
+.card-body table {
+    width: 100%;
+    margin: 14px 0 18px;
+    border-collapse: collapse;
+    border: 1px solid #ffffff;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.card-body th,
+.card-body td {
+    border: 1px solid #ffffff;
+    padding: 12px 14px;
+    text-align: left;
+    vertical-align: top;
+    font-size: 0.94rem;
+    color: var(--color-card-text);
+}
+
+.card-body th {
+    color: #ffffff;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.09);
+}
+
+.card-body tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.04);
+}
+
 /* ============================================================
    PRELABORATORIO SLIDER
    ============================================================ */
@@ -604,7 +642,7 @@ hr {
     padding: 8px 10px;
     border: 0px solid rgba(255, 255, 255, 0.4);
     border-radius: var(--radius-nav);
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.4);
     color: #ffffff;
     font-family: var(--font-main);
     font-size: 0.9rem;
@@ -640,11 +678,11 @@ hr {
     0%,
     100% {
         transform: translateY(0) scale(1);
-        box-shadow: 0 0 0 0 rgba(173, 190, 181, 0.26);
+        box-shadow: 0 0 0 0 rgba(224, 235, 229, 0.5);
     }
 
     45% {
-        transform: translateY(0) scale(1.05);
+        transform: translateY(0) scale(1.1);
         box-shadow: 0 0 0 10px rgba(173, 190, 181, 0);
     }
 }
@@ -730,18 +768,29 @@ hr {
 }
 
 /* References & Credits list */
-.ref-list {
+.ref-list,
+.bullet-list {
     list-style: none;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    padding-left: 12px;
+    margin-left: 28px;
 }
 
-.ref-list li {
+.number-list {
+    padding-left: 12px;
+    margin-left: 28px;
+}
+
+.ref-list li,
+.bullet-list li,
+.number-list li:not(.left-indent-list li) {
     font-size: 0.95rem;
     color: var(--color-card-text);
     padding-left: 16px;
     position: relative;
+    margin-bottom: 10px;
 }
 
 .ref-list li::before {
@@ -750,6 +799,28 @@ hr {
     left: 0;
     color: var(--color-accent);
     font-weight: 600;
+}
+
+.bullet-list li::before {
+    content: '■';
+    /* square */
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.left-indent-list {
+    padding-left: 28px;
+}
+
+.french-quote {
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--color-card-text);
+    border-left: 4px solid var(--color-accent);
+    padding-left: 16px;
+    margin-left: 12px;
 }
 
 /* ============================================================
@@ -1180,6 +1251,12 @@ hr {
 
     .prelab-slider-card {
         padding-bottom: 24px;
+    }
+
+    .card-body table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
