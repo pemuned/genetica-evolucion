@@ -10,8 +10,8 @@
   --line: rgba(27, 95, 119, .16);
   --shadow: 0 18px 50px rgba(21, 61, 75, .16);
   /* Lab-glove cursor: open hand by default, fist while dragging, open again on release. */
-  --cursor-glove-open: url("../assets/img/hand.svg") 10 10, auto;
-  --cursor-glove-closed: url("../assets/img/hand-grab.svg") 10 14, grabbing;
+  --cursor-glove-open: url("../img/hand.svg") 10 10, auto;
+  --cursor-glove-closed: url("../img/hand-grab.svg") 10 14, grabbing;
   font-family: Inter, ui-rounded, "Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
 }
@@ -233,7 +233,7 @@ button:focus-visible,
   inset: 0;
   min-width: 900px;
   overflow: hidden;
-  background: linear-gradient(rgba(235, 246, 247, .08), rgba(219, 236, 237, .08)), url("../assets/img/fondo-lab.png") center/cover no-repeat;
+  background: linear-gradient(rgba(235, 246, 247, .08), rgba(219, 236, 237, .08)), url("../img/fondo-lab.png") center/cover no-repeat;
   isolation: isolate;
 }
 
@@ -902,7 +902,7 @@ button:focus-visible,
   place-items: stretch;
   padding: clamp(10px, 2.5vw, 30px);
   overflow: auto;
-  background: linear-gradient(125deg, rgba(232, 248, 249, .97), rgba(213, 237, 240, .94)), url("app/assets/img/fondo-lab.png") center/cover;
+  background: linear-gradient(125deg, rgba(232, 248, 249, .97), rgba(213, 237, 240, .94)), url("app/img/fondo-lab.png") center/cover;
   transition: opacity .45s, visibility .45s;
 }
 

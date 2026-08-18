@@ -44,53 +44,53 @@
         <div class="ambient ambient-two" aria-hidden="true"></div>
         <div class="stage-dim" id="stage-dim" aria-hidden="true"></div>
 
-        <img class="prop shelf" src="app/assets/img/estante.png" alt="Estante con material de laboratorio">
-        <img class="prop refrigerator" src="app/assets/img/refrigerador.png" alt="Refrigerador de laboratorio">
-        <img class="prop cage" src="app/assets/img/jaula.png" alt="Jaula para ratones">
+        <img class="prop shelf" src="app/img/estante.png" alt="Estante con material de laboratorio">
+        <img class="prop refrigerator" src="app/img/refrigerador.png" alt="Refrigerador de laboratorio">
+        <img class="prop cage" src="app/img/jaula.png" alt="Jaula para ratones">
 
         <div class="microscope-station drop-zone" data-drop-zone="microscope" tabindex="-1"
           aria-label="Microscopio, zona de colocación">
           <span class="station-glow" aria-hidden="true"></span>
-          <img src="app/assets/img/microscopio.png" alt="Microscopio">
+          <img src="app/img/microscopio.png" alt="Microscopio">
           <span class="object-label">Microscopio</span>
         </div>
 
         <div class="tool-rack" aria-label="Herramientas">
           <button class="lab-tool locked" id="holding-tool-lab" type="button" tabindex="-1"
             aria-label="Pipeta de sostén">
-            <img src="app/assets/img/aguja-sosten.png" alt=""><span>Pipeta de sostén</span>
+            <img src="app/img/aguja-sosten.png" alt=""><span>Pipeta de sostén</span>
           </button>
           <button class="lab-tool locked" id="injection-tool-lab" type="button" tabindex="-1"
             aria-label="Aguja de inyección">
-            <img src="app/assets/img/aguja-inyeccion.png" alt=""><span>Aguja de inyección</span>
+            <img src="app/img/aguja-inyeccion.png" alt=""><span>Aguja de inyección</span>
           </button>
           <button class="lab-tool locked" id="reagent-lab" type="button" tabindex="-1"
             aria-label="Reactivo de estimulación">
-            <img src="app/assets/img/reactivo.png" alt=""><span>Reactivo</span>
+            <img src="app/img/reactivo.png" alt=""><span>Reactivo</span>
           </button>
         </div>
 
         <div class="workbench" aria-label="Mesa de trabajo">
           <div class="petri-slot petri-one drop-zone" data-drop-zone="petri1" tabindex="-1"
             aria-label="Caja de Petri 1, célula somática">
-            <img src="app/assets/img/caja-petri.png" alt="Caja de Petri 1">
+            <img src="app/img/caja-petri.png" alt="Caja de Petri 1">
             <span class="petri-label"><b>01</b>Célula somática</span>
           </div>
           <div class="petri-slot petri-two draggable drop-zone" data-draggable="petri2" data-drop-zone="petri2"
             tabindex="-1" role="button" aria-label="Caja de Petri 2, ovocito">
-            <img src="app/assets/img/caja-petri.png" alt="Caja de Petri 2">
+            <img src="app/img/caja-petri.png" alt="Caja de Petri 2">
             <span class="petri-label"><b>02</b>Ovocito</span>
           </div>
           <div class="petri-slot petri-three draggable drop-zone" data-draggable="petri3" data-drop-zone="petri3"
             tabindex="-1" role="button" aria-label="Caja de Petri 3, transferencia nuclear">
-            <img src="app/assets/img/caja-petri.png" alt="Caja de Petri 3">
+            <img src="app/img/caja-petri.png" alt="Caja de Petri 3">
             <span class="petri-label"><b>03</b>Transferencia nuclear</span>
           </div>
         </div>
 
         <div class="mouse-station gray-mouse">
           <div class="hand-drawn-filter" aria-hidden="true">
-            <img src="app/assets/img/raton-gris.png" alt="Ratón gris, donante somático">
+            <img src="app/img/raton-gris.png" alt="Ratón gris, donante somático">
           </div>
           <span class="mouse-role">Donante somático</span>
           <button class="cell-token somatic-token draggable cell-hidden" data-draggable="somatic-cell" type="button"
@@ -100,7 +100,7 @@
         </div>
         <div class="mouse-station brown-mouse">
           <div class="hand-drawn-filter" aria-hidden="true">
-            <img src="app/assets/img/raton-cafe.png" alt="Ratón café, donante de ovocito">
+            <img src="app/img/raton-cafe.png" alt="Ratón café, donante de ovocito">
           </div>
           <span class="mouse-role">Donante de ovocito</span>
           <button class="cell-token oocyte-token draggable cell-hidden" data-draggable="oocyte" type="button"
@@ -111,7 +111,7 @@
         <div class="mouse-station white-mouse drop-zone" data-drop-zone="surrogate" tabindex="-1"
           aria-label="Madre sustituta blanca">
           <div class="hand-drawn-filter" aria-hidden="true">
-            <img src="app/assets/img/raton-blanco.png" alt="Ratón blanco, madre sustituta">
+            <img src="app/img/raton-blanco.png" alt="Ratón blanco, madre sustituta">
           </div>
           <span class="mouse-role">Madre sustituta</span>
           <button class="belly-target" data-action="birth" type="button" tabindex="-1"
@@ -203,16 +203,16 @@
       <aside class="micro-tools" aria-label="Herramientas de micromanipulación">
         <p>Selecciona y lleva la herramienta a la célula.</p>
         <button class="micro-tool draggable" data-draggable="holding-pipette" type="button">
-          <img src="app/assets/img/aguja-sosten-macro.png" alt=""><span><b>Pipeta de sostén</b><small>Estabiliza la
+          <img src="app/img/aguja-sosten-macro.png" alt=""><span><b>Pipeta de sostén</b><small>Estabiliza la
               célula</small></span>
         </button>
         <button class="micro-tool draggable" data-draggable="injection-needle" type="button">
-          <img src="app/assets/img/aguja-inyec-macro.png" alt=""><span><b>Aguja de inyección</b><small>Extrae o
+          <img src="app/img/aguja-inyec-macro.png" alt=""><span><b>Aguja de inyección</b><small>Extrae o
               transfiere
               el núcleo</small></span>
         </button>
         <button class="micro-tool reagent-tool draggable" data-draggable="reagent" type="button">
-          <img src="app/assets/img/reactivo.png" alt=""><span><b>Reactivo</b><small>Activa el desarrollo</small></span>
+          <img src="app/img/reactivo.png" alt=""><span><b>Reactivo</b><small>Activa el desarrollo</small></span>
         </button>
         <div class="micro-note"><span aria-hidden="true">ⓘ</span>
           <p id="micro-note-text">La pipeta evita que la célula se mueva durante el procedimiento.</p>
