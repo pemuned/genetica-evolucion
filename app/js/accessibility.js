@@ -127,6 +127,9 @@ function applySettings({ announce = false, message = "" } = {}) {
   document.documentElement.style.fontSize = `${BASE_FONT_SIZE * settings.fontScale}px`;
   document.body.classList.toggle("a11y-high-contrast", settings.highContrast);
   document.body.classList.remove("a11y-reduce-motion");
+  document.body.style.backgroundImage = settings.highContrast
+    ? "none"
+    : "";
   updatePressedStates();
 
   if (announce && message) announceStatus(message);
