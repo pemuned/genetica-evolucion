@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e8f7fb">
+  <title>Ratón Lab · Clonación SCNT</title>
+  <link rel="stylesheet" href="app/css/styles.css">
+</head>
+
+<body>
+  <main class="app-shell">
+    <header class="topbar" aria-label="Progreso del laboratorio">
+      <div class="instruction-panel" aria-labelledby="instruction-title">
+        <span class="instruction-number" id="instruction-number">01</span>
+        <div>
+          <p class="eyebrow" id="instruction-title">Bienvenida al laboratorio</p>
+          <p id="instruction-text">Descubre cómo el núcleo de una célula puede dirigir la formación de un nuevo
+            organismo.
+          </p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-button" id="hint-button" type="button" aria-label="Mostrar una pista" title="Pista">
+          <span aria-hidden="true">💡</span><span class="button-word">Pista</span>
+        </button>
+        <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
+          <span aria-hidden="true">↻</span><span class="button-word">Reiniciar</span>
+        </button>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-copy"><span id="step-label">Paso 1 de 14</span><span id="progress-percent">7%</span></div>
+        <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="14" aria-valuenow="1"
+          aria-label="Progreso">
+          <span id="progress-fill"></span>
+        </div>
+      </div>
+
+    </header>
+    <section class="lab-frame" id="lab-frame" aria-label="Laboratorio interactivo">
+      <div class="lab-stage" id="lab-stage">
+        <div class="ambient ambient-one" aria-hidden="true"></div>
+        <div class="ambient ambient-two" aria-hidden="true"></div>
+        <div class="stage-dim" id="stage-dim" aria-hidden="true"></div>
+
+        <img class="prop shelf" src="app/assets/img/estante.png" alt="Estante con material de laboratorio">
+        <img class="prop refrigerator" src="app/assets/img/refrigerador.png" alt="Refrigerador de laboratorio">
+        <img class="prop cage" src="app/assets/img/jaula.png" alt="Jaula para ratones">
+
+        <div class="microscope-station drop-zone" data-drop-zone="microscope" tabindex="-1"
+          aria-label="Microscopio, zona de colocación">
+          <span class="station-glow" aria-hidden="true"></span>
+          <img src="app/assets/img/microscopio.png" alt="Microscopio">
+          <span class="object-label">Microscopio</span>
+        </div>
+
+        <div class="tool-rack" aria-label="Herramientas">
+          <button class="lab-tool locked" id="holding-tool-lab" type="button" tabindex="-1"
+            aria-label="Pipeta de sostén">
+            <img src="app/assets/img/aguja-sosten.png" alt=""><span>Pipeta de sostén</span>
+          </button>
+          <button class="lab-tool locked" id="injection-tool-lab" type="button" tabindex="-1"
+            aria-label="Aguja de inyección">
+            <img src="app/assets/img/aguja-inyeccion.png" alt=""><span>Aguja de inyección</span>
+          </button>
+          <button class="lab-tool locked" id="reagent-lab" type="button" tabindex="-1"
+            aria-label="Reactivo de estimulación">
+            <img src="app/assets/img/reactivo.png" alt=""><span>Reactivo</span>
+          </button>
+        </div>
+
+        <div class="workbench" aria-label="Mesa de trabajo">
+          <div class="petri-slot petri-one drop-zone" data-drop-zone="petri1" tabindex="-1"
+            aria-label="Caja de Petri 1, célula somática">
+            <img src="app/assets/img/caja-petri.png" alt="Caja de Petri 1">
+            <span class="petri-label"><b>01</b>Célula somática</span>
+          </div>
+          <div class="petri-slot petri-two draggable drop-zone" data-draggable="petri2" data-drop-zone="petri2"
+            tabindex="-1" role="button" aria-label="Caja de Petri 2, ovocito">
+            <img src="app/assets/img/caja-petri.png" alt="Caja de Petri 2">
+            <span class="petri-label"><b>02</b>Ovocito</span>
+          </div>
+          <div class="petri-slot petri-three draggable drop-zone" data-draggable="petri3" data-drop-zone="petri3"
+            tabindex="-1" role="button" aria-label="Caja de Petri 3, transferencia nuclear">
+            <img src="app/assets/img/caja-petri.png" alt="Caja de Petri 3">
+            <span class="petri-label"><b>03</b>Transferencia nuclear</span>
+          </div>
+        </div>
+
+        <div class="mouse-station gray-mouse">
+          <div class="hand-drawn-filter" aria-hidden="true">
+            <img src="app/assets/img/raton-gris.png" alt="Ratón gris, donante somático">
+          </div>
+          <span class="mouse-role">Donante somático</span>
+          <button class="cell-token somatic-token draggable cell-hidden" data-draggable="somatic-cell" type="button"
+            aria-label="Célula somática del ratón gris">
+            <span class="cell-membrane"><span class="cell-nucleus"></span><i></i><i></i><i></i></span>
+          </button>
+        </div>
+        <div class="mouse-station brown-mouse">
+          <div class="hand-drawn-filter" aria-hidden="true">
+            <img src="app/assets/img/raton-cafe.png" alt="Ratón café, donante de ovocito">
+          </div>
+          <span class="mouse-role">Donante de ovocito</span>
+          <button class="cell-token oocyte-token draggable cell-hidden" data-draggable="oocyte" type="button"
+            aria-label="Ovocito del ratón café">
+            <span class="cell-membrane"><span class="cell-nucleus"></span><i></i><i></i><i></i></span>
+          </button>
+        </div>
+        <div class="mouse-station white-mouse drop-zone" data-drop-zone="surrogate" tabindex="-1"
+          aria-label="Madre sustituta blanca">
+          <div class="hand-drawn-filter" aria-hidden="true">
+            <img src="app/assets/img/raton-blanco.png" alt="Ratón blanco, madre sustituta">
+          </div>
+          <span class="mouse-role">Madre sustituta</span>
+          <button class="belly-target" data-action="birth" type="button" tabindex="-1"
+            aria-label="Vientre de la madre sustituta"></button>
+          <div class="baby-mouse" aria-hidden="true">
+            <span class="baby-ear"></span><span class="baby-body"></span><span class="baby-eye"></span><span
+              class="baby-tail"></span>
+          </div>
+        </div>
+
+        <div class="sample-token enucleated-sample draggable" data-draggable="enucleated-oocyte" role="button"
+          tabindex="-1" aria-label="Ovocito enucleado">
+          <span class="mini-cell no-nucleus"></span><small>Ovocito enucleado</small>
+        </div>
+        <div class="sample-token embryo-sample draggable" data-draggable="embryo" role="button" tabindex="-1"
+          aria-label="Embrión activado">
+          <span class="mini-cell embryo-mini"><i></i><i></i></span><small>Embrión</small>
+        </div>
+
+        <button class="primary-button clone-button pulse-button" id="clone-button" type="button">Empecemos la clonación
+          <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <p class="status-message" id="status-message" aria-live="polite"></p>
+  </main>
+
+  <div class="screen-overlay intro-screen" id="intro-screen" role="dialog" aria-modal="true"
+    aria-labelledby="intro-title">
+    <div class="intro-orbit" aria-hidden="true">
+      <span class="orbit-cell"><i></i></span><span class="orbit-dot dot-a"></span><span class="orbit-dot dot-b"></span>
+    </div>
+    <div class="intro-card">
+      <p class="eyebrow">Objeto de aprendizaje interactivo</p>
+      <h1 id="intro-title">El secreto está<br>en el <em>núcleo</em></h1>
+      <p>Explora paso a paso cómo la transferencia nuclear de células somáticas permite crear un organismo genéticamente
+        idéntico al donante del núcleo.</p>
+      <button class="primary-button" id="start-button" type="button">Entrar al laboratorio <span
+          aria-hidden="true">→</span></button>
+      <small>16 pasos · 8–10 minutos · Actividad guiada</small>
+    </div>
+  </div>
+
+  <div class="screen-overlay materials-screen hidden" id="materials-screen" role="dialog" aria-modal="true"
+    aria-labelledby="materials-title">
+    <div class="materials-card">
+      <p class="eyebrow">Antes de comenzar</p>
+      <h2 id="materials-title">Conoce los materiales</h2>
+      <p>Usaremos herramientas de micromanipulación para trabajar con estructuras más pequeñas que el ancho de un
+        cabello.</p>
+      <div class="materials-grid">
+        <span><b>🔬</b> Microscopio</span><span><b>◎</b> 3 cajas de Petri</span>
+        <span><b>╱</b> Aguja de inyección</span><span><b>━</b> Pipeta de sostén</span>
+        <span><b>🧪</b> Reactivo estimulante</span><span><b>🐭</b> Tres ratones donantes</span>
+      </div>
+      <button class="primary-button" id="materials-button" type="button">Todo listo <span
+          aria-hidden="true">→</span></button>
+    </div>
+  </div>
+
+  <div class="microscope-overlay hidden" id="microscope-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="micro-title">
+    <div class="micro-header">
+      <div>
+        <p class="eyebrow">Vista microscópica · 400×</p>
+        <h2 id="micro-title">Micromanipulación</h2>
+      </div>
+      <button class="close-micro" id="close-micro" type="button" disabled aria-label="Volver al laboratorio">×</button>
+    </div>
+    <div class="micro-layout">
+      <div class="lens-shell">
+        <div class="lens" id="lens">
+          <span class="lens-grid" aria-hidden="true"></span>
+          <div class="macro-cell macro-oocyte drop-zone" data-drop-zone="macro-oocyte" tabindex="-1"
+            aria-label="Ovocito bajo el microscopio">
+            <span class="zona"></span><span class="cytoplasm"></span><span class="macro-nucleus"></span>
+            <i class="organelle o1"></i><i class="organelle o2"></i><i class="organelle o3"></i><i
+              class="organelle o4"></i>
+          </div>
+          <div class="macro-cell macro-somatic drop-zone" data-drop-zone="macro-somatic" tabindex="-1"
+            aria-label="Célula somática bajo el microscopio">
+            <span class="cytoplasm"></span><span class="macro-nucleus"></span>
+            <i class="organelle o1"></i><i class="organelle o2"></i><i class="organelle o3"></i>
+          </div>
+          <div class="division-cell" aria-hidden="true"><i></i><i></i></div>
+          <div class="micro-particles" aria-hidden="true"></div>
+        </div>
+      </div>
+      <aside class="micro-tools" aria-label="Herramientas de micromanipulación">
+        <p>Selecciona y lleva la herramienta a la célula.</p>
+        <button class="micro-tool draggable" data-draggable="holding-pipette" type="button">
+          <img src="app/assets/img/aguja-sosten-macro.png" alt=""><span><b>Pipeta de sostén</b><small>Estabiliza la
+              célula</small></span>
+        </button>
+        <button class="micro-tool draggable" data-draggable="injection-needle" type="button">
+          <img src="app/assets/img/aguja-inyec-macro.png" alt=""><span><b>Aguja de inyección</b><small>Extrae o
+              transfiere
+              el núcleo</small></span>
+        </button>
+        <button class="micro-tool reagent-tool draggable" data-draggable="reagent" type="button">
+          <img src="app/assets/img/reactivo.png" alt=""><span><b>Reactivo</b><small>Activa el desarrollo</small></span>
+        </button>
+        <div class="micro-note"><span aria-hidden="true">ⓘ</span>
+          <p id="micro-note-text">La pipeta evita que la célula se mueva durante el procedimiento.</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="reset-dialog">
+    <form method="dialog">
+      <span class="dialog-icon" aria-hidden="true">↻</span>
+      <h2>¿Reiniciar el experimento?</h2>
+      <p>Volverás al inicio y se perderá el progreso actual.</p>
+      <div class="dialog-actions">
+        <button class="secondary-button" value="cancel">Cancelar</button>
+        <button class="primary-button" value="confirm">Sí, reiniciar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app/js/app.js"></script>
+  <script src="app/js/svg-filters.js"></script>
+</body>
+
+</html>
