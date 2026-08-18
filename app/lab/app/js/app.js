@@ -51,14 +51,14 @@ const STEP_CONFIG = {
     instruction: "Usa la pipeta de sostén para estabilizar el ovocito.",
     hint: "Lleva la pipeta de sostén desde el panel hasta el ovocito.",
     drags: ["holding-pipette"],
-    targets: ["macro-oocyte"],
+    targets: ["micro-oocyte"],
   },
   8: {
     title: "Retira el núcleo del ovocito",
     instruction: "Usa la aguja de inyección para aspirar el núcleo.",
     hint: "Lleva la aguja de inyección hasta el centro morado del ovocito.",
     drags: ["injection-needle"],
-    targets: ["macro-oocyte"],
+    targets: ["micro-oocyte"],
   },
   9: {
     title: "Prepara la transferencia",
@@ -89,14 +89,14 @@ const STEP_CONFIG = {
       "Primero estabiliza la célula somática con la pipeta de sostén.",
     hint: "Lleva la pipeta a la célula azul; después usa la aguja para extraer su núcleo.",
     drags: ["holding-pipette"],
-    targets: ["macro-somatic"],
+    targets: ["micro-somatic"],
   },
   13: {
     title: "Transfiere el núcleo",
     instruction: "Inserta el núcleo somático dentro del ovocito enucleado.",
     hint: "La aguja ya contiene el núcleo. Llévala hasta el ovocito dorado.",
     drags: ["injection-needle"],
-    targets: ["macro-oocyte"],
+    targets: ["micro-oocyte"],
   },
   14: {
     title: "Activa el desarrollo",
@@ -104,7 +104,7 @@ const STEP_CONFIG = {
       "Aplica una gota del reactivo para iniciar la primera división celular.",
     hint: "Arrastra el frasco de reactivo hasta el ovocito reconstruido.",
     drags: ["reagent"],
-    targets: ["macro-oocyte"],
+    targets: ["micro-oocyte"],
   },
   15: {
     title: "Implanta el embrión",
@@ -159,7 +159,7 @@ class GameState {
   isValidDrop(action, target) {
     const config = this.config;
     if (this.step === 12 && this.flags.somaticCellHeld) {
-      return action === "injection-needle" && target === "macro-somatic";
+      return action === "injection-needle" && target === "micro-somatic";
     }
     return Boolean(
       config.drags?.includes(action) && config.targets?.includes(target),
@@ -195,11 +195,11 @@ class AnimationEngine {
   }
 
   suction(cell) {
-    const nucleus = cell.querySelector(".macro-nucleus");
+    const nucleus = cell.querySelector(".micro-nucleus");
     const suctionTrail = document.createElement("span");
     suctionTrail.className = "suction-trail";
     cell.append(suctionTrail);
-    suctionTrail.addEventListener("animationend", () => suctionTrail.remove());
+    //suctionTrail.addEventListener("animationend", () => suctionTrail.remove());
     nucleus?.classList.add("extracted");
     this.particles(cell, 8, "#9679b0");
   }
@@ -554,13 +554,13 @@ class UIController {
           "Ahora podemos observar y manipular el ovocito a gran aumento.",
         );
       },
-      "7:holding-pipette:macro-oocyte": () => {
-        document.querySelector(".macro-oocyte").classList.add("held");
+      "7:holding-pipette:micro-oocyte": () => {
+        document.querySelector(".micro-oocyte").classList.add("held");
         this.game.flags.oocyteHeld = true;
         this.completeStep("La pipeta mantiene estable el ovocito sin dañarlo.");
       },
-      "8:injection-needle:macro-oocyte": () => {
-        this.animations.suction(document.querySelector(".macro-oocyte"));
+      "8:injection-needle:micro-oocyte": () => {
+        this.animations.suction(document.querySelector(".micro-oocyte"));
         this.game.flags.oocyteEnucleated = true;
         document.querySelector("[data-draggable='oocyte']").hidden = true;
         this.updateInteractiveStates();
@@ -591,8 +591,8 @@ class UIController {
           "Volvemos al microscopio para transferir el núcleo con precisión.",
         );
       },
-      "12:holding-pipette:macro-somatic": () => {
-        document.querySelector(".macro-somatic").classList.add("held");
+      "12:holding-pipette:micro-somatic": () => {
+        document.querySelector(".micro-somatic").classList.add("held");
         this.game.flags.somaticCellHeld = true;
         this.toast(
           "Célula estabilizada. Ahora usa la aguja de inyección.",
@@ -600,8 +600,8 @@ class UIController {
         );
         this.updateInteractiveStates();
       },
-      "12:injection-needle:macro-somatic": () => {
-        this.animations.suction(document.querySelector(".macro-somatic"));
+      "12:injection-needle:micro-somatic": () => {
+        this.animations.suction(document.querySelector(".micro-somatic"));
         this.game.flags.somaticNucleusExtracted = true;
         this.updateInteractiveStates();
         document
@@ -615,24 +615,24 @@ class UIController {
           650,
         );
       },
-      "13:injection-needle:macro-oocyte": () => {
-        const nucleus = document.querySelector(".macro-oocyte .macro-nucleus");
+      "13:injection-needle:micro-oocyte": () => {
+        const nucleus = document.querySelector(".micro-oocyte .micro-nucleus");
         nucleus.classList.remove("extracted");
         nucleus.style.opacity = "1";
         nucleus.style.transform = "scale(1)";
         this.game.flags.nucleusTransferred = true;
-        this.animations.particles(document.querySelector(".macro-oocyte"), 10);
+        this.animations.particles(document.querySelector(".micro-oocyte"), 10);
         this.completeStep(
           "El ovocito ahora contiene el ADN nuclear de la donante gris.",
         );
       },
-      "14:reagent:macro-oocyte": () => {
+      "14:reagent:micro-oocyte": () => {
         this.game.flags.embryoActivated = true;
         this.updateInteractiveStates();
         const drop = document.createElement("span");
         drop.className = "reagent-drop";
         document.querySelector("#lens").append(drop);
-        this.animations.activateEmbryo(document.querySelector(".macro-oocyte"));
+        this.animations.activateEmbryo(document.querySelector(".micro-oocyte"));
         this.toast(
           "¡Activación lograda! Comienza la primera división.",
           "success",
@@ -675,8 +675,8 @@ class UIController {
   }
 
   openMicroscope(mode) {
-    const oocyte = document.querySelector(".macro-oocyte");
-    const somatic = document.querySelector(".macro-somatic");
+    const oocyte = document.querySelector(".micro-oocyte");
+    const somatic = document.querySelector(".micro-somatic");
     const division = document.querySelector(".division-cell");
     this.microOverlay.classList.remove("hidden");
     this.closeMicroButton.disabled = true;
@@ -686,7 +686,7 @@ class UIController {
     division.classList.remove("visible");
     if (mode === "transfer") {
       oocyte.style.left = "52%";
-      oocyte.querySelector(".macro-nucleus").classList.add("extracted");
+      oocyte.querySelector(".micro-nucleus").classList.add("extracted");
       oocyte.classList.add("held");
       this.microNote.textContent =
         "La célula azul es somática; el ovocito dorado ya no tiene núcleo.";
@@ -792,12 +792,12 @@ class UIController {
     enucleatedSample.className = "sample-token enucleated-sample draggable";
     embryoSample.className = "sample-token embryo-sample draggable";
 
-    const oocyte = document.querySelector(".macro-oocyte");
-    const somatic = document.querySelector(".macro-somatic");
+    const oocyte = document.querySelector(".micro-oocyte");
+    const somatic = document.querySelector(".micro-somatic");
     [oocyte, somatic].forEach((cell) => {
       cell.classList.remove("held", "activated");
       cell.style.removeProperty("opacity");
-      const nucleus = cell.querySelector(".macro-nucleus");
+      const nucleus = cell.querySelector(".micro-nucleus");
       nucleus?.classList.remove("extracted");
       nucleus?.style.removeProperty("opacity");
       nucleus?.style.removeProperty("transform");

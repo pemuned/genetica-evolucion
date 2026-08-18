@@ -73,9 +73,9 @@ button:focus-visible,
 }
 
 .topbar {
-  min-height: 70px;
+  height: 90px;
   display: grid;
-  grid-template-columns: minmax(170px, 1fr) minmax(260px, 520px) minmax(170px, 1fr);
+  grid-template-columns: minmax(350px, 1fr) minmax(100px, 1fr) minmax(350px, 1fr);
   align-items: center;
   gap: 24px;
   padding: 9px 16px;
@@ -206,9 +206,9 @@ button:focus-visible,
 
 .eyebrow {
   color: var(--blue-dark);
-  font-size: 0.6875rem;
+  font-size: 0.7rem;
   font-weight: 850;
-  letter-spacing: .14em;
+  letter-spacing: .05em;
   text-transform: uppercase;
 }
 
@@ -1117,6 +1117,7 @@ button:focus-visible,
   background: radial-gradient(circle at 40% 50%, #eafafa, #c7e2e5 65%, #9fc5ca);
   transition: opacity .4s, visibility .4s;
   overflow: auto;
+  top: 90px;
 }
 
 .micro-header {
@@ -1153,9 +1154,11 @@ button:focus-visible,
   width: min(1180px, 100%);
   margin: auto;
   display: grid;
-  grid-template-columns: minmax(500px, 1fr) 310px;
+  grid-template-columns: minmax(700px, 1fr) 410px;
   align-items: center;
   gap: clamp(16px, 4vw, 50px);
+  position: relative;
+  top: 8%;
 }
 
 .lens-shell {
@@ -1188,7 +1191,7 @@ button:focus-visible,
   mask-image: radial-gradient(circle, #000, transparent 78%)
 }
 
-.macro-cell {
+.micro-cell {
   position: absolute;
   width: 38%;
   aspect-ratio: 1;
@@ -1198,14 +1201,14 @@ button:focus-visible,
   animation: cellMorph 5s ease-in-out infinite alternate
 }
 
-.macro-oocyte {
+.micro-oocyte {
   left: 31%;
   top: 30%;
   border: 10px double rgba(183, 139, 83, .55);
-  background: radial-gradient(circle at 35% 32%, rgba(255, 255, 255, .85), rgba(245, 219, 177, .9) 65%, rgba(189, 137, 85, .8))
+  background: radial-gradient(circle at 35% 32%, rgba(255, 255, 255, .85), rgba(245, 219, 177, .9) 65%, rgba(189, 137, 85, .8));
 }
 
-.macro-somatic {
+.micro-somatic {
   display: none;
   left: 12%;
   top: 33%;
@@ -1213,14 +1216,14 @@ button:focus-visible,
   background: radial-gradient(circle at 35% 32%, #fff, rgba(148, 220, 216, .9) 65%, rgba(56, 139, 157, .8))
 }
 
-.macro-cell .cytoplasm {
+.micro-cell .cytoplasm {
   position: absolute;
   inset: 11%;
   border-radius: inherit;
   border: 1px solid rgba(255, 255, 255, .6)
 }
 
-.macro-nucleus {
+.micro-nucleus {
   position: absolute;
   z-index: 3;
   left: 34%;
@@ -1233,7 +1236,7 @@ button:focus-visible,
   transition: all .75s cubic-bezier(.2, .8, .2, 1)
 }
 
-.macro-nucleus.extracted {
+.micro-nucleus.extracted {
   left: 115%;
   top: 42%;
   transform: scale(.15);
@@ -1271,21 +1274,19 @@ button:focus-visible,
   transform: rotate(60deg)
 }
 
-.macro-cell.held::before {
+.micro-cell.held::before {
   content: "";
   position: absolute;
   z-index: 5;
-  right: 92%;
-  top: 38%;
-  width: 55%;
-  height: 24%;
-  background: linear-gradient(180deg, #d9edf0, #9fc8ce 48%, #eefafa 52%, #a7ccd1);
-  clip-path: polygon(0 20%, 100% 42%, 100% 58%, 0 80%);
-  filter: drop-shadow(0 5px 5px rgba(32, 79, 88, .25));
-  animation: toolEnter .5s ease both
+  left: -120%;
+  top: -10%;
+  width: 120%;
+  height: 100%;
+  background: url("../img/aguja-sosten-micro.png") center/contain no-repeat;
+  animation: toolEnterLeft 2s ease both
 }
 
-.macro-cell.activated {
+.micro-cell.activated {
   animation: activationPulse .8s ease 2
 }
 
@@ -1334,15 +1335,14 @@ button:focus-visible,
 
 .suction-trail {
   position: absolute;
-  z-index: 7;
-  left: 48%;
-  top: 46%;
-  width: 78%;
-  height: 8%;
-  border-radius: 99px;
-  background: linear-gradient(90deg, rgba(139, 111, 169, .8), rgba(139, 111, 169, 0));
+  z-index: 5;
+  right: -160%;
+  top: 30%;
+  width: 220%;
+  height: 30%;
+  background: url("../img/aguja-inyec-micro.png") center/cover no-repeat;
   transform-origin: left;
-  animation: suctionFlow .8s ease forwards
+  animation: toolEnterRight 2s ease both
 }
 
 .reagent-drop {
@@ -1370,7 +1370,7 @@ button:focus-visible,
 .micro-tools>p {
   margin-top: 0;
   color: var(--muted);
-  font-size: 0.8125rem
+  font-size: 1rem
 }
 
 .micro-tool {
@@ -1390,8 +1390,8 @@ button:focus-visible,
 }
 
 .micro-tool img {
-  width: 92px;
-  height: 54px;
+  max-width: 120px;
+  max-height: 90px;
   object-fit: contain
 }
 
@@ -1400,13 +1400,13 @@ button:focus-visible,
 }
 
 .micro-tool b {
-  font-size: 0.75rem
+  font-size: 0.9rem
 }
 
 .micro-tool small {
   margin-top: 4px;
   color: var(--muted);
-  font-size: 0.625rem
+  font-size: 0.8rem
 }
 
 .micro-tool.is-disabled {
@@ -1671,16 +1671,21 @@ dialog form {
   }
 }
 
-@keyframes toolEnter {
+@keyframes toolEnterLeft {
   from {
-    transform: translateX(-70px);
-    opacity: 0
+    transform: translateX(-250px);
+  }
+}
+
+@keyframes toolEnterRight {
+  from {
+    transform: translateX(280px);
   }
 }
 
 @keyframes suctionFlow {
   to {
-    transform: translateX(80%) scaleX(.1);
+    transform: scaleX(.1);
     opacity: 0
   }
 }
@@ -1742,7 +1747,8 @@ dialog form {
 
 @media(max-width:900px) {
   .topbar {
-    grid-template-columns: 1fr auto
+    grid-template-columns: 1fr auto;
+    min-height: 150px;
   }
 
   .progress-wrap {
