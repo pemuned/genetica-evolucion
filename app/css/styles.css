@@ -105,7 +105,7 @@ body {
     /* Gradient base */
     background-color: var(--color-bg-mid);
     background-image:
-        url('../img/web/cell-bg.svg'),
+        url('../img/web/cell-bg.png'),
         radial-gradient(55% 45% at 12% 18%, rgba(33, 112, 145, 0.58) 0%, rgba(33, 112, 145, 0.22) 42%, transparent 76%),
         radial-gradient(48% 42% at 82% 14%, rgba(20, 86, 120, 0.52) 0%, rgba(20, 86, 120, 0.20) 44%, transparent 78%),
         radial-gradient(62% 50% at 68% 70%, rgba(11, 58, 84, 0.62) 0%, rgba(11, 58, 84, 0.24) 46%, transparent 80%),

@@ -333,7 +333,7 @@ class UIController {
     this.progressTrack.setAttribute("aria-valuenow", String(displayStep));
     this.instructionNumber.textContent = String(displayStep).padStart(2, "0");
     this.instructionTitle.textContent = config.title;
-    this.instructionText.textContent = config.instruction;
+    this.typeInstructionText(config.instruction);
     this.status.textContent = step >= 4 && step <= 15 ? "" : "";
 
     document
@@ -346,6 +346,22 @@ class UIController {
     if (step >= 5)
       this.revealCellToken(document.querySelector(".oocyte-token"));
     this.updateInteractiveStates();
+  }
+
+  // Simulates keystrokes appearing left-to-right, ending with a blinking text cursor.
+  typeInstructionText(text) {
+    clearInterval(this._typeInterval);
+    this.instructionText.classList.add("is-typing");
+    this.instructionText.textContent = "";
+    let i = 0;
+    this._typeInterval = setInterval(() => {
+      i += 1;
+      this.instructionText.textContent = text.slice(0, i);
+      if (i >= text.length) {
+        clearInterval(this._typeInterval);
+        this.instructionText.classList.remove("is-typing");
+      }
+    }, 18);
   }
 
   // Cell tokens are hidden until their step, then "emerge" from inside the donor mouse.
@@ -369,8 +385,9 @@ class UIController {
     if (this.game.step === 12 && this.game.flags.somaticCellHeld) {
       allowedDrags.clear();
       allowedDrags.add("injection-needle");
-      this.instructionText.textContent =
-        "La célula está estable. Ahora extrae su núcleo con la aguja de inyección.";
+      this.typeInstructionText(
+        "La célula está estable. Ahora extrae su núcleo con la aguja de inyección.",
+      );
       this.microNote.textContent =
         "Aspira solo el núcleo: allí se encuentra la información genética del ratón gris.";
     }
@@ -638,8 +655,9 @@ class UIController {
         this.schedule(() => {
           this.game.flags.birthReady = true;
           document.querySelector(".white-mouse").classList.add("birth-ready");
-          this.instructionText.textContent =
-            "La gestación se completó. Pulsa el vientre iluminado para revelar la cría.";
+          this.typeInstructionText(
+            "La gestación se completó. Pulsa el vientre iluminado para revelar la cría.",
+          );
           document.querySelector(".belly-target").tabIndex = 0;
           document.querySelector(".belly-target").focus();
         }, 2200);
@@ -697,8 +715,9 @@ class UIController {
     document.querySelector(".baby-mouse").classList.add("revealed");
     document.querySelector(".belly-target").tabIndex = -1;
     this.instructionTitle.textContent = "¡Ha nacido una cría gris!";
-    this.instructionText.textContent =
-      "Su pelaje confirma que es genéticamente idéntica a la donante del núcleo, no a la donante del ovocito ni a la madre sustituta.";
+    this.typeInstructionText(
+      "Su pelaje confirma que es genéticamente idéntica a la donante del núcleo, no a la donante del ovocito ni a la madre sustituta.",
+    );
     this.status.textContent =
       "Experimento completado. Puedes reiniciarlo para repetir el procedimiento.";
     this.toast(
@@ -722,7 +741,7 @@ class UIController {
     this.toastElement.className = `toast show ${type}`;
     this.toastTimer = window.setTimeout(
       () => this.toastElement.classList.remove("show"),
-      3800,
+      7800,
     );
   }
 
