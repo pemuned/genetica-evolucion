@@ -675,9 +675,8 @@ button:focus-visible,
 }
 
 .drop-zone.is-target {
-  outline: 3px dashed rgba(37, 168, 185, .8);
+  outline: 5px dashed rgba(12, 75, 143, 0.911);
   outline-offset: 5px;
-  background: rgba(127, 232, 224, .18);
   animation: targetPulse 1.25s ease-in-out infinite;
 }
 
@@ -746,6 +745,25 @@ button:focus-visible,
   top: 51%;
 }
 
+.enucleated-sample.is-disabled {
+  left: 39%;
+  top: 20%;
+}
+
+.petri-slot[data-draggable="petri3"] .somatic-token.is-disabled {
+  left: 36%;
+  top: 14%;
+}
+
+.enucleated-sample.is-disabled small {
+  display: none;
+}
+
+.enucleated-sample.is-disabled .mini-cell.no-nucleus {
+  animation: none;
+  border: 4px double rgba(183, 139, 83, .55);
+}
+
 .embryo-sample {
   left: 49%;
   top: 51%;
@@ -755,10 +773,10 @@ button:focus-visible,
   width: 49px;
   height: 49px;
   margin: auto;
+  background: radial-gradient(circle at 35% 30%, #fff, #f3d3a9 60%, #c98c65);
   animation: cellMorph 4s ease-in-out infinite alternate;
 }
 
-/* Draws attention to the enucleated oocyte so the user notices it's ready for the next step. */
 .mini-cell.no-nucleus {
   animation: cellMorph 4s ease-in-out infinite alternate, noNucleusBorderPulse 1.3s ease-in-out infinite;
 }
@@ -1224,7 +1242,7 @@ button:focus-visible,
   left: 31%;
   top: 30%;
   border: 10px double rgba(183, 139, 83, .55);
-  background: radial-gradient(circle at 35% 32%, #fff, rgba(148, 220, 216, .9) 65%, rgba(56, 139, 157, .8))
+  background: radial-gradient(circle at 35% 30%, #fff, #f3d3a9 60%, #c98c65);
 }
 
 .micro-somatic {
@@ -1263,7 +1281,7 @@ button:focus-visible,
   width: 40%;
   height: 40%;
   border-radius: 47% 53%;
-  border: 4px dashed rgba(0, 66, 172, 0.35)
+  border: 4px dashed #c98b6583
 }
 
 .micro-nucleus.extracted {
@@ -1604,10 +1622,12 @@ dialog form {
   0%,
   100% {
     border-color: rgba(58, 152, 172, .65);
+    transform: scale(1);
   }
 
   50% {
     border-color: rgba(233, 138, 61, .95);
+    transform: scale(1.16);
   }
 }
 
@@ -1668,7 +1688,6 @@ dialog form {
 @keyframes targetPulse {
   50% {
     outline-color: rgba(37, 168, 185, .3);
-    background: rgba(127, 232, 224, .35)
   }
 }
 
