@@ -199,9 +199,25 @@ class AnimationEngine {
     const suctionTrail = document.createElement("span");
     suctionTrail.className = "suction-trail";
     cell.append(suctionTrail);
-    //suctionTrail.addEventListener("animationend", () => suctionTrail.remove());
-    nucleus?.classList.add("extracted");
-    this.particles(cell, 8, "#9679b0");
+
+    // Only start draining once the needle has finished sliding in.
+    const onNeedleIn = (event) => {
+      if (event.animationName !== "toolEnterRight") return;
+      suctionTrail.removeEventListener("animationend", onNeedleIn);
+      const progress = document.createElement("span");
+      progress.className = "suction-progress";
+      cell.append(progress);
+      nucleus?.classList.add("extracted");
+
+      // Nucleus is only marked extracted once the progress bar is full.
+      const onFillEnd = (event2) => {
+        if (event2.animationName !== "suctionFill") return;
+        progress.removeEventListener("animationend", onFillEnd);
+        this.particles(cell, 118, "#9679b0");
+      };
+      progress.addEventListener("animationend", onFillEnd);
+    };
+    suctionTrail.addEventListener("animationend", onNeedleIn);
   }
 
   particles(origin, amount = 12, color = "#61d6d8") {
@@ -236,7 +252,9 @@ class AnimationEngine {
     this.timers.forEach((timer) => clearTimeout(timer));
     this.timers = [];
     document
-      .querySelectorAll(".suction-trail, .reagent-drop, .micro-particles i")
+      .querySelectorAll(
+        ".suction-trail, .suction-progress, .reagent-drop, .micro-particles i",
+      )
       .forEach((element) => element.remove());
   }
 }
@@ -574,7 +592,6 @@ class UIController {
       },
       "9:enucleated-oocyte:petri3": () => {
         document.querySelector("[data-drop-zone='petri3']").append(source);
-        source.classList.remove("visible");
         this.completeStep(
           "El ovocito sin núcleo está listo para recibir nueva información genética.",
         );

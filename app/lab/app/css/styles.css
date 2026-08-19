@@ -731,7 +731,7 @@ button:focus-visible,
   display: none;
   position: absolute;
   z-index: 10;
-  width: 90px;
+  width: 110px;
   text-align: center;
   cursor: var(--cursor-glove-open);
   touch-action: none;
@@ -742,7 +742,7 @@ button:focus-visible,
 }
 
 .enucleated-sample {
-  left: 49%;
+  left: 39%;
   top: 51%;
 }
 
@@ -755,15 +755,21 @@ button:focus-visible,
   width: 49px;
   height: 49px;
   margin: auto;
+  animation: cellMorph 4s ease-in-out infinite alternate;
+}
+
+/* Draws attention to the enucleated oocyte so the user notices it's ready for the next step. */
+.mini-cell.no-nucleus {
+  animation: cellMorph 4s ease-in-out infinite alternate, noNucleusBorderPulse 1.3s ease-in-out infinite;
 }
 
 .sample-token small {
   display: block;
-  margin-top: 4px;
+  margin-top: 8px;
   padding: 3px 5px;
   border-radius: 99px;
   background: white;
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   font-weight: 750;
 }
 
@@ -1136,18 +1142,31 @@ button:focus-visible,
 }
 
 .close-micro {
-  width: 48px;
+  width: auto;
   height: 48px;
   border: 1px solid var(--line);
-  border-radius: 50%;
-  background: white;
-  font-size: 1.75rem;
-  cursor: pointer
+  border-radius: 10px;
+  background: #f3fafc;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 2px 12px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 5px 15px rgba(27, 67, 78, .12);
+  transition: background .25s;
+  font-weight: bold;
 }
 
 .close-micro:disabled {
   opacity: .35;
   cursor: not-allowed
+}
+
+.close-micro:hover:not(:disabled) {
+  background: #fff;
+  box-shadow: 0 5px 15px rgba(27, 67, 78, .2);
+  transform: translateY(-1px);
 }
 
 .micro-layout {
@@ -1205,7 +1224,7 @@ button:focus-visible,
   left: 31%;
   top: 30%;
   border: 10px double rgba(183, 139, 83, .55);
-  background: radial-gradient(circle at 35% 32%, rgba(255, 255, 255, .85), rgba(245, 219, 177, .9) 65%, rgba(189, 137, 85, .8));
+  background: radial-gradient(circle at 35% 32%, #fff, rgba(148, 220, 216, .9) 65%, rgba(56, 139, 157, .8))
 }
 
 .micro-somatic {
@@ -1226,21 +1245,29 @@ button:focus-visible,
 .micro-nucleus {
   position: absolute;
   z-index: 3;
-  left: 34%;
-  top: 34%;
-  width: 31%;
-  height: 31%;
+  left: 29%;
+  top: 29%;
+  width: 40%;
+  height: 40%;
   border-radius: 47% 53%;
   background: radial-gradient(circle at 35% 32%, #eadcf2, #8a6fa7 65%, #604b82);
   box-shadow: 0 0 0 5px rgba(107, 82, 136, .15);
-  transition: all .75s cubic-bezier(.2, .8, .2, 1)
+  transition: all 4s cubic-bezier(.2, .8, .2, 1)
+}
+
+.micro-nucleus-border {
+  position: absolute;
+  z-index: 2;
+  left: 29%;
+  top: 29%;
+  width: 40%;
+  height: 40%;
+  border-radius: 47% 53%;
+  border: 4px dashed rgba(0, 66, 172, 0.35)
 }
 
 .micro-nucleus.extracted {
-  left: 115%;
-  top: 42%;
-  transform: scale(.15);
-  opacity: 0
+  transform: scale(0);
 }
 
 .organelle {
@@ -1336,13 +1363,38 @@ button:focus-visible,
 .suction-trail {
   position: absolute;
   z-index: 5;
-  right: -160%;
-  top: 30%;
+  right: -155%;
+  top: 34%;
   width: 220%;
   height: 30%;
   background: url("../img/aguja-inyec-micro.png") center/cover no-repeat;
   transform-origin: left;
   animation: toolEnterRight 2s ease both
+}
+
+/* Sits behind the needle image and fills to signal the nucleus liquid being drawn out. */
+.suction-progress {
+  position: absolute;
+  z-index: 4;
+  left: 53%;
+  top: 45%;
+  width: 150%;
+  height: 20px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .55);
+  box-shadow: inset 0 0 0 1px rgba(107, 82, 136, .3);
+  overflow: hidden;
+}
+
+.suction-progress::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #6b5288, #9679b0);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: suctionFill 4s ease forwards
 }
 
 .reagent-drop {
@@ -1547,6 +1599,18 @@ dialog form {
   }
 }
 
+@keyframes noNucleusBorderPulse {
+
+  0%,
+  100% {
+    border-color: rgba(58, 152, 172, .65);
+  }
+
+  50% {
+    border-color: rgba(233, 138, 61, .95);
+  }
+}
+
 @keyframes cellMorph {
   to {
     border-radius: 54% 46% 45% 55%/46% 55% 45% 54%;
@@ -1687,6 +1751,12 @@ dialog form {
   to {
     transform: scaleX(.1);
     opacity: 0
+  }
+}
+
+@keyframes suctionFill {
+  to {
+    transform: scaleX(1)
   }
 }
 
