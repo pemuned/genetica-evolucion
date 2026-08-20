@@ -101,10 +101,10 @@ const STEP_CONFIG = {
   14: {
     title: "Activa el desarrollo",
     instruction:
-      "Aplica una gota del reactivo para iniciar la primera división celular.",
-    hint: "Arrastra el frasco de reactivo hasta el ovocito reconstruido.",
+      "Aplica una gota del reactivo sobre el área del microscopio para iniciar la división celular.",
+    hint: "Arrastra el frasco de reactivo hasta cualquier parte de la rejilla del microscopio.",
     drags: ["reagent"],
-    targets: ["micro-oocyte"],
+    targets: ["lens"],
   },
   15: {
     title: "Implanta el embrión",
@@ -137,6 +137,7 @@ class GameState {
       somaticNucleusExtracted: false,
       nucleusTransferred: false,
       embryoActivated: false,
+      embryoDivisionComplete: false,
       embryoImplanted: false,
       birthReady: false,
       completed: false,
@@ -284,15 +285,96 @@ class AnimationEngine {
     }
   }
 
-  activateEmbryo(oocyte) {
-    oocyte.classList.add("activated");
-    this.particles(oocyte, 18, "#f2c960");
+  activateEmbryo(oocyte, onComplete) {
+    const lens = document.querySelector("#lens");
+    const drop = document.createElement("span");
+    drop.className = "reagent-drop";
+    drop.setAttribute("aria-hidden", "true");
+    lens.append(drop);
+
+    // Start the yellow wash near impact so it feels like liquid spreading, not an instant tint.
     this.timers.push(
       window.setTimeout(() => {
-        oocyte.style.opacity = "0";
-        document.querySelector(".division-cell")?.classList.add("visible");
-      }, 650),
+        lens.classList.add("reagent-wash");
+        oocyte.classList.add("activated");
+        this.particles(oocyte, 10, "#e8c45a");
+      }, 980),
     );
+
+    this.timers.push(
+      window.setTimeout(() => {
+        lens.classList.add("reagent-wash-fade");
+      }, 4200),
+    );
+
+    this.timers.push(
+      window.setTimeout(() => {
+        lens.classList.remove("reagent-wash", "reagent-wash-fade");
+        drop.remove();
+        this.startCleavage(oocyte, onComplete);
+      }, 5400),
+    );
+  }
+
+  startCleavage(oocyte, onComplete) {
+    oocyte.classList.remove("activated");
+    oocyte.classList.add("cleaving");
+
+    const field = document.createElement("span");
+    field.className = "blastomere-field";
+    field.setAttribute("aria-hidden", "true");
+    oocyte.append(field);
+
+    const stages = [2, 4, 8, 16];
+    let stageIndex = 0;
+
+    const showStage = () => {
+      this.placeBlastomeres(field, stages[stageIndex]);
+      stageIndex += 1;
+      if (stageIndex < stages.length) {
+        this.timers.push(window.setTimeout(showStage, 1500));
+      } else {
+        this.timers.push(window.setTimeout(() => onComplete?.(), 1400));
+      }
+    };
+
+    showStage();
+  }
+
+  // Irregular packing: golden-angle spiral with jitter so blastomeres look organic and may overlap.
+  placeBlastomeres(field, count) {
+    field.dataset.count = String(count);
+    field.replaceChildren();
+
+    const baseSize =
+      count <= 2 ? 40 : count <= 4 ? 32 : count <= 8 ? 24 : 17;
+    const maxRadius =
+      count <= 2 ? 22 : count <= 4 ? 28 : count <= 8 ? 34 : 38;
+
+    for (let index = 0; index < count; index += 1) {
+      const angle =
+        index * 2.399963229728653 + (Math.random() - 0.5) * 0.55;
+      const radius =
+        count === 1
+          ? 0
+          : Math.min(
+              maxRadius,
+              6 +
+                Math.sqrt(index + 0.35) * (maxRadius / Math.sqrt(count)) +
+                (Math.random() - 0.5) * 9,
+            );
+      const x = 50 + Math.cos(angle) * radius + (Math.random() - 0.5) * 7;
+      const y = 50 + Math.sin(angle) * radius + (Math.random() - 0.5) * 7;
+      const size = baseSize + (Math.random() - 0.5) * (baseSize * 0.28);
+
+      const blastomere = document.createElement("i");
+      blastomere.style.setProperty("--i", String(index));
+      blastomere.style.left = `${Math.max(10, Math.min(90, x))}%`;
+      blastomere.style.top = `${Math.max(10, Math.min(90, y))}%`;
+      blastomere.style.width = `${Math.max(12, size)}%`;
+      blastomere.style.zIndex = String(1 + Math.floor(Math.random() * 6));
+      field.append(blastomere);
+    }
   }
 
   reset() {
@@ -300,9 +382,12 @@ class AnimationEngine {
     this.timers = [];
     document
       .querySelectorAll(
-        ".suction-trail, .suction-progress, .reagent-drop, .micro-particles i",
+        ".suction-trail, .suction-progress, .reagent-drop, .micro-particles i, .blastomere-field",
       )
       .forEach((element) => element.remove());
+    document
+      .querySelector("#lens")
+      ?.classList.remove("reagent-wash", "reagent-wash-fade");
   }
 }
 
@@ -405,7 +490,10 @@ class UIController {
       .querySelector("#clone-button")
       .classList.toggle("visible", step === 3);
     this.stageDim.classList.toggle("visible", step === 3);
-    this.closeMicroButton.disabled = step !== 9;
+    this.closeMicroButton.disabled = !(
+      step === 9 ||
+      (step === 14 && this.game.flags.embryoDivisionComplete)
+    );
     if (step >= 4)
       this.revealCellToken(document.querySelector(".somatic-token"));
     if (step >= 5)
@@ -455,6 +543,11 @@ class UIController {
       );
       this.microNote.textContent =
         "Aspira solo el núcleo: allí se encuentra la información genética del ratón gris.";
+    }
+
+    if (this.game.step === 14 && this.game.flags.embryoActivated) {
+      allowedDrags.clear();
+      targets.clear();
     }
 
     document.querySelectorAll("[data-draggable]").forEach((element) => {
@@ -529,10 +622,19 @@ class UIController {
 
   onPointerUp(event) {
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
-    const target = document
-      .elementFromPoint(event.clientX, event.clientY)
-      ?.closest("[data-drop-zone]");
+    const hit = document.elementFromPoint(event.clientX, event.clientY);
+    let target = hit?.closest("[data-drop-zone]");
     const { action, source } = this.drag;
+
+    // Step 14: the whole lens (grid + cell) accepts the reagent drop.
+    if (
+      action === "reagent" &&
+      this.game.step === 14 &&
+      hit?.closest("#lens")
+    ) {
+      target = document.querySelector("#lens");
+    }
+
     this.cancelDrag();
     if (target && this.game.isValidDrop(action, target.dataset.dropZone)) {
       this.handleDrop(action, target.dataset.dropZone, source);
@@ -700,22 +802,31 @@ class UIController {
           },
         );
       },
-      "14:reagent:micro-oocyte": () => {
+      "14:reagent:lens": () => {
         this.game.flags.embryoActivated = true;
         this.updateInteractiveStates();
-        const drop = document.createElement("span");
-        drop.className = "reagent-drop";
-        document.querySelector("#lens").append(drop);
-        this.animations.activateEmbryo(document.querySelector(".micro-oocyte"));
         this.toast(
-          "¡Activación lograda! Comienza la primera división.",
+          "Reactivo aplicado. Observa cómo el medio se tiñe y comienza la división.",
           "success",
         );
-        this.schedule(() => {
-          this.closeMicroscope();
-          document.querySelector(".embryo-sample").classList.add("visible");
-          this.game.advance();
-        }, 1900);
+        this.microNote.textContent =
+          "El reactivo estimula al ovocito reconstruido para que inicie la división celular.";
+        this.animations.activateEmbryo(
+          document.querySelector(".micro-oocyte"),
+          () => {
+            this.game.flags.embryoDivisionComplete = true;
+            this.closeMicroButton.disabled = false;
+            this.typeInstructionText(
+              "La división celular llegó a 16 células. Pulsa Regresar al laboratorio para continuar.",
+            );
+            this.microNote.textContent =
+              "El embrión temprano ya está listo. Regresa al laboratorio para implantarlo.";
+            this.toast(
+              "División completa. Usa Regresar al laboratorio cuando quieras continuar.",
+              "success",
+            );
+          },
+        );
       },
       "15:embryo:surrogate": () => {
         source.classList.remove("visible");
@@ -751,13 +862,16 @@ class UIController {
   openMicroscope(mode) {
     const oocyte = document.querySelector(".micro-oocyte");
     const somatic = document.querySelector(".micro-somatic");
-    const division = document.querySelector(".division-cell");
     this.microOverlay.classList.remove("hidden");
     this.closeMicroButton.disabled = true;
     oocyte.style.display = "block";
     oocyte.style.opacity = "1";
+    oocyte.classList.remove("activated", "cleaving");
+    oocyte.querySelector(".blastomere-field")?.remove();
     somatic.style.display = mode === "transfer" ? "block" : "none";
-    division.classList.remove("visible");
+    document
+      .querySelector("#lens")
+      .classList.remove("reagent-wash", "reagent-wash-fade");
     // Second micromanipulation has both cells on screen, so tools enter vertically instead.
     document
       .querySelector("#lens")
@@ -786,6 +900,10 @@ class UIController {
     this.microOverlay.classList.add("hidden");
     if (this.game.step === 9)
       document.querySelector(".enucleated-sample").classList.add("visible");
+    if (this.game.step === 14 && this.game.flags.embryoDivisionComplete) {
+      document.querySelector(".embryo-sample").classList.add("visible");
+      this.game.advance();
+    }
     this.updateInteractiveStates();
   }
 
@@ -894,8 +1012,11 @@ class UIController {
     const oocyte = document.querySelector(".micro-oocyte");
     const somatic = document.querySelector(".micro-somatic");
     [oocyte, somatic].forEach((cell) => {
-      cell.classList.remove("held", "activated");
+      cell.classList.remove("held", "held-retract", "activated", "cleaving");
       cell.style.removeProperty("opacity");
+      cell.style.removeProperty("transform");
+      cell.style.removeProperty("transition");
+      cell.querySelector(".blastomere-field")?.remove();
       const nucleus = cell.querySelector(".micro-nucleus");
       nucleus?.classList.remove("extracted");
       nucleus?.style.removeProperty("opacity");
@@ -903,8 +1024,9 @@ class UIController {
     });
     oocyte.style.left = "31%";
     somatic.style.display = "none";
-    document.querySelector("#lens").classList.remove("dual-cell");
-    document.querySelector(".division-cell").classList.remove("visible");
+    document
+      .querySelector("#lens")
+      .classList.remove("dual-cell", "reagent-wash", "reagent-wash-fade");
     document
       .querySelector(".white-mouse")
       .classList.remove("is-pregnant", "birth-ready");

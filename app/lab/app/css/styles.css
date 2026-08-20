@@ -800,19 +800,22 @@ button:focus-visible,
 }
 
 .embryo-mini {
-  display: flex !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr);
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   gap: 1px;
+  padding: 7px;
   background: radial-gradient(circle, #fff7d8, #d4ae74) !important;
   border-color: #d0a160 !important;
 }
 
 .embryo-mini i {
-  width: 42%;
-  height: 58%;
+  width: 100%;
+  aspect-ratio: 1;
+  height: auto;
   border-radius: 50%;
-  background: #f7dca3;
+  background: radial-gradient(circle at 35% 30%, #fff3d4, #e1b578);
   border: 1px solid #b78555;
 }
 
@@ -1216,13 +1219,52 @@ button:focus-visible,
   border-radius: 50%;
   background: radial-gradient(circle, #f9ffff 0, #d6f3f1 57%, #8dbbbc 85%, #31525b 100%);
   box-shadow: inset 0 0 45px rgba(20, 69, 76, .65);
-  isolation: isolate
+  isolation: isolate;
+  transition: background 2.8s ease, box-shadow 2.8s ease
+}
+
+.lens.drop-zone.is-target {
+  outline-offset: -10px;
+  cursor: var(--cursor-glove-open, pointer)
+}
+
+.lens.reagent-wash {
+  background: radial-gradient(circle, #fff6c8 0, #f0d56a 48%, #c9a23a 78%, #5a4a28 100%);
+  box-shadow: inset 0 0 45px rgba(120, 90, 20, .45)
+}
+
+.lens.reagent-wash::after {
+  content: "";
+  position: absolute;
+  left: 54%;
+  top: 44%;
+  z-index: 7;
+  width: 28%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  translate: -50% -50%;
+  background:
+    radial-gradient(circle, rgba(255, 244, 170, .8) 0%, rgba(236, 196, 70, .55) 42%, rgba(210, 160, 40, .18) 68%, transparent 78%);
+  filter: blur(1px);
+  animation: reagentSpread 2.6s cubic-bezier(.12, .7, .2, 1) forwards
+}
+
+.lens.reagent-wash-fade {
+  transition: background 1.1s ease, box-shadow 1.1s ease;
+  background: radial-gradient(circle, #f9ffff 0, #d6f3f1 57%, #8dbbbc 85%, #31525b 100%);
+  box-shadow: inset 0 0 45px rgba(20, 69, 76, .65)
+}
+
+.lens.reagent-wash-fade::after {
+  animation: reagentWashOut 1.1s ease forwards
 }
 
 .lens-grid {
   position: absolute;
   inset: 0;
   opacity: .2;
+  pointer-events: none;
   background-image: linear-gradient(rgba(37, 127, 141, .25) 1px, transparent 1px), linear-gradient(90deg, rgba(37, 127, 141, .25) 1px, transparent 1px);
   background-size: 35px 35px;
   mask-image: radial-gradient(circle, #000, transparent 78%)
@@ -1360,35 +1402,37 @@ button:focus-visible,
 }
 
 .micro-cell.activated {
-  animation: activationPulse .8s ease 2
+  animation: activationPulse 1.4s ease 2
 }
 
-.division-cell {
-  display: none;
+.micro-cell.cleaving {
+  animation: none
+}
+
+.micro-cell.cleaving .micro-nucleus,
+.micro-cell.cleaving .micro-nucleus-border,
+.micro-cell.cleaving .organelle {
+  opacity: 0;
+  transition: opacity .7s ease
+}
+
+.blastomere-field {
   position: absolute;
-  left: 30%;
-  top: 30%;
-  width: 40%;
+  inset: 12%;
+  z-index: 4;
+  pointer-events: none
+}
+
+.blastomere-field i {
+  position: absolute;
   aspect-ratio: 1;
-  border: 8px double rgba(183, 139, 83, .6);
-  border-radius: 50%;
-  background: rgba(245, 217, 174, .78)
-}
-
-.division-cell.visible {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: divisionIn 1.5s ease both
-}
-
-.division-cell i {
-  width: 44%;
-  height: 70%;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 32%, #fff3d4, #e1b578);
-  border: 2px solid #bd8952;
-  animation: blastomere 1.2s ease both
+  border-radius: 48% 52% 47% 53%/52% 46% 54% 48%;
+  background: radial-gradient(circle at 35% 30%, #fff6dc, #e4b66f 70%, #c48a48);
+  border: 2px solid rgba(168, 112, 55, .75);
+  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, .55);
+  transform: translate(-50%, -50%);
+  animation: blastomereIn .75s cubic-bezier(.2, .8, .2, 1) both;
+  animation-delay: calc(var(--i, 0) * 40ms)
 }
 
 .micro-particles {
@@ -1483,14 +1527,49 @@ button:focus-visible,
 .reagent-drop {
   position: absolute;
   z-index: 9;
-  left: 60%;
-  top: 8%;
-  width: 25px;
+  left: 54%;
+  top: -22%;
+  width: 26px;
   height: 34px;
-  border-radius: 55% 45% 60% 40%;
-  background: linear-gradient(145deg, #c7ffff, #4ccbd2);
-  box-shadow: inset 4px 4px 7px rgba(255, 255, 255, .8), 0 0 16px #63dce1;
-  animation: dropFall .75s ease-in forwards
+  border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
+  background:
+    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .95) 0 18%, transparent 42%),
+    linear-gradient(165deg, #fff7c4 8%, #efc84a 48%, #c89218 100%);
+  box-shadow:
+    inset -3px -4px 6px rgba(150, 100, 10, .28),
+    inset 3px 4px 5px rgba(255, 255, 255, .55),
+    0 8px 18px rgba(180, 130, 20, .35);
+  filter: drop-shadow(0 4px 6px rgba(90, 60, 10, .2));
+  transform: translateX(-50%);
+  transform-origin: center top;
+  animation: dropFall 1.35s cubic-bezier(.28, .1, .22, 1) forwards;
+  pointer-events: none
+}
+
+.reagent-drop::before {
+  content: "";
+  position: absolute;
+  left: 28%;
+  top: 16%;
+  width: 34%;
+  height: 28%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .55);
+  filter: blur(.4px)
+}
+
+.reagent-drop::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  width: 42%;
+  height: 22%;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: rgba(180, 130, 20, .22);
+  filter: blur(2px);
+  opacity: .7
 }
 
 .micro-tools {
@@ -1907,50 +1986,87 @@ dialog form {
 }
 
 @keyframes dropFall {
-  65% {
-    top: 44%;
-    transform: scale(1)
+  0% {
+    top: -24%;
+    opacity: 0;
+    border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
+    transform: translateX(-50%) scaleX(1.05) scaleY(.82) rotate(-4deg)
+  }
+
+  10% {
+    opacity: 1
+  }
+
+  48% {
+    top: 28%;
+    opacity: 1;
+    border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
+    transform: translateX(-50%) scaleX(.78) scaleY(1.38) rotate(2deg)
+  }
+
+  68% {
+    top: 43%;
+    border-radius: 48% 52% 55% 45% / 40% 40% 60% 60%;
+    transform: translateX(-50%) scaleX(1.55) scaleY(.42) rotate(0deg)
+  }
+
+  82% {
+    top: 45%;
+    opacity: .55;
+    border-radius: 50%;
+    transform: translateX(-50%) scale(1.9) rotate(0deg)
   }
 
   100% {
-    top: 48%;
-    transform: scale(.15);
-    opacity: 0
+    top: 47%;
+    opacity: 0;
+    border-radius: 50%;
+    transform: translateX(-50%) scale(2.6)
+  }
+}
+
+@keyframes reagentSpread {
+  0% {
+    transform: scale(.12);
+    opacity: .25
+  }
+
+  35% {
+    opacity: .85
+  }
+
+  100% {
+    transform: scale(5.2);
+    opacity: 1
+  }
+}
+
+@keyframes reagentWashOut {
+  to {
+    opacity: 0;
+    transform: scale(5.4)
   }
 }
 
 @keyframes activationPulse {
   50% {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 25px #f8cf62)
+    filter: drop-shadow(0 0 18px rgba(248, 207, 98, .9))
   }
 }
 
-@keyframes divisionIn {
-  0% {
-    transform: scale(.6);
+@keyframes blastomereIn {
+  from {
+    transform: translate(-50%, -50%) scale(.15);
     opacity: 0
   }
 
-  45% {
-    transform: scale(1.08)
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 1
-  }
-}
-
-@keyframes blastomere {
-  from {
-    transform: translateX(0);
-    border-radius: 50%
+  70% {
+    transform: translate(-50%, -50%) scale(1.08)
   }
 
   to {
-    transform: translateX(var(--shift, 0));
-    border-radius: 45% 55%
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1
   }
 }
 

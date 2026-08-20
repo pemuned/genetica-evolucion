@@ -128,7 +128,7 @@
         </div>
         <div class="sample-token embryo-sample draggable" data-draggable="embryo" role="button" tabindex="-1"
           aria-label="Embrión activado">
-          <span class="mini-cell embryo-mini"><i></i><i></i></span><small>Embrión</small>
+          <span class="mini-cell embryo-mini" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>Embrión</small>
         </div>
 
         <button class="primary-button clone-button pulse-button" id="clone-button" type="button">Empecemos la clonación
@@ -189,7 +189,8 @@
     </div>
     <div class="micro-layout">
       <div class="lens-shell">
-        <div class="lens" id="lens">
+        <div class="lens drop-zone" id="lens" data-drop-zone="lens" tabindex="-1"
+          aria-label="Área de observación del microscopio">
           <span class="lens-grid" aria-hidden="true"></span>
           <div class="micro-cell micro-oocyte drop-zone" data-drop-zone="micro-oocyte" tabindex="-1"
             aria-label="Ovocito bajo el microscopio">
@@ -204,7 +205,6 @@
             <span class="micro-nucleus-border"></span>
             <i class="organelle o1"></i><i class="organelle o2"></i><i class="organelle o3"></i>
           </div>
-          <div class="division-cell" aria-hidden="true"><i></i><i></i></div>
           <div class="micro-particles" aria-hidden="true"></div>
         </div>
       </div>
