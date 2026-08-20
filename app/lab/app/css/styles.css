@@ -1281,7 +1281,14 @@ button:focus-visible,
   width: 40%;
   height: 40%;
   border-radius: 47% 53%;
+}
+
+.micro-oocyte .micro-nucleus-border {
   border: 4px dashed #c98b6583
+}
+
+.micro-somatic .micro-nucleus-border {
+  border: 4px dashed #3a8d9d8c
 }
 
 .micro-nucleus.extracted {
@@ -1329,6 +1336,28 @@ button:focus-visible,
   height: 100%;
   background: url("../img/aguja-sosten-micro.png") center/contain no-repeat;
   animation: toolEnterLeft 2s ease both
+}
+
+.dual-cell .micro-cell.micro-oocyte.held::before {
+  display: none;
+}
+
+.dual-cell .micro-cell.micro-somatic.held::before {
+  rotate: -90deg;
+  left: -25%;
+  top: 110%;
+  animation: toolEnterBottom 2s ease both
+}
+
+.micro-cell.held.held-retract::before {
+  animation: toolExitLeft 2s ease both;
+  animation-delay: 1s;
+}
+
+/* Higher specificity than the dual-cell entrance rule so the pipette exits downward instead of replaying the entrance. */
+.dual-cell .micro-cell.micro-somatic.held.held-retract::before {
+  animation: toolExitLeft 2s ease both;
+  animation-delay: 1s;
 }
 
 .micro-cell.activated {
@@ -1413,6 +1442,43 @@ button:focus-visible,
   transform: scaleX(0);
   transform-origin: left;
   animation: suctionFill 4s ease forwards
+}
+
+/* Reverse of the extraction fill: bar starts full and drains as the nucleus is delivered into the cell. */
+.suction-progress.injecting::before {
+  animation: injectionFill 4s ease forwards
+}
+
+.dual-cell .micro-somatic .suction-trail,
+.dual-cell .micro-oocyte .suction-trail {
+  rotate: -90deg;
+  left: 50%;
+  top: 50%;
+  animation: toolEnterTop 2s ease both
+}
+
+.dual-cell .micro-somatic .suction-progress,
+.dual-cell .micro-oocyte .suction-progress {
+  rotate: -90deg;
+  left: -25%;
+  top: -32%;
+}
+
+.suction-trail-retract {
+  transform-origin: left;
+  animation: toolExitRight 1.2s ease both
+}
+
+/* The progress bar defaults to a centered pivot; keep that on retract so it doesn't jump before exiting. */
+.dual-cell .micro-somatic .suction-progress.suction-trail-retract,
+.dual-cell .micro-oocyte .suction-progress.suction-trail-retract {
+  transform-origin: center;
+}
+
+/* Higher specificity than the dual-cell entrance rule so the needle retracts upward instead of replaying the entrance. */
+.dual-cell .micro-somatic .suction-trail.suction-trail-retract,
+.dual-cell .micro-oocyte .suction-trail.suction-trail-retract {
+  animation: toolExitRight 1.2s ease both
 }
 
 .reagent-drop {
@@ -1528,18 +1594,33 @@ button:focus-visible,
   z-index: 120;
   left: 50%;
   top: 100px;
-  max-width: min(480px, calc(100% - 30px));
+  max-width: min(520px, calc(100% - 30px));
   padding: 12px 18px;
   border-radius: 12px;
   background: #153d49;
   color: white;
   box-shadow: 0 12px 30px rgba(18, 55, 66, .3);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 9px;
   transform: translate(-50%, 25px);
   opacity: 0;
   pointer-events: none;
   transition: .3s
+}
+
+.toast-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 19px;
+  height: 19px;
+  font-size: 0.75rem;
+  font-style: italic;
+  font-weight: 800;
 }
 
 .toast.show {
@@ -1548,7 +1629,7 @@ button:focus-visible,
 }
 
 .toast.success {
-  background: #147a76
+  background: #0d4c4a96
 }
 
 .toast.error {
@@ -1756,13 +1837,37 @@ dialog form {
 
 @keyframes toolEnterLeft {
   from {
-    transform: translateX(-250px);
+    transform: translateX(-400px);
+  }
+}
+
+@keyframes toolExitRight {
+  to {
+    transform: translateX(400px);
+  }
+}
+
+@keyframes toolExitLeft {
+  to {
+    transform: translateX(-400px);
   }
 }
 
 @keyframes toolEnterRight {
   from {
-    transform: translateX(280px);
+    transform: translateX(400px);
+  }
+}
+
+@keyframes toolEnterTop {
+  from {
+    transform: translateX(400px);
+  }
+}
+
+@keyframes toolEnterBottom {
+  from {
+    transform: translateX(-400px);
   }
 }
 
@@ -1776,6 +1881,29 @@ dialog form {
 @keyframes suctionFill {
   to {
     transform: scaleX(1)
+  }
+}
+
+@keyframes injectionFill {
+  0% {
+    transform-origin: right;
+    transform: scaleX(0);
+  }
+
+  8% {
+    transform-origin: right;
+    transform: scaleX(1);
+  }
+
+  8.01% {
+    /* Origin swap is invisible here since scaleX(1) renders identically regardless of pivot. */
+    transform-origin: left;
+    transform: scaleX(1);
+  }
+
+  100% {
+    transform-origin: left;
+    transform: scaleX(0);
   }
 }
 

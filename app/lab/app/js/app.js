@@ -167,7 +167,6 @@ class GameState {
   }
 }
 
-// Visual effects remain independent from progression and never decide game state.
 class AnimationEngine {
   constructor(root) {
     this.root = root;
@@ -200,22 +199,70 @@ class AnimationEngine {
     suctionTrail.className = "suction-trail";
     cell.append(suctionTrail);
 
-    // Only start draining once the needle has finished sliding in.
+    // Only start draining once the needle has finished sliding in (right entry, or top entry in the second micromanipulation).
     const onNeedleIn = (event) => {
-      if (event.animationName !== "toolEnterRight") return;
+      if (
+        event.animationName !== "toolEnterRight" &&
+        event.animationName !== "toolEnterTop"
+      )
+        return;
       suctionTrail.removeEventListener("animationend", onNeedleIn);
-      const progress = document.createElement("span");
-      progress.className = "suction-progress";
-      cell.append(progress);
+      const suctionTrailProgress = document.createElement("span");
+      suctionTrailProgress.className = "suction-progress";
+      cell.append(suctionTrailProgress);
       nucleus?.classList.add("extracted");
 
       // Nucleus is only marked extracted once the progress bar is full.
       const onFillEnd = (event2) => {
         if (event2.animationName !== "suctionFill") return;
-        progress.removeEventListener("animationend", onFillEnd);
+        suctionTrailProgress.removeEventListener("animationend", onFillEnd);
         this.particles(cell, 118, "#9679b0");
+        //add class to suction trail to make it retract and disappear
+        suctionTrail.classList.add("suction-trail-retract");
+        suctionTrailProgress.classList.add("suction-trail-retract");
+        cell.classList.add("held-retract");
       };
-      progress.addEventListener("animationend", onFillEnd);
+      suctionTrailProgress.addEventListener("animationend", onFillEnd);
+    };
+    suctionTrail.addEventListener("animationend", onNeedleIn);
+  }
+
+  // Reverse of suction(): needle enters, the progress bar drains as the nucleus is delivered, then it retracts.
+  injection(cell, onComplete) {
+    const nucleus = cell.querySelector(".micro-nucleus");
+    const suctionTrail = document.createElement("span");
+    suctionTrail.className = "suction-trail";
+    cell.append(suctionTrail);
+
+    const onNeedleIn = (event) => {
+      if (
+        event.animationName !== "toolEnterRight" &&
+        event.animationName !== "toolEnterTop"
+      )
+        return;
+      suctionTrail.removeEventListener("animationend", onNeedleIn);
+      const suctionTrailProgress = document.createElement("span");
+      suctionTrailProgress.className = "suction-progress injecting";
+      cell.append(suctionTrailProgress);
+      nucleus?.classList.remove("extracted");
+
+      // Nucleus only reappears once the progress bar has fully drained into the cell.
+      const onFillEnd = (event2) => {
+        if (event2.animationName !== "injectionFill") return;
+        suctionTrailProgress.removeEventListener("animationend", onFillEnd);
+        this.particles(cell, 10, "#9679b0");
+        suctionTrail.classList.add("suction-trail-retract");
+        suctionTrailProgress.classList.add("suction-trail-retract");
+
+        // The step only completes once the needle has fully withdrawn.
+        const onRetractEnd = (event3) => {
+          if (event3.animationName !== "toolExitRight") return;
+          suctionTrail.removeEventListener("animationend", onRetractEnd);
+          onComplete?.();
+        };
+        suctionTrail.addEventListener("animationend", onRetractEnd);
+      };
+      suctionTrailProgress.addEventListener("animationend", onFillEnd);
     };
     suctionTrail.addEventListener("animationend", onNeedleIn);
   }
@@ -633,14 +680,15 @@ class UIController {
         );
       },
       "13:injection-needle:micro-oocyte": () => {
-        const nucleus = document.querySelector(".micro-oocyte .micro-nucleus");
-        nucleus.classList.remove("extracted");
-        nucleus.style.opacity = "1";
-        nucleus.style.transform = "scale(1)";
         this.game.flags.nucleusTransferred = true;
-        this.animations.particles(document.querySelector(".micro-oocyte"), 10);
-        this.completeStep(
-          "El ovocito ahora contiene el ADN nuclear de la donante gris.",
+        this.updateInteractiveStates();
+        this.animations.injection(
+          document.querySelector(".micro-oocyte"),
+          () => {
+            this.completeStep(
+              "El ovocito ahora contiene el ADN nuclear de la donante gris.",
+            );
+          },
         );
       },
       "14:reagent:micro-oocyte": () => {
@@ -701,9 +749,20 @@ class UIController {
     oocyte.style.opacity = "1";
     somatic.style.display = mode === "transfer" ? "block" : "none";
     division.classList.remove("visible");
+    // Second micromanipulation has both cells on screen, so tools enter vertically instead.
+    document
+      .querySelector("#lens")
+      .classList.toggle("dual-cell", mode === "transfer");
     if (mode === "transfer") {
       oocyte.style.left = "52%";
       oocyte.querySelector(".micro-nucleus").classList.add("extracted");
+      // Clear the first micromanipulation's leftover pipette/needle state before reusing the cells.
+      [oocyte, somatic].forEach((cell) => {
+        cell.classList.remove("held", "held-retract");
+        cell
+          .querySelectorAll(".suction-trail, .suction-progress")
+          .forEach((element) => element.remove());
+      });
       oocyte.classList.add("held");
       this.microNote.textContent =
         "La célula azul es somática; el ovocito dorado ya no tiene núcleo.";
@@ -754,12 +813,26 @@ class UIController {
 
   toast(message, type = "") {
     clearTimeout(this.toastTimer);
-    this.toastElement.textContent = message;
+    this.toastElement.replaceChildren();
+    if (type === "success") {
+      const icon = document.createElement("span");
+      icon.className = "toast-icon";
+      icon.innerHTML =
+        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor"d="M12 20a8 8 0 1 0 0-16a8 8 0 0 0 0 16m0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-1-11v6h2v-6zm0-4h2v2h-2z" /></svg>';
+      icon.setAttribute("aria-hidden", "true");
+      this.toastElement.append(icon);
+    }
+    const text = document.createElement("span");
+    text.textContent = message;
+    this.toastElement.append(text);
     this.toastElement.className = `toast show ${type}`;
-    this.toastTimer = window.setTimeout(
-      () => this.toastElement.classList.remove("show"),
-      7800,
-    );
+
+    if (type !== "success") {
+      this.toastTimer = window.setTimeout(
+        () => this.toastElement.classList.remove("show"),
+        7800,
+      );
+    }
   }
 
   schedule(callback, delay) {
@@ -821,6 +894,7 @@ class UIController {
     });
     oocyte.style.left = "31%";
     somatic.style.display = "none";
+    document.querySelector("#lens").classList.remove("dual-cell");
     document.querySelector(".division-cell").classList.remove("visible");
     document
       .querySelector(".white-mouse")
@@ -835,6 +909,7 @@ class UIController {
     this.materials.classList.add("hidden");
     this.intro.classList.remove("hidden");
     this.toastElement.className = "toast";
+    this.toastElement.replaceChildren();
     this.game.reset();
     this.renderStep();
     document.querySelector("#start-button").focus();
