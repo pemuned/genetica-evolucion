@@ -1233,7 +1233,6 @@ button:focus-visible,
   width: 38%;
   aspect-ratio: 1;
   border-radius: 46% 54% 51% 49%/53% 45% 55% 47%;
-  transition: left .6s, transform .6s, opacity .4s;
   filter: drop-shadow(0 15px 20px rgba(41, 114, 121, .2));
   animation: cellMorph 5s ease-in-out infinite alternate
 }
