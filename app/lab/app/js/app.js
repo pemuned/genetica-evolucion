@@ -541,7 +541,7 @@ class UIController {
         source,
         target
           ? "Esa no es la zona correcta."
-          : "Suelta el elemento sobre la zona iluminada.",
+          : "Suelta el elemento sobre la zona resaltada.",
       );
     }
   }
@@ -634,7 +634,7 @@ class UIController {
             this.completeStep(
               "Al retirar el núcleo eliminamos el ADN de la donante del ovocito.",
             ),
-          650,
+          6950,
         );
       },
       "9:enucleated-oocyte:petri3": () => {
@@ -676,12 +676,21 @@ class UIController {
             this.completeStep(
               "El núcleo extraído contiene el genoma del ratón gris.",
             ),
-          650,
+          6950,
         );
       },
       "13:injection-needle:micro-oocyte": () => {
         this.game.flags.nucleusTransferred = true;
         this.updateInteractiveStates();
+        //fadeout micro-somatic cell after suction animation completes
+        document.querySelector(".micro-somatic").style.opacity = "0";
+        document.querySelector(".micro-somatic").style.transition =
+          "opacity 0.2s ease, transform 1s ease";
+        // trasnlate micro-oocyte to the left
+        document.querySelector(".micro-oocyte").style.transform =
+          "translateX(-140px)";
+        document.querySelector(".micro-oocyte").style.transition =
+          "transform 1s ease";
         this.animations.injection(
           document.querySelector(".micro-oocyte"),
           () => {
