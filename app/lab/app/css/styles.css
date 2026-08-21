@@ -1414,6 +1414,10 @@ button:focus-visible,
   animation: cellMorph 5s ease-in-out infinite alternate, miniCellRotate 5s ease-in-out infinite alternate
 }
 
+.micro-cell.micro-oocyte.held {
+  animation: none;
+}
+
 .micro-oocyte {
   left: 31%;
   top: 30%;
