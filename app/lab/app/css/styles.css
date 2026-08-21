@@ -1334,7 +1334,7 @@ button:focus-visible,
   align-items: center;
   gap: clamp(16px, 4vw, 50px);
   position: relative;
-  top: 8%;
+  top: 5%;
 }
 
 .lens-shell {

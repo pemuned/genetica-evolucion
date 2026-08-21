@@ -269,7 +269,9 @@ a {
 .a11y-toggle:focus-visible,
 .btn-enter:focus-visible,
 .nav-btn:focus-visible,
-.hamburger-btn:focus-visible {
+.hamburger-btn:focus-visible,
+.sim-close-btn:focus-visible,
+.sim-fullscreen-btn:focus-visible {
     outline: 3px solid #f8ff9a;
     outline-offset: 2px;
 }
@@ -318,6 +320,17 @@ body.a11y-high-contrast .btn-enter {
 }
 
 body.a11y-high-contrast .btn-enter:hover {
+    background: #ffffff;
+    color: #000000;
+}
+
+body.a11y-high-contrast .sim-close-btn {
+    color: #ffffff;
+    border-color: #ffffff;
+    background: #07131d;
+}
+
+body.a11y-high-contrast .sim-close-btn:hover {
     background: #ffffff;
     color: #000000;
 }
@@ -849,6 +862,103 @@ hr {
 .prelab-arrow-btn:focus-visible {
     outline: 3px solid #f8ff9a;
     outline-offset: 2px;
+}
+
+/* ============================================================
+   SIMULATION PREVIEW + FULLSCREEN OVERLAY
+   ============================================================ */
+.sim-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    margin: 50px 0 100px 0;
+}
+
+.sim-preview-frame {
+    display: block;
+    width: 100%;
+    min-height: 360px;
+    height: min(55vh, 520px);
+    border: 1px solid var(--color-card-border);
+    border-radius: 12px;
+    background: #000;
+}
+
+.sim-fullscreen-btn {
+    align-self: center;
+    padding: 12px 28px;
+    font-size: 0.85rem;
+    animation: none;
+}
+
+.sim-fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    background: var(--color-bg-mid);
+}
+
+.sim-fullscreen[hidden] {
+    display: none;
+}
+
+.sim-fullscreen-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-shrink: 0;
+    padding: 10px 16px;
+    background: rgba(0, 0, 0, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.sim-fullscreen-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-card-heading);
+    letter-spacing: 0.04em;
+}
+
+.sim-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 20px;
+    background: transparent;
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius-nav);
+    color: var(--color-accent);
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-speed) ease,
+        color var(--transition-speed) ease;
+}
+
+.sim-close-btn:hover {
+    background-color: var(--color-accent);
+    color: var(--color-bg-start);
+}
+
+.sim-fullscreen-frame {
+    flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #000;
+}
+
+body.sim-fullscreen-open {
+    overflow: hidden;
 }
 
 /* References & Credits list */

@@ -206,7 +206,53 @@ function initContentSliders() {
   sliderRoots.forEach(initSlider);
 }
 
+/**
+ * Fullscreen simulation overlay (iframe stays on this page).
+ */
+function initSimFullscreen() {
+  const openBtn = document.getElementById("sim-open-btn");
+  const overlay = document.getElementById("sim-fullscreen");
+  const closeBtn = document.getElementById("sim-close-btn");
+  const frame = document.getElementById("sim-fullscreen-frame");
+  const LAB_SRC = "app/lab/index.html";
+
+  if (!openBtn || !overlay || !closeBtn || !frame) return;
+
+  let lastFocus = null;
+
+  function openSim() {
+    lastFocus = document.activeElement;
+    if (!frame.getAttribute("src") || frame.getAttribute("src") === "about:blank") {
+      frame.setAttribute("src", LAB_SRC);
+    }
+    overlay.hidden = false;
+    document.body.classList.add("sim-fullscreen-open");
+    closeBtn.focus();
+  }
+
+  function closeSim() {
+    overlay.hidden = true;
+    document.body.classList.remove("sim-fullscreen-open");
+    if (lastFocus && typeof lastFocus.focus === "function") {
+      lastFocus.focus();
+    } else {
+      openBtn.focus();
+    }
+  }
+
+  openBtn.addEventListener("click", openSim);
+  closeBtn.addEventListener("click", closeSim);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !overlay.hidden) {
+      event.preventDefault();
+      closeSim();
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initNav();
   initContentSliders();
+  initSimFullscreen();
 });
