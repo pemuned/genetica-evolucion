@@ -758,6 +758,8 @@ class UIController {
         );
       },
       "12:holding-pipette:micro-somatic": () => {
+        document.querySelector(".somatic-token").style.display = "none";
+        document.querySelector(".enucleated-sample").style.display = "none";
         document.querySelector(".micro-somatic").classList.add("held");
         this.game.flags.somaticCellHeld = true;
         this.toast(
