@@ -399,7 +399,6 @@ class UIController {
     this.materials = document.querySelector("#materials-screen");
     this.microOverlay = document.querySelector("#microscope-overlay");
     this.closeMicroButton = document.querySelector("#close-micro");
-    this.microNote = document.querySelector("#micro-note-text");
     this.resetDialog = document.querySelector("#reset-dialog");
     this.stageDim = document.querySelector("#stage-dim");
   }
@@ -519,8 +518,6 @@ class UIController {
       this.typeInstructionText(
         "La célula está estable. Ahora extrae su núcleo con la aguja de inyección.",
       );
-      this.microNote.textContent =
-        "Aspira solo el núcleo: allí se encuentra la información genética del ratón gris.";
     }
 
     if (this.game.step === 14 && this.game.flags.embryoActivated) {
@@ -789,8 +786,6 @@ class UIController {
           "Reactivo aplicado. Observa cómo el medio se tiñe y comienza la división.",
           "success",
         );
-        this.microNote.textContent =
-          "El reactivo estimula al ovocito reconstruido para que inicie la división celular.";
         this.animations.activateEmbryo(
           document.querySelector(".micro-oocyte"),
           () => {
@@ -799,8 +794,6 @@ class UIController {
             this.typeInstructionText(
               "La división celular llegó a 16 células. Pulsa Regresar al laboratorio para continuar.",
             );
-            this.microNote.textContent =
-              "El embrión temprano ya está listo. Regresa al laboratorio para implantarlo.";
             this.toast(
               "División completa. Usa Regresar al laboratorio cuando quieras continuar.",
               "success",
@@ -867,12 +860,8 @@ class UIController {
           .forEach((element) => element.remove());
       });
       oocyte.classList.add("held");
-      this.microNote.textContent =
-        "La célula azul es somática; el ovocito dorado ya no tiene núcleo.";
     } else {
       oocyte.style.left = "31%";
-      this.microNote.textContent =
-        "La pipeta evita que la célula se mueva durante el procedimiento.";
     }
   }
 

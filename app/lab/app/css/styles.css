@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/montserrat/montserrat-latin.woff2') format('woff2');
+}
+
 :root {
   --ink: #17333f;
   --muted: #607985;
@@ -12,7 +20,7 @@
   /* Lab-glove cursor: open hand by default, fist while dragging, open again on release. */
   --cursor-glove-open: url("../img/hand.svg") 10 10, auto;
   --cursor-glove-closed: url("../img/hand-grab.svg") 10 14, grabbing;
-  font-family: Inter, ui-rounded, "Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Montserrat', Inter, ui-rounded, "Nunito Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--ink);
 }
 
@@ -75,7 +83,7 @@ button:focus-visible,
 .topbar {
   height: 90px;
   display: grid;
-  grid-template-columns: minmax(350px, 1fr) minmax(100px, 1fr) minmax(350px, 1fr);
+  grid-template-columns: minmax(350px, 3fr) minmax(350px, auto) minmax(100px, auto);
   align-items: center;
   gap: 24px;
   padding: 9px 16px;
@@ -123,7 +131,7 @@ button:focus-visible,
 
 .progress-wrap {
   width: 100%;
-  padding-right: 20px;
+  padding: 0 20px 0 20px;
 }
 
 .progress-copy {
@@ -185,6 +193,10 @@ button:focus-visible,
   width: 100%;
   min-height: 72px;
   position: relative;
+  border-radius: 14px;
+  padding: 10px;
+  background-color: var(--panel);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .instruction-number {
@@ -197,7 +209,25 @@ button:focus-visible,
   background: linear-gradient(145deg, var(--blue-dark), var(--blue));
   font-weight: 900;
   font-size: 1.0625rem;
-  animation: instructionNumberPulse 1.8s ease-in-out infinite;
+  animation: instructionNumberPulse 1.8s ease-in-out infinite, nav-active-glow 1.5s ease-in-out infinite;
+  overflow: hidden;
+}
+
+.instruction-number::before {
+  content: '';
+  position: absolute;
+  top: -130%;
+  left: -35%;
+  width: 55%;
+  height: 320%;
+  background: linear-gradient(120deg,
+      rgba(255, 255, 255, 0.536) 0%,
+      rgba(255, 255, 255, 0.945) 50%,
+      rgba(255, 255, 255, 0.404) 100%);
+  transform: translateX(-260%) skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
+  animation: nav-active-reflection 2.5s ease-in-out infinite;
 }
 
 .instruction-panel p {
@@ -246,8 +276,9 @@ button:focus-visible,
   inset: 0;
   min-width: 900px;
   overflow: hidden;
-  background: linear-gradient(rgba(235, 246, 247, .08), rgba(219, 236, 237, .08)), url("../img/fondo-lab.png") center/cover no-repeat;
+  background: linear-gradient(rgba(235, 246, 247, .08), rgba(219, 236, 237, .08)), url("../img/fondo-lab.png") 50% 75% no-repeat;
   isolation: isolate;
+  background-size: auto 200%;
 }
 
 .lab-stage::before {
@@ -1288,6 +1319,7 @@ button:focus-visible,
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 20px;
 }
 
 .micro-header h2 {
@@ -1778,7 +1810,8 @@ button:focus-visible,
   width: 55px
 }
 
-.micro-note {
+.micro-note,
+.toast.success {
   display: flex;
   gap: 9px;
   margin-top: 13px;
@@ -1852,10 +1885,6 @@ button:focus-visible,
   opacity: 1
 }
 
-.toast.success {
-  background: #0a6099af
-}
-
 .toast.error {
   background: #a65454
 }
@@ -1895,6 +1924,42 @@ dialog form {
   justify-content: center;
   gap: 10px;
   margin-top: 22px
+}
+
+@keyframes nav-active-glow {
+
+  0%,
+  64%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(255, 255, 255);
+  }
+
+  82% {
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.878);
+  }
+}
+
+@keyframes nav-active-reflection {
+
+  0%,
+  60% {
+    transform: translateX(-260%) skewX(-18deg);
+    opacity: 0;
+  }
+
+  70% {
+    opacity: 0.56;
+  }
+
+  97% {
+    transform: translateX(360%) skewX(-18deg);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(360%) skewX(-18deg);
+    opacity: 0;
+  }
 }
 
 @keyframes instructionNumberPulse {

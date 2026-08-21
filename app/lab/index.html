@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#e8f7fb">
-  <title>Ratón Lab · Clonación SCNT</title>
+  <title>Genetica Evolucion · Clona tu propio ratón</title>
   <link rel="stylesheet" href="app/css/styles.css">
 </head>
 
@@ -21,17 +21,17 @@
           </p>
         </div>
       </div>
-      <div class="top-actions">
-        <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
-          <span aria-hidden="true">↻</span><span class="button-word">Reiniciar</span>
-        </button>
-      </div>
       <div class="progress-wrap">
         <div class="progress-copy"><span id="step-label">Paso 1 de 14</span><span id="progress-percent">7%</span></div>
         <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="14" aria-valuenow="1"
           aria-label="Progreso">
           <span id="progress-fill"></span>
         </div>
+      </div>
+      <div class="top-actions">
+        <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
+          <span aria-hidden="true">↻</span><span class="button-word">Reiniciar</span>
+        </button>
       </div>
 
     </header>
@@ -125,7 +125,8 @@
         </div>
         <div class="sample-token embryo-sample draggable" data-draggable="embryo" role="button" tabindex="-1"
           aria-label="Embrión activado">
-          <span class="mini-cell embryo-mini" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>Embrión</small>
+          <span class="mini-cell embryo-mini"
+            aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><small>Embrión</small>
         </div>
 
         <button class="primary-button clone-button pulse-button" id="clone-button" type="button">Empecemos la clonación
@@ -143,12 +144,12 @@
     </div>
     <div class="intro-card">
       <p class="eyebrow">Objeto de aprendizaje interactivo</p>
-      <h1 id="intro-title">El secreto está<br>en el <em>núcleo</em></h1>
+      <h1 id="intro-title">Clona tu propio<br><em>ratón</em></h1>
       <p>Explora paso a paso cómo la transferencia nuclear de células somáticas permite crear un organismo genéticamente
         idéntico al donante del núcleo.</p>
       <button class="primary-button" id="start-button" type="button">Entrar al laboratorio <span
           aria-hidden="true">→</span></button>
-      <small>16 pasos · 8–10 minutos · Actividad guiada</small>
+      <small>14 pasos · 8-10 minutos · Actividad guiada</small>
     </div>
   </div>
 
@@ -255,13 +256,6 @@
         <button class="micro-tool reagent-tool draggable" data-draggable="reagent" type="button">
           <img src="app/img/reactivo.png" alt=""><span><b>Reactivo</b><small>Activa el desarrollo</small></span>
         </button>
-        <div class="micro-note"><span aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <path fill="currentColor"
-                d="M12 20a8 8 0 1 0 0-16a8 8 0 0 0 0 16m0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-1-11v6h2v-6zm0-4h2v2h-2z" />
-            </svg></span>
-          <p id="micro-note-text">La pipeta evita que la célula se mueva durante el procedimiento.</p>
-        </div>
       </aside>
     </div>
   </div>
