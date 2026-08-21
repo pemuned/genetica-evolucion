@@ -11,52 +11,44 @@ const STEP_CONFIG = {
     title: "Bienvenida al laboratorio",
     instruction:
       "Descubre cómo el núcleo de una célula puede dirigir la formación de un nuevo organismo.",
-    hint: "Pulsa “Entrar al laboratorio” para comenzar.",
   },
   2: {
     title: "Reconoce los materiales",
     instruction:
       "Observa las herramientas y los tres ratones que participarán en el procedimiento.",
-    hint: "Revisa la función de cada material y pulsa “Todo listo”.",
   },
   3: {
     title: "Prepara la mesa de trabajo",
     instruction:
       "Ya conoces el equipo. Activa la mesa para iniciar la clonación.",
-    hint: "Pulsa el botón “Empecemos la clonación”.",
   },
   4: {
     title: "Obtén una célula somática",
     instruction: "Lleva la célula del ratón gris a la caja de Petri 1.",
-    hint: "Arrastra la célula brillante junto al ratón gris hasta la placa 01.",
     drags: ["somatic-cell"],
     targets: ["petri1"],
   },
   5: {
     title: "Obtén un ovocito",
     instruction: "Lleva el ovocito del ratón café a la caja de Petri 2.",
-    hint: "Arrastra la célula dorada junto al ratón café hasta la placa 02.",
     drags: ["oocyte"],
     targets: ["petri2"],
   },
   6: {
     title: "Observa el ovocito",
     instruction: "Coloca la caja de Petri 2 en el microscopio.",
-    hint: "Arrastra la placa marcada 02 hasta el microscopio.",
     drags: ["petri2"],
     targets: ["microscope"],
   },
   7: {
     title: "Sujeta el ovocito",
     instruction: "Usa la pipeta de sostén para estabilizar el ovocito.",
-    hint: "Lleva la pipeta de sostén desde el panel hasta el ovocito.",
     drags: ["holding-pipette"],
     targets: ["micro-oocyte"],
   },
   8: {
     title: "Retira el núcleo del ovocito",
     instruction: "Usa la aguja de inyección para aspirar el núcleo.",
-    hint: "Lleva la aguja de inyección hasta el centro morado del ovocito.",
     drags: ["injection-needle"],
     targets: ["micro-oocyte"],
   },
@@ -64,7 +56,6 @@ const STEP_CONFIG = {
     title: "Prepara la transferencia",
     instruction:
       "Vuelve al laboratorio y lleva el ovocito sin núcleo a la caja de Petri 3.",
-    hint: "Cierra la vista microscópica y arrastra el ovocito enucleado a la placa 03.",
     drags: ["enucleated-oocyte"],
     targets: ["petri3"],
   },
@@ -72,14 +63,12 @@ const STEP_CONFIG = {
     title: "Reúne ambas células",
     instruction:
       "Lleva la célula somática de la caja 1 a la caja de transferencia nuclear.",
-    hint: "Arrastra la célula azul desde la placa 01 hasta la placa 03.",
     drags: ["somatic-cell"],
     targets: ["petri3"],
   },
   11: {
     title: "Regresa al microscopio",
     instruction: "Coloca la caja de Petri 3 en el microscopio.",
-    hint: "Arrastra la placa 03, que ahora contiene ambas células, al microscopio.",
     drags: ["petri3"],
     targets: ["microscope"],
   },
@@ -87,14 +76,12 @@ const STEP_CONFIG = {
     title: "Extrae el núcleo somático",
     instruction:
       "Primero estabiliza la célula somática con la pipeta de sostén.",
-    hint: "Lleva la pipeta a la célula azul; después usa la aguja para extraer su núcleo.",
     drags: ["holding-pipette"],
     targets: ["micro-somatic"],
   },
   13: {
     title: "Transfiere el núcleo",
     instruction: "Inserta el núcleo somático dentro del ovocito enucleado.",
-    hint: "La aguja ya contiene el núcleo. Llévala hasta el ovocito dorado.",
     drags: ["injection-needle"],
     targets: ["micro-oocyte"],
   },
@@ -102,21 +89,18 @@ const STEP_CONFIG = {
     title: "Activa el desarrollo",
     instruction:
       "Aplica una gota del reactivo sobre el área del microscopio para iniciar la división celular.",
-    hint: "Arrastra el frasco de reactivo hasta cualquier parte de la rejilla del microscopio.",
     drags: ["reagent"],
     targets: ["lens"],
   },
   15: {
     title: "Implanta el embrión",
     instruction: "Lleva el embrión al vientre de la madre sustituta blanca.",
-    hint: "Arrastra el embrión desde el microscopio hasta el área resaltada del ratón blanco.",
     drags: ["embryo"],
     targets: ["surrogate"],
   },
   16: {
     title: "Espera el nacimiento",
     instruction: "La gestación está ocurriendo de forma acelerada…",
-    hint: "Cuando el vientre se ilumine, púlsalo para conocer a la cría.",
   },
 };
 
@@ -187,8 +171,8 @@ class AnimationEngine {
     const particles = this.root.querySelectorAll(".organelle");
     particles.forEach((particle, index) => {
       const phase = (time - this.startTime) / (1150 + index * 90) + index;
-      const x = Math.sin(phase) * (2.5 + (index % 3));
-      const y = Math.cos(phase * 0.73) * (2 + (index % 2));
+      const x = Math.sin(phase) * (5.5 + (index % 3));
+      const y = Math.cos(phase * 0.73) * (7 + (index % 2));
       particle.style.translate = `${x}px ${y}px`;
     });
     requestAnimationFrame(this.animate);
@@ -347,7 +331,7 @@ class AnimationEngine {
     field.replaceChildren();
 
     const baseSize =
-      count <= 2 ? 40 : count <= 4 ? 32 : count <= 8 ? 24 : 17;
+      count <= 2 ? 44 : count <= 4 ? 36 : count <= 8 ? 27 : 20;
     const maxRadius =
       count <= 2 ? 22 : count <= 4 ? 28 : count <= 8 ? 34 : 38;
 
@@ -444,9 +428,6 @@ class UIController {
       this.toast("Mesa preparada. Sigue el elemento iluminado.", "success");
     });
 
-    document
-      .querySelector("#hint-button")
-      .addEventListener("click", () => this.showHint());
     document
       .querySelector("#reset-button")
       .addEventListener("click", () => this.resetDialog.showModal());
@@ -929,15 +910,6 @@ class UIController {
       "¡Clonación completada! La información genética nuclear provino del ratón gris.",
       "success",
     );
-  }
-
-  showHint() {
-    this.toast(this.game.config.hint);
-    const active = document.querySelector(".is-active");
-    if (active) {
-      active.classList.remove("shake");
-      requestAnimationFrame(() => active.classList.add("shake"));
-    }
   }
 
   toast(message, type = "") {
