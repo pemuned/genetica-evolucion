@@ -1005,6 +1005,7 @@ button:focus-visible,
   height: 22px;
   border-radius: 55% 45% 48% 52%;
   background: linear-gradient(145deg, #88959e, #53646e);
+  border: 1px solid #fff;
 }
 
 .status-message {
