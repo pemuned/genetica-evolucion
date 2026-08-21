@@ -330,14 +330,11 @@ class AnimationEngine {
     field.dataset.count = String(count);
     field.replaceChildren();
 
-    const baseSize =
-      count <= 2 ? 44 : count <= 4 ? 36 : count <= 8 ? 27 : 20;
-    const maxRadius =
-      count <= 2 ? 22 : count <= 4 ? 28 : count <= 8 ? 34 : 38;
+    const baseSize = count <= 2 ? 44 : count <= 4 ? 36 : count <= 8 ? 27 : 20;
+    const maxRadius = count <= 2 ? 22 : count <= 4 ? 28 : count <= 8 ? 34 : 38;
 
     for (let index = 0; index < count; index += 1) {
-      const angle =
-        index * 2.399963229728653 + (Math.random() - 0.5) * 0.55;
+      const angle = index * 2.399963229728653 + (Math.random() - 0.5) * 0.55;
       const radius =
         count === 1
           ? 0
@@ -355,7 +352,7 @@ class AnimationEngine {
       blastomere.style.setProperty("--i", String(index));
       blastomere.style.left = `${Math.max(10, Math.min(90, x))}%`;
       blastomere.style.top = `${Math.max(10, Math.min(90, y))}%`;
-      blastomere.style.width = `${Math.max(12, size)}%`;
+      blastomere.style.width = `${Math.max(18, size)}%`;
       blastomere.style.zIndex = String(1 + Math.floor(Math.random() * 6));
       field.append(blastomere);
     }

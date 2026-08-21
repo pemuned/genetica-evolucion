@@ -1589,8 +1589,8 @@ button:focus-visible,
 
 .micro-particles i {
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: #66d9dc;
   animation: particlePop 1.2s ease forwards
@@ -2015,7 +2015,7 @@ dialog form {
 
 @keyframes miniCellRotate {
   to {
-    transform: rotate(10deg)
+    transform: rotate(10deg);
   }
 }
 
