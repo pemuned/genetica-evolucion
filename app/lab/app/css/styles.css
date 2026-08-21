@@ -1208,15 +1208,15 @@ button:focus-visible,
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(10px, 1.6vw, 24px);
   margin: clamp(25px, 3vw, 46px) auto;
+  padding: 0;
   width: 100%;
-  max-width: min(960px, 92vw)
+  max-width: min(960px, 92vw);
+  list-style: none
 }
 
-.materials-grid span {
+.materials-grid li {
   min-height: clamp(90px, 9vw, 150px);
   padding: clamp(13px, 1.4vw, 22px) 8px;
-  display: grid;
-  place-items: center;
   border: 1px solid var(--line);
   border-radius: 15px;
   background: #f6fbfb;
@@ -1224,8 +1224,45 @@ button:focus-visible,
   font-weight: 750
 }
 
-.materials-grid b {
-  font-size: clamp(1.8125rem, 2vw + 1.5vh, 3.25rem)
+.materials-grid figure {
+  height: 100%;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  gap: 8px
+}
+
+.materials-grid figcaption {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.materials-grid .material-image {
+  width: 100%;
+  height: clamp(48px, 5vw, 82px);
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+
+.materials-grid .material-image img {
+  display: block;
+  width: auto;
+  max-width: 82%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 5px 5px rgba(31, 78, 91, .18))
+}
+
+.materials-grid .materials-mice {
+  gap: 0
+}
+
+.materials-grid .materials-mice img {
+  width: 38%;
+  height: 92%;
+  margin: 0 -4%;
+  object-fit: contain
 }
 
 .materials-card .primary-button {
@@ -2273,7 +2310,7 @@ dialog form {
     grid-template-columns: 1fr 1fr
   }
 
-  .materials-grid span {
+  .materials-grid li {
     min-height: 72px
   }
 
