@@ -195,8 +195,6 @@ button:focus-visible,
   position: relative;
   border-radius: 14px;
   padding: 10px;
-  background-color: var(--panel);
-  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .instruction-number {
@@ -714,9 +712,9 @@ button:focus-visible,
   animation: targetPulse 2s ease-in-out infinite;
 }
 
-.drop-zone.is-target:not(.micro-cell) {
+.drop-zone.is-target:not(.micro-cell, .lens) {
   background: rgba(62, 62, 62, 0.2);
-  animation: targetPulseLensGrid 2s ease-in-out infinite;
+  animation: targetPulseNotLensGrid 2s ease-in-out infinite;
 }
 
 .clone-button {
@@ -1311,7 +1309,8 @@ button:focus-visible,
   height: 48px;
   border: 2px solid var(--line);
   border-radius: 10px;
-  background: #f3fafc;
+  color: white;
+  background: linear-gradient(135deg, var(--blue-dark), var(--blue));
   font-size: 1rem;
   cursor: pointer;
   padding: 2px 12px;
@@ -1324,16 +1323,51 @@ button:focus-visible,
   animation: cloneCallout 1.6s ease-in-out .45s infinite;
 }
 
+.close-micro-icon,
+.close-micro-spinner {
+  flex: 0 0 auto
+}
+
+.close-micro-icon {
+  display: inline-flex;
+  align-items: center
+}
+
+.close-micro-spinner {
+  display: none;
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(21, 61, 73, .2);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: closeMicroSpin .8s linear infinite
+}
+
 .close-micro:disabled {
-  opacity: .35;
+  opacity: .68;
   cursor: not-allowed;
   animation: none;
 }
 
+.close-micro[data-state="processing"] .close-micro-icon {
+  display: none
+}
+
+.close-micro[data-state="processing"] .close-micro-spinner {
+  display: inline-block
+}
+
 .close-micro:hover:not(:disabled) {
-  background: #fff;
+  background: linear-gradient(35deg, var(--blue-dark), var(--blue));
   box-shadow: 0 5px 15px rgba(27, 67, 78, .2);
-  transform: translateY(-1px);
+  transform: translateY(-4px) scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+
+@keyframes closeMicroSpin {
+  to {
+    transform: rotate(1turn)
+  }
 }
 
 .micro-layout {
@@ -1425,9 +1459,7 @@ button:focus-visible,
   animation: cellMorph 5s ease-in-out infinite alternate, miniCellRotate 5s ease-in-out infinite alternate
 }
 
-.micro-cell.micro-oocyte.held {
-  animation: none;
-}
+
 
 .micro-oocyte {
   left: 31%;
@@ -2014,7 +2046,7 @@ dialog form {
   }
 }
 
-@keyframes targetPulseLensGrid {
+@keyframes targetPulseNotLensGrid {
   50% {
     outline-color: var(--ink);
     background: rgba(62, 62, 62, 0.6);
@@ -2151,7 +2183,6 @@ dialog form {
   }
 
   8.01% {
-    /* Origin swap is invisible here since scaleX(1) renders identically regardless of pivot. */
     transform-origin: left;
     transform: scaleX(1);
   }

@@ -408,8 +408,29 @@ class UIController {
     this.materials = document.querySelector("#materials-screen");
     this.microOverlay = document.querySelector("#microscope-overlay");
     this.closeMicroButton = document.querySelector("#close-micro");
+    this.closeMicroLabel = this.closeMicroButton.querySelector(
+      ".close-micro-label",
+    );
     this.resetDialog = document.querySelector("#reset-dialog");
     this.stageDim = document.querySelector("#stage-dim");
+  }
+
+  setCloseButtonState(state) {
+    const labels = {
+      waiting: "Completa el procedimiento",
+      processing: "Micromanipulación en progreso…",
+      ready: "Regresar al laboratorio",
+    };
+    const label = labels[state] || labels.waiting;
+
+    this.closeMicroButton.dataset.state = state;
+    this.closeMicroButton.disabled = state !== "ready";
+    this.closeMicroButton.setAttribute(
+      "aria-busy",
+      String(state === "processing"),
+    );
+    this.closeMicroButton.setAttribute("aria-label", label);
+    this.closeMicroLabel.textContent = label;
   }
 
   bindEvents() {
@@ -475,10 +496,14 @@ class UIController {
       .querySelector("#clone-button")
       .classList.toggle("visible", step === 3);
     this.stageDim.classList.toggle("visible", step === 3);
-    this.closeMicroButton.disabled = !(
+    const canCloseMicroscope =
       step === 9 ||
-      (step === 14 && this.game.flags.embryoDivisionComplete)
-    );
+      (step === 14 && this.game.flags.embryoDivisionComplete);
+    if (canCloseMicroscope) {
+      this.setCloseButtonState("ready");
+    } else if (this.closeMicroButton.dataset.state !== "processing") {
+      this.setCloseButtonState("waiting");
+    }
     if (step >= 4)
       this.revealCellToken(document.querySelector(".somatic-token"));
     if (step >= 5)
@@ -708,10 +733,7 @@ class UIController {
         this.game.flags.oocyteEnucleated = true;
         document.querySelector("[data-draggable='oocyte']").hidden = true;
         this.updateInteractiveStates();
-        this.schedule(
-          () => this.completeStep(),
-          6950,
-        );
+        this.schedule(() => this.completeStep(), 6950);
       },
       "9:enucleated-oocyte:petri3": () => {
         document.querySelector("[data-drop-zone='petri3']").append(source);
@@ -739,10 +761,7 @@ class UIController {
         document
           .querySelector("[data-draggable='injection-needle']")
           .classList.add("loaded");
-        this.schedule(
-          () => this.completeStep(),
-          6950,
-        );
+        this.schedule(() => this.completeStep(), 6950);
       },
       "13:injection-needle:micro-oocyte": () => {
         this.game.flags.nucleusTransferred = true;
@@ -759,6 +778,7 @@ class UIController {
         this.animations.injection(
           document.querySelector(".micro-oocyte"),
           () => this.completeStep(),
+          document.querySelector(".micro-oocyte").style.animation = "none",
         );
       },
       "14:reagent:lens": () => {
@@ -771,7 +791,7 @@ class UIController {
           document.querySelector(".micro-oocyte"),
           () => {
             this.game.flags.embryoDivisionComplete = true;
-            this.closeMicroButton.disabled = false;
+            this.setCloseButtonState("ready");
             this.typeInstructionText(
               "La división celular llegó a 16 células. Pulsa Regresar al laboratorio para continuar.",
             );
@@ -795,8 +815,21 @@ class UIController {
       },
     };
 
-    if (handlers[key]) handlers[key]();
-    else
+    if (handlers[key]) {
+      const microscopeTargets = new Set([
+        "micro-oocyte",
+        "micro-somatic",
+        "lens",
+      ]);
+      if (
+        !this.microOverlay.classList.contains("hidden") &&
+        microscopeTargets.has(target) &&
+        this.closeMicroButton.dataset.state === "waiting"
+      ) {
+        this.setCloseButtonState("processing");
+      }
+      handlers[key]();
+    } else
       this.invalidFeedback(source, "Esa acción no corresponde al paso actual.");
   }
 
@@ -808,7 +841,7 @@ class UIController {
     const oocyte = document.querySelector(".micro-oocyte");
     const somatic = document.querySelector(".micro-somatic");
     this.microOverlay.classList.remove("hidden");
-    this.closeMicroButton.disabled = true;
+    this.setCloseButtonState("waiting");
     oocyte.style.display = "block";
     oocyte.style.opacity = "1";
     oocyte.classList.remove("activated", "cleaving");
@@ -929,8 +962,7 @@ class UIController {
 
     // Restore complete token state, including inline styles set during step 12.
     somaticToken.hidden = false;
-    somaticToken.className =
-      "cell-token somatic-token draggable cell-hidden";
+    somaticToken.className = "cell-token somatic-token draggable cell-hidden";
     somaticToken.style.removeProperty("display");
     somaticToken.style.removeProperty("opacity");
     somaticToken.style.removeProperty("transform");
