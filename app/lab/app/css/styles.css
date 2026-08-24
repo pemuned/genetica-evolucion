@@ -345,10 +345,11 @@ button:focus-visible,
   width: 17%;
   left: 41.5%;
   top: 20%;
-  display: block;
+  display: flex;
   place-items: center;
   border-radius: 28px;
   transition: filter .25s, background .25s;
+  justify-content: center;
 }
 
 .microscope-station img {
@@ -507,9 +508,9 @@ button:focus-visible,
 }
 
 .petri-slot .cell-token {
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%) scale(.65);
+  top: 18%;
+  left: 25%;
+  transform: scale(.75);
 }
 
 .mouse-station {
@@ -708,9 +709,14 @@ button:focus-visible,
 }
 
 .drop-zone.is-target {
-  outline: 5px dashed rgba(12, 75, 143, 0.911);
-  outline-offset: 5px;
-  animation: targetPulse 1.25s ease-in-out infinite;
+  outline: 7px dashed rgba(255, 255, 255, 0.911);
+  outline-offset: 7px;
+  animation: targetPulse 2s ease-in-out infinite;
+}
+
+.drop-zone.is-target:not(.micro-cell) {
+  background: rgba(62, 62, 62, 0.2);
+  animation: targetPulseLensGrid 2s ease-in-out infinite;
 }
 
 .clone-button {
@@ -784,8 +790,9 @@ button:focus-visible,
 }
 
 .petri-slot[data-draggable="petri3"] .somatic-token.is-disabled {
-  left: 33%;
+  left: 5%;
   top: 16%;
+  transform: scale(.65);
 }
 
 .cell-token.is-disabled {
@@ -1297,6 +1304,9 @@ button:focus-visible,
 }
 
 .close-micro {
+  position: absolute;
+  left: 0;
+  top: -80px;
   width: auto;
   height: 48px;
   border: 2px solid var(--line);
@@ -1781,8 +1791,7 @@ button:focus-visible,
   width: 55px
 }
 
-.micro-note,
-.toast.success {
+.micro-note {
   display: flex;
   gap: 9px;
   margin-top: 13px;
@@ -1837,18 +1846,6 @@ button:focus-visible,
   opacity: 0;
   pointer-events: none;
   transition: .3s
-}
-
-.toast-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  width: 19px;
-  height: 19px;
-  font-size: 0.75rem;
-  font-style: italic;
-  font-weight: 800;
 }
 
 .toast.show {
@@ -2006,14 +2003,21 @@ dialog form {
 
 @keyframes activeFloat {
   50% {
-    transform: translateY(-4px);
+    transform: translateY(-8px);
     filter: drop-shadow(0 0 15px rgba(28, 180, 198, .95))
   }
 }
 
 @keyframes targetPulse {
   50% {
-    outline-color: rgba(37, 168, 185, .3);
+    outline-color: var(--ink);
+  }
+}
+
+@keyframes targetPulseLensGrid {
+  50% {
+    outline-color: var(--ink);
+    background: rgba(62, 62, 62, 0.6);
   }
 }
 

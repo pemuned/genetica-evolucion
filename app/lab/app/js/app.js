@@ -24,83 +24,92 @@ const STEP_CONFIG = {
   },
   4: {
     title: "Obtén una célula somática",
-    instruction: "Lleva la célula del ratón gris a la caja de Petri 1.",
+    instruction:
+      "La mesa está preparada. Lleva la célula del ratón gris a la caja de Petri 1.",
     drags: ["somatic-cell"],
     targets: ["petri1"],
   },
   5: {
     title: "Obtén un ovocito",
-    instruction: "Lleva el ovocito del ratón café a la caja de Petri 2.",
+    instruction:
+      "La célula somática aportará el ADN del ratón gris. Ahora lleva el ovocito del ratón café a la caja de Petri 2.",
     drags: ["oocyte"],
     targets: ["petri2"],
   },
   6: {
     title: "Observa el ovocito",
-    instruction: "Coloca la caja de Petri 2 en el microscopio.",
+    instruction:
+      "El ovocito proporcionará el citoplasma para iniciar el desarrollo. Coloca la caja de Petri 2 en el microscopio.",
     drags: ["petri2"],
     targets: ["microscope"],
   },
   7: {
     title: "Sujeta el ovocito",
-    instruction: "Usa la pipeta de sostén para estabilizar el ovocito.",
+    instruction:
+      "Ya puedes observar el ovocito a gran aumento. Usa la pipeta de sostén para estabilizarlo.",
     drags: ["holding-pipette"],
     targets: ["micro-oocyte"],
   },
   8: {
     title: "Retira el núcleo del ovocito",
-    instruction: "Usa la aguja de inyección para aspirar el núcleo.",
+    instruction:
+      "La pipeta mantiene estable el ovocito. Usa la aguja de inyección para aspirar su núcleo.",
     drags: ["injection-needle"],
     targets: ["micro-oocyte"],
   },
   9: {
     title: "Prepara la transferencia",
     instruction:
-      "Vuelve al laboratorio y lleva el ovocito sin núcleo a la caja de Petri 3.",
+      "El ADN de la donante del ovocito fue retirado. Vuelve al laboratorio y lleva el ovocito enucleado a la caja de Petri 3.",
     drags: ["enucleated-oocyte"],
     targets: ["petri3"],
   },
   10: {
     title: "Reúne ambas células",
     instruction:
-      "Lleva la célula somática de la caja 1 a la caja de transferencia nuclear.",
+      "El ovocito enucleado está listo. Lleva la célula somática de la caja 1 a la caja de transferencia nuclear.",
     drags: ["somatic-cell"],
     targets: ["petri3"],
   },
   11: {
     title: "Regresa al microscopio",
-    instruction: "Coloca la caja de Petri 3 en el microscopio.",
+    instruction:
+      "Ambas células están en la placa de transferencia. Coloca la caja de Petri 3 en el microscopio.",
     drags: ["petri3"],
     targets: ["microscope"],
   },
   12: {
     title: "Extrae el núcleo somático",
     instruction:
-      "Primero estabiliza la célula somática con la pipeta de sostén.",
+      "De nuevo bajo el microscopio, estabiliza la célula somática con la pipeta de sostén.",
     drags: ["holding-pipette"],
     targets: ["micro-somatic"],
   },
   13: {
     title: "Transfiere el núcleo",
-    instruction: "Inserta el núcleo somático dentro del ovocito enucleado.",
+    instruction:
+      "La aguja contiene el núcleo con el genoma del ratón gris. Insértalo dentro del ovocito enucleado.",
     drags: ["injection-needle"],
     targets: ["micro-oocyte"],
   },
   14: {
     title: "Activa el desarrollo",
     instruction:
-      "Aplica una gota del reactivo sobre el área del microscopio para iniciar la división celular.",
+      "El ovocito ya contiene el ADN nuclear del ratón gris. Aplica una gota del reactivo para iniciar la división celular.",
     drags: ["reagent"],
     targets: ["lens"],
   },
   15: {
     title: "Implanta el embrión",
-    instruction: "Lleva el embrión al vientre de la madre sustituta blanca.",
+    instruction:
+      "El embrión alcanzó 16 células. Llévalo al vientre de la madre sustituta blanca.",
     drags: ["embryo"],
     targets: ["surrogate"],
   },
   16: {
     title: "Espera el nacimiento",
-    instruction: "La gestación está ocurriendo de forma acelerada…",
+    instruction:
+      "El embrión fue implantado y la gestación está ocurriendo de forma acelerada…",
   },
 };
 
@@ -421,7 +430,6 @@ class UIController {
 
     document.querySelector("#clone-button").addEventListener("click", () => {
       this.game.advance();
-      this.toast("Mesa preparada. Sigue el elemento iluminado.", "success");
     });
 
     document
@@ -679,27 +687,21 @@ class UIController {
       "4:somatic-cell:petri1": () => {
         document.querySelector("[data-drop-zone='petri1']").append(source);
         this.game.flags.somaticCellCollected = true;
-        this.completeStep(
-          "La célula somática aporta el núcleo con el ADN del ratón gris.",
-        );
+        this.completeStep();
       },
       "5:oocyte:petri2": () => {
         document.querySelector("[data-drop-zone='petri2']").append(source);
         this.game.flags.oocyteCollected = true;
-        this.completeStep(
-          "El ovocito proporcionará el citoplasma necesario para iniciar el desarrollo.",
-        );
+        this.completeStep();
       },
       "6:petri2:microscope": () => {
         this.openMicroscope("oocyte");
-        this.completeStep(
-          "Ahora podemos observar y manipular el ovocito a gran aumento.",
-        );
+        this.completeStep();
       },
       "7:holding-pipette:micro-oocyte": () => {
         document.querySelector(".micro-oocyte").classList.add("held");
         this.game.flags.oocyteHeld = true;
-        this.completeStep("La pipeta mantiene estable el ovocito sin dañarlo.");
+        this.completeStep();
       },
       "8:injection-needle:micro-oocyte": () => {
         this.animations.suction(document.querySelector(".micro-oocyte"));
@@ -707,40 +709,27 @@ class UIController {
         document.querySelector("[data-draggable='oocyte']").hidden = true;
         this.updateInteractiveStates();
         this.schedule(
-          () =>
-            this.completeStep(
-              "Al retirar el núcleo eliminamos el ADN de la donante del ovocito.",
-            ),
+          () => this.completeStep(),
           6950,
         );
       },
       "9:enucleated-oocyte:petri3": () => {
         document.querySelector("[data-drop-zone='petri3']").append(source);
-        this.completeStep(
-          "El ovocito sin núcleo está listo para recibir nueva información genética.",
-        );
+        this.completeStep();
       },
       "10:somatic-cell:petri3": () => {
         document.querySelector("[data-drop-zone='petri3']").append(source);
-        this.completeStep(
-          "Las dos células ya comparten la misma placa de transferencia.",
-        );
+        this.completeStep();
       },
       "11:petri3:microscope": () => {
         this.openMicroscope("transfer");
-        this.completeStep(
-          "Volvemos al microscopio para transferir el núcleo con precisión.",
-        );
+        this.completeStep();
       },
       "12:holding-pipette:micro-somatic": () => {
         document.querySelector(".somatic-token").style.display = "none";
         document.querySelector(".enucleated-sample").style.display = "none";
         document.querySelector(".micro-somatic").classList.add("held");
         this.game.flags.somaticCellHeld = true;
-        this.toast(
-          "Célula estabilizada. Ahora usa la aguja de inyección.",
-          "success",
-        );
         this.updateInteractiveStates();
       },
       "12:injection-needle:micro-somatic": () => {
@@ -751,10 +740,7 @@ class UIController {
           .querySelector("[data-draggable='injection-needle']")
           .classList.add("loaded");
         this.schedule(
-          () =>
-            this.completeStep(
-              "El núcleo extraído contiene el genoma del ratón gris.",
-            ),
+          () => this.completeStep(),
           6950,
         );
       },
@@ -772,19 +758,14 @@ class UIController {
           "transform 1s ease";
         this.animations.injection(
           document.querySelector(".micro-oocyte"),
-          () => {
-            this.completeStep(
-              "El ovocito ahora contiene el ADN nuclear de la donante gris.",
-            );
-          },
+          () => this.completeStep(),
         );
       },
       "14:reagent:lens": () => {
         this.game.flags.embryoActivated = true;
         this.updateInteractiveStates();
-        this.toast(
+        this.typeInstructionText(
           "Reactivo aplicado. Observa cómo el medio se tiñe y comienza la división.",
-          "success",
         );
         this.animations.activateEmbryo(
           document.querySelector(".micro-oocyte"),
@@ -794,10 +775,6 @@ class UIController {
             this.typeInstructionText(
               "La división celular llegó a 16 células. Pulsa Regresar al laboratorio para continuar.",
             );
-            this.toast(
-              "División completa. Usa Regresar al laboratorio cuando quieras continuar.",
-              "success",
-            );
           },
         );
       },
@@ -806,10 +783,6 @@ class UIController {
         this.game.flags.embryoImplanted = true;
         document.querySelector(".white-mouse").classList.add("is-pregnant");
         this.game.advance();
-        this.toast(
-          "Embrión implantado. La gestación simulada ha comenzado.",
-          "success",
-        );
         this.schedule(() => {
           this.game.flags.birthReady = true;
           document.querySelector(".white-mouse").classList.add("birth-ready");
@@ -827,8 +800,7 @@ class UIController {
       this.invalidFeedback(source, "Esa acción no corresponde al paso actual.");
   }
 
-  completeStep(message) {
-    this.toast(message, "success");
+  completeStep() {
     this.game.advance();
   }
 
@@ -892,34 +864,19 @@ class UIController {
     );
     this.status.textContent =
       "Experimento completado. Puedes reiniciarlo para repetir el procedimiento.";
-    this.toast(
-      "¡Clonación completada! La información genética nuclear provino del ratón gris.",
-      "success",
-    );
   }
 
   toast(message, type = "") {
     clearTimeout(this.toastTimer);
     this.toastElement.replaceChildren();
-    if (type === "success") {
-      const icon = document.createElement("span");
-      icon.className = "toast-icon";
-      icon.innerHTML =
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor"d="M12 20a8 8 0 1 0 0-16a8 8 0 0 0 0 16m0 2C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m-1-11v6h2v-6zm0-4h2v2h-2z" /></svg>';
-      icon.setAttribute("aria-hidden", "true");
-      this.toastElement.append(icon);
-    }
     const text = document.createElement("span");
     text.textContent = message;
     this.toastElement.append(text);
     this.toastElement.className = `toast show ${type}`;
-
-    if (type !== "success") {
-      this.toastTimer = window.setTimeout(
-        () => this.toastElement.classList.remove("show"),
-        7800,
-      );
-    }
+    this.toastTimer = window.setTimeout(
+      () => this.toastElement.classList.remove("show"),
+      7800,
+    );
   }
 
   schedule(callback, delay) {
@@ -943,13 +900,21 @@ class UIController {
     this.cancelDrag();
     this.selectedAction = null;
     clearTimeout(this.toastTimer);
+    this.toastTimer = null;
     this.sequenceTimers.forEach((timer) => clearTimeout(timer));
     this.sequenceTimers = [];
     this.animations.reset();
+    document.body.classList.remove("is-dragging");
+    document
+      .querySelectorAll(".shake, .dragging-source")
+      .forEach((element) =>
+        element.classList.remove("shake", "dragging-source"),
+      );
 
     const grayMouse = document.querySelector(".gray-mouse");
     const brownMouse = document.querySelector(".brown-mouse");
     const labStage = document.querySelector("#lab-stage");
+    const cloneButton = document.querySelector("#clone-button");
     const somaticToken = document.querySelector(
       "[data-draggable='somatic-cell']",
     );
@@ -959,15 +924,36 @@ class UIController {
 
     grayMouse.append(somaticToken);
     brownMouse.append(oocyteToken);
-    labStage.append(enucleatedSample, embryoSample);
+    labStage.insertBefore(enucleatedSample, cloneButton);
+    labStage.insertBefore(embryoSample, cloneButton);
+
+    // Restore complete token state, including inline styles set during step 12.
     somaticToken.hidden = false;
+    somaticToken.className =
+      "cell-token somatic-token draggable cell-hidden";
+    somaticToken.style.removeProperty("display");
+    somaticToken.style.removeProperty("opacity");
+    somaticToken.style.removeProperty("transform");
+    somaticToken.style.removeProperty("transition");
+
     oocyteToken.hidden = false;
-    somaticToken.classList.remove("cell-emerge");
-    somaticToken.classList.add("cell-hidden");
-    oocyteToken.classList.remove("cell-emerge");
-    oocyteToken.classList.add("cell-hidden");
+    oocyteToken.className = "cell-token oocyte-token draggable cell-hidden";
+    oocyteToken.style.removeProperty("display");
+    oocyteToken.style.removeProperty("opacity");
+    oocyteToken.style.removeProperty("transform");
+    oocyteToken.style.removeProperty("transition");
+
     enucleatedSample.className = "sample-token enucleated-sample draggable";
+    enucleatedSample.style.removeProperty("display");
+    enucleatedSample.style.removeProperty("opacity");
+    enucleatedSample.style.removeProperty("transform");
+    enucleatedSample.style.removeProperty("transition");
+
     embryoSample.className = "sample-token embryo-sample draggable";
+    embryoSample.style.removeProperty("display");
+    embryoSample.style.removeProperty("opacity");
+    embryoSample.style.removeProperty("transform");
+    embryoSample.style.removeProperty("transition");
 
     const oocyte = document.querySelector(".micro-oocyte");
     const somatic = document.querySelector(".micro-somatic");
