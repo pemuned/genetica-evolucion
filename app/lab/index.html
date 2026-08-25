@@ -12,7 +12,8 @@
 <body>
   <main class="app-shell">
     <header class="topbar" aria-label="Progreso del laboratorio">
-      <div class="instruction-panel" aria-labelledby="instruction-title">
+      <div class="instruction-panel" role="region" aria-label="Indicación del paso actual"
+        aria-labelledby="instruction-title">
         <span class="instruction-number" id="instruction-number">01</span>
         <div>
           <p class="eyebrow" id="instruction-title">Bienvenida al laboratorio</p>
@@ -138,9 +139,6 @@
 
   <div class="screen-overlay intro-screen" id="intro-screen" role="dialog" aria-modal="true"
     aria-labelledby="intro-title">
-    <div class="intro-orbit" aria-hidden="true">
-      <span class="orbit-cell"><i></i></span><span class="orbit-dot dot-a"></span><span class="orbit-dot dot-b"></span>
-    </div>
     <div class="intro-card">
       <p class="eyebrow">Objeto de aprendizaje interactivo</p>
       <h1 id="intro-title">Clona tu propio<br><em>ratón</em></h1>
@@ -247,7 +245,7 @@
           <span class="close-micro-spinner" aria-hidden="true"></span>
           <span class="close-micro-label">Completa el procedimiento</span>
         </button>
-        <p>Selecciona y lleva la herramienta a la célula.</p>
+        <p><b>HERRAMIENTAS</b></p>
         <button class="micro-tool draggable" data-draggable="holding-pipette" type="button">
           <img src="app/img/aguja-sosten.png" alt=""><span><b>Pipeta de sostén</b><small>Estabiliza la
               célula</small></span>
@@ -302,7 +300,8 @@
         </button>
 
         <div class="gestation-mother" aria-label="Madre sustituta durante la gestación">
-          <img class="gestation-mother-image hand-drawn-filter" src="app/img/raton-blanco.png" alt="Madre sustituta blanca">
+          <img class="gestation-mother-image hand-drawn-filter" src="app/img/raton-blanco.png"
+            alt="Madre sustituta blanca">
 
           <div class="gestation-womb" aria-hidden="true">
             <span class="womb-ring"></span>
@@ -317,7 +316,7 @@
 
           <div class="gestation-newborn" aria-hidden="true">
             <span>Nueva cría</span>
-            <img src="app/img/raton-gris.png" alt="Cría gris clonada" class="hand-drawn-filter">
+            <img class="hand-drawn-filter" src="app/img/raton-gris.png" alt="Cría gris clonada">
           </div>
         </div>
 

@@ -87,7 +87,7 @@ button:focus-visible,
   align-items: center;
   gap: 24px;
   padding: 9px 16px;
-  background: rgba(255, 255, 255, .82);
+  background: rgba(255, 255, 255, .52);
   box-shadow: 0 10px 35px rgba(40, 91, 104, .1);
   backdrop-filter: blur(14px);
   z-index: 10;
@@ -193,11 +193,63 @@ button:focus-visible,
   width: 100%;
   min-height: 72px;
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 2px solid var(--blue-dark);
+  border-left: 10px solid var(--blue-dark);
   border-radius: 14px;
-  padding: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  padding: 10px 42px 10px 12px;
+  background:
+    linear-gradient(110deg, rgba(236, 250, 252, .98), rgba(255, 255, 255, .94) 62%),
+    white;
+  transition: border-color .3s ease, background .3s ease
+}
+
+.instruction-panel::before {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  right: 12px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  border-right: 14px solid var(--blue-dark);
+  filter: drop-shadow(0 2px 3px rgba(31, 94, 108, .28));
+  transform: translateY(-50%);
+  pointer-events: none;
+  animation: instructionPointerBlink 1.25s ease-in-out infinite
+}
+
+.instruction-panel::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 38px;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  border-bottom: 2px solid rgba(51, 172, 194, .35);
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(.4);
+  pointer-events: none
+}
+
+.instruction-panel.step-attention {
+  animation: instructionPanelFocus 1.15s cubic-bezier(.2, .8, .2, 1)
+}
+
+.instruction-panel.step-attention::after {
+  animation: instructionPanelRing 1.15s ease-out
 }
 
 .instruction-number {
+  position: relative;
+  z-index: 2;
   flex: 0 0 46px;
   height: 46px;
   display: grid;
@@ -242,8 +294,9 @@ button:focus-visible,
 
 #instruction-text {
   margin-top: 4px;
-  color: var(--muted);
+  color: #385c65;
   font-size: clamp(0.8125rem, 1.2vw, 1rem);
+  font-weight: 620;
   line-height: 1.35;
 }
 
@@ -735,7 +788,7 @@ button:focus-visible,
 }
 
 .draggable.is-active {
-  filter: drop-shadow(0 0 10px rgba(28, 180, 198, .85));
+  filter: drop-shadow(0 0 5px var(--blue-dark));
   cursor: var(--cursor-glove-open);
   animation: activeFloat 1.8s ease-in-out infinite;
 }
@@ -1111,68 +1164,6 @@ button:focus-visible,
   font-size: clamp(0.75rem, .3vw + .6rem, 1.0625rem);
 }
 
-.intro-orbit {
-  position: fixed;
-  width: min(75vw, 950px);
-  aspect-ratio: 1;
-  right: -18vw;
-  top: -20vw;
-  border: 1px solid rgba(49, 147, 176, .2);
-  border-radius: 50%;
-  animation: spin 40s linear infinite;
-}
-
-.intro-orbit::before,
-.intro-orbit::after {
-  content: "";
-  position: absolute;
-  border: 1px solid rgba(49, 147, 176, .16);
-  border-radius: 50%;
-  inset: 13%;
-}
-
-.intro-orbit::after {
-  inset: 27%;
-}
-
-.orbit-cell {
-  position: absolute;
-  left: 7%;
-  top: 35%;
-  width: clamp(90px, 9vw, 165px);
-  height: clamp(90px, 9vw, 165px);
-  border-radius: 48% 52%;
-  background: radial-gradient(circle at 36% 34%, white, #a6e3df 60%, #4aafbf);
-  box-shadow: inset 0 0 25px white, 0 20px 40px rgba(41, 127, 149, .2)
-}
-
-.orbit-cell i {
-  position: absolute;
-  inset: 34%;
-  border-radius: 50%;
-  background: #766098
-}
-
-.orbit-dot {
-  position: absolute;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #50bfd0
-}
-
-.dot-a {
-  right: 17%;
-  top: 18%
-}
-
-.dot-b {
-  right: 24%;
-  bottom: 14%;
-  width: 9px;
-  height: 9px
-}
-
 .materials-card {
   width: 100%;
   height: 100%;
@@ -1306,7 +1297,7 @@ button:focus-visible,
   position: absolute;
   left: 0;
   top: -80px;
-  width: auto;
+  width: 100%;
   height: 48px;
   border: 2px solid var(--line);
   border-radius: 10px;
@@ -1322,6 +1313,7 @@ button:focus-visible,
   transition: background .25s;
   font-weight: bold;
   animation: cloneCallout 1.6s ease-in-out .45s infinite;
+  justify-content: center;
 }
 
 .close-micro-icon,
@@ -1791,12 +1783,15 @@ button:focus-visible,
   background: rgba(255, 255, 255, .76);
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px)
+
 }
 
 .micro-tools>p {
   margin-top: 0;
   color: var(--muted);
-  font-size: 1rem
+  font-size: 1rem;
+  text-align: center;
+  padding-bottom: 20px;
 }
 
 .micro-tool {
@@ -1923,7 +1918,6 @@ button:focus-visible,
 .gestation-stage {
   position: relative;
   min-height: 500px;
-  padding: clamp(18px, 3vw, 38px);
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -2052,21 +2046,33 @@ button:focus-visible,
   position: absolute;
   width: 23%;
   aspect-ratio: 1;
+  overflow: hidden;
   border-radius: 48% 52% 47% 53%/52% 46% 54% 48%;
-  background: radial-gradient(circle at 34% 29%, #e8ecee, #929da2 62%, #626e74);
-  border: 1px solid rgba(66, 77, 82, .68);
+  background: radial-gradient(circle at 35% 30%, #fff6dc, #e4b66f 70%, #c48a48);
+  border: 1px solid rgba(168, 112, 55, .75);
   box-shadow:
     inset 2px 2px 3px rgba(255, 255, 255, .55),
     0 2px 3px rgba(54, 41, 44, .18);
   transform: translate(-50%, -50%)
 }
 
+.embryo-cluster i::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 34% 29%, #e8ecee, #929da2 62%, #626e74);
+  opacity: 0
+}
+
 .embryo-cluster i::after {
   content: "";
   position: absolute;
+  z-index: 2;
   inset: 31%;
   border-radius: 50%;
-  background: rgba(65, 72, 79, .32)
+  background: rgba(112, 78, 132, .35)
 }
 
 .embryo-cluster i:nth-child(1) {
@@ -2175,6 +2181,8 @@ button:focus-visible,
     radial-gradient(circle at 35% 30%, rgba(239, 242, 243, .78), transparent 18%),
     radial-gradient(circle at 62% 67%, rgba(52, 61, 67, .28), transparent 32%),
     linear-gradient(145deg, #aeb7bb, #68747a 72%, #4c585e);
+  background-size: 145% 145%, 135% 135%, 100% 100%;
+  background-position: 10% 12%, 90% 86%, center;
   box-shadow:
     inset 5px 5px 9px rgba(255, 255, 255, .32),
     inset -6px -7px 10px rgba(41, 47, 51, .28),
@@ -2207,17 +2215,33 @@ button:focus-visible,
 }
 
 .gestation-overlay.is-gestating .embryo-cluster {
-  animation: embryoImplant 7.2s ease forwards
+  animation: embryoImplant 9.5s ease forwards
 }
 
 .gestation-overlay.is-gestating .embryo-cluster i {
-  animation: embryoCellMerge 6.8s cubic-bezier(.3, .02, .22, 1) forwards
+  animation: embryoCellMerge 9.1s cubic-bezier(.3, .02, .22, 1) forwards
+}
+
+.gestation-overlay.is-gestating .embryo-cluster i::before {
+  animation: embryoCellGray 9.1s ease forwards
+}
+
+.gestation-overlay.is-gestating .embryo-cluster i::after {
+  animation: embryoNucleusGray 9.1s ease forwards
 }
 
 .gestation-overlay.is-gestating .clone-mass {
   animation:
-    cloneMassForm 10.5s cubic-bezier(.16, .7, .2, 1) forwards,
-    cloneMassMorph 2.6s ease-in-out 10.5s infinite alternate
+    cloneMassForm 10.8s cubic-bezier(.16, .7, .2, 1) forwards,
+    cloneMassMorph 2.4s ease-in-out 10.8s infinite alternate
+}
+
+.gestation-overlay.is-gestating .clone-mass::before {
+  animation: cloneContentDriftA 2.7s ease-in-out 7.5s infinite alternate
+}
+
+.gestation-overlay.is-gestating .clone-mass::after {
+  animation: cloneContentDriftB 3.1s ease-in-out 7.5s infinite alternate
 }
 
 .gestation-overlay.completed .clone-mass {
@@ -2421,7 +2445,7 @@ button:focus-visible,
   position: absolute;
   z-index: 8;
   right: -18%;
-  bottom: 3%;
+  bottom: 8%;
   width: 58%;
   padding: 12px;
   display: grid;
@@ -2447,7 +2471,7 @@ button:focus-visible,
   width: 100%;
   max-height: 310px;
   object-fit: contain;
-  filter: drop-shadow(6px 9px 8px rgba(42, 48, 49, .25))
+  filter: url("#hand-drawn-filter") drop-shadow(6px 9px 8px rgba(42, 48, 49, .25))
 }
 
 .gestation-overlay.completed .gestation-newborn {
@@ -2534,17 +2558,17 @@ button:focus-visible,
 @keyframes embryoCellMerge {
 
   0%,
-  34% {
+  38% {
     transform: translate(-50%, -50%) rotate(var(--turn)) scale(1)
   }
 
-  55% {
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%) rotate(var(--turn)) scale(1.08)
+  68% {
+    left: 55%;
+    top: 52%;
+    transform: translate(-50%, -50%) rotate(var(--turn)) scale(1.05)
   }
 
-  76% {
+  86% {
     left: 50%;
     top: 50%;
     border-radius: 42% 58% 55% 45%/57% 44% 56% 43%;
@@ -2559,42 +2583,133 @@ button:focus-visible,
   }
 }
 
+@keyframes embryoCellGray {
+
+  0%,
+  18% {
+    opacity: 0
+  }
+
+  48% {
+    opacity: .55
+  }
+
+  72%,
+  100% {
+    opacity: 1
+  }
+}
+
+@keyframes embryoNucleusGray {
+
+  0%,
+  22% {
+    background: rgba(112, 78, 132, .35)
+  }
+
+  65%,
+  100% {
+    background: rgba(65, 72, 79, .38)
+  }
+}
+
 @keyframes cloneMassForm {
 
   0%,
   42% {
     opacity: 0;
-    transform: scale(.08) rotate(-10deg);
-    border-radius: 50%
+    transform: translate(-5px, 4px) scale(.08) rotate(-10deg);
+    border-radius: 50%;
+    background-position: 8% 12%, 92% 88%, center
   }
 
   58% {
     opacity: .3;
-    transform: scale(.35) rotate(-6deg)
+    transform: translate(5px, -4px) scale(.35) rotate(-6deg);
+    border-radius: 61% 39% 48% 52%/42% 63% 37% 58%;
+    background-position: 35% 24%, 72% 68%, center
   }
 
   78% {
     opacity: .78;
-    transform: scale(.82) rotate(-2deg);
-    border-radius: 48% 52% 45% 55%/54% 46% 58% 42%
+    transform: translate(-3px, 3px) scale(.82) rotate(3deg);
+    border-radius: 39% 61% 56% 44%/62% 38% 53% 47%;
+    background-position: 78% 58%, 26% 35%, center
   }
 
   100% {
     opacity: .96;
     transform: scale(1) rotate(0);
-    border-radius: 44% 56% 51% 49%/57% 43% 55% 45%
+    border-radius: 44% 56% 51% 49%/57% 43% 55% 45%;
+    background-position: 10% 12%, 90% 86%, center
   }
 }
 
 @keyframes cloneMassMorph {
+  0% {
+    transform: translate(-3px, 2px) scale(.98) rotate(-2deg);
+    border-radius: 42% 58% 48% 52%/61% 39% 57% 43%;
+    background-position: 5% 8%, 95% 90%, center;
+    box-shadow:
+      inset 7px 4px 11px rgba(255, 255, 255, .34),
+      inset -5px -9px 12px rgba(41, 47, 51, .3),
+      0 5px 12px rgba(64, 38, 45, .26)
+  }
+
+  34% {
+    transform: translate(4px, -3px) scale(1.07) rotate(2deg);
+    border-radius: 61% 39% 55% 45%/43% 62% 38% 57%;
+    background-position: 40% 24%, 65% 55%, center
+  }
+
+  67% {
+    transform: translate(1px, 4px) scale(1.02) rotate(-1deg);
+    border-radius: 49% 51% 37% 63%/58% 42% 64% 36%;
+    background-position: 72% 54%, 32% 72%, center;
+    box-shadow:
+      inset 3px 8px 12px rgba(255, 255, 255, .28),
+      inset -9px -4px 13px rgba(41, 47, 51, .34),
+      0 8px 15px rgba(64, 38, 45, .3)
+  }
+
+  100% {
+    transform: translate(-4px, -1px) scale(1.09) rotate(3deg);
+    border-radius: 63% 37% 52% 48%/39% 57% 43% 61%;
+    background-position: 88% 72%, 14% 30%, center;
+    box-shadow:
+      inset 9px 3px 13px rgba(255, 255, 255, .32),
+      inset -4px -10px 12px rgba(41, 47, 51, .3),
+      0 6px 16px rgba(64, 38, 45, .32)
+  }
+}
+
+@keyframes cloneContentDriftA {
   from {
-    transform: scale(1) rotate(-1deg);
-    border-radius: 44% 56% 51% 49%/57% 43% 55% 45%
+    left: 18%;
+    top: 48%;
+    transform: scale(.8);
+    border-radius: 45% 55% 60% 40%
   }
 
   to {
-    transform: scale(1.05) rotate(2deg);
-    border-radius: 57% 43% 46% 54%/44% 58% 42% 56%
+    left: 48%;
+    top: 21%;
+    transform: scale(1.35);
+    border-radius: 62% 38% 43% 57%
+  }
+}
+
+@keyframes cloneContentDriftB {
+  from {
+    right: 16%;
+    top: 23%;
+    transform: scale(1.25)
+  }
+
+  to {
+    right: 49%;
+    top: 57%;
+    transform: scale(.72)
   }
 }
 
@@ -2856,6 +2971,51 @@ dialog form {
   }
 }
 
+@keyframes instructionPanelFocus {
+  0% {
+    transform: translateX(0) scale(1);
+  }
+
+  50% {
+    transform: translateX(30px) scale(1.05);
+    border-left-width: 40px;
+  }
+
+  100% {
+    transform: translateX(0) scale(1);
+    border-left-width: 10px;
+  }
+}
+
+@keyframes instructionPointerBlink {
+  0%,
+  100% {
+    opacity: .38;
+    transform: translate(4px, -50%) scale(.88)
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1)
+  }
+}
+
+@keyframes instructionPanelRing {
+  0% {
+    opacity: .75;
+    transform: translate(-50%, -50%) scale(.35)
+  }
+
+  75% {
+    opacity: .18
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(4.5)
+  }
+}
+
 @keyframes instructionCursorBlink {
 
   0%,
@@ -2918,7 +3078,7 @@ dialog form {
 @keyframes activeFloat {
   50% {
     transform: translateY(-8px);
-    filter: drop-shadow(0 0 15px rgba(28, 180, 198, .95))
+    filter: drop-shadow(5px 5px 3px var(--blue-dark))
   }
 }
 
@@ -3358,7 +3518,7 @@ dialog form {
 
   .instruction-panel {
     width: calc(100% - 12px);
-    padding: 10px 12px
+    padding: 10px 38px 10px 12px
   }
 
   .instruction-number {
