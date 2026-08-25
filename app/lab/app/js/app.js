@@ -290,14 +290,14 @@ class AnimationEngine {
       window.setTimeout(() => {
         lens.classList.add("reagent-wash");
         oocyte.classList.add("activated");
-        this.particles(oocyte, 10, "#e8c45a");
-      }, 980),
+        this.particles(oocyte, 20, "#e8c45a");
+      }, 1280),
     );
 
     this.timers.push(
       window.setTimeout(() => {
         lens.classList.add("reagent-wash-fade");
-      }, 4200),
+      }, 4500),
     );
 
     this.timers.push(
@@ -305,7 +305,7 @@ class AnimationEngine {
         lens.classList.remove("reagent-wash", "reagent-wash-fade");
         drop.remove();
         this.startCleavage(oocyte, onComplete);
-      }, 5400),
+      }, 5700),
     );
   }
 
@@ -407,10 +407,22 @@ class UIController {
     this.intro = document.querySelector("#intro-screen");
     this.materials = document.querySelector("#materials-screen");
     this.microOverlay = document.querySelector("#microscope-overlay");
-    this.closeMicroButton = document.querySelector("#close-micro");
-    this.closeMicroLabel = this.closeMicroButton.querySelector(
-      ".close-micro-label",
+    this.gestationOverlay = document.querySelector("#gestation-overlay");
+    this.gestationPhase = document.querySelector("#gestation-phase");
+    this.gestationBirthButton = document.querySelector(
+      "#gestation-birth-button",
     );
+    this.gestationStartButton = document.querySelector(
+      "#gestation-start-button",
+    );
+    this.gestationCompleteMessage = document.querySelector(
+      "#gestation-complete-message",
+    );
+    this.gestationCalendar = document.querySelector(".gestation-calendar");
+    this.gestationDay = document.querySelector("#gestation-day");
+    this.closeMicroButton = document.querySelector("#close-micro");
+    this.closeMicroLabel =
+      this.closeMicroButton.querySelector(".close-micro-label");
     this.resetDialog = document.querySelector("#reset-dialog");
     this.stageDim = document.querySelector("#stage-dim");
   }
@@ -476,6 +488,12 @@ class UIController {
     document
       .querySelector("[data-action='birth']")
       .addEventListener("click", () => this.handleBirth());
+    this.gestationBirthButton.addEventListener("click", () =>
+      this.handleBirth(),
+    );
+    this.gestationStartButton.addEventListener("click", () =>
+      this.startGestationProcess(),
+    );
   }
 
   renderStep() {
@@ -497,8 +515,7 @@ class UIController {
       .classList.toggle("visible", step === 3);
     this.stageDim.classList.toggle("visible", step === 3);
     const canCloseMicroscope =
-      step === 9 ||
-      (step === 14 && this.game.flags.embryoDivisionComplete);
+      step === 9 || (step === 14 && this.game.flags.embryoDivisionComplete);
     if (canCloseMicroscope) {
       this.setCloseButtonState("ready");
     } else if (this.closeMicroButton.dataset.state !== "processing") {
@@ -778,7 +795,7 @@ class UIController {
         this.animations.injection(
           document.querySelector(".micro-oocyte"),
           () => this.completeStep(),
-          document.querySelector(".micro-oocyte").style.animation = "none",
+          (document.querySelector(".micro-oocyte").style.animation = "none"),
         );
       },
       "14:reagent:lens": () => {
@@ -801,17 +818,8 @@ class UIController {
       "15:embryo:surrogate": () => {
         source.classList.remove("visible");
         this.game.flags.embryoImplanted = true;
-        document.querySelector(".white-mouse").classList.add("is-pregnant");
         this.game.advance();
-        this.schedule(() => {
-          this.game.flags.birthReady = true;
-          document.querySelector(".white-mouse").classList.add("birth-ready");
-          this.typeInstructionText(
-            "La gestación se completó. Pulsa el vientre iluminado para revelar la cría.",
-          );
-          document.querySelector(".belly-target").tabIndex = 0;
-          document.querySelector(".belly-target").focus();
-        }, 2200);
+        this.openGestationView();
       },
     };
 
@@ -881,6 +889,87 @@ class UIController {
     this.updateInteractiveStates();
   }
 
+  openGestationView() {
+    this.gestationOverlay.classList.remove(
+      "hidden",
+      "is-gestating",
+      "birth-ready",
+      "completed",
+    );
+    this.typeInstructionText(
+      "El embrión fue implantado. Pulsa Visualizar gestación para continuar.",
+    );
+    this.gestationDay.textContent = "1";
+    this.gestationCalendar.classList.remove("turning");
+    this.gestationStartButton.disabled = false;
+    this.gestationStartButton.classList.remove("hidden");
+    this.gestationBirthButton.disabled = true;
+    this.gestationCompleteMessage.classList.remove("visible");
+    this.setGestationProgress("development");
+    this.updateInteractiveStates();
+    this.gestationStartButton.focus();
+  }
+
+  startGestationProcess() {
+    if (
+      this.gestationOverlay.classList.contains("is-gestating") ||
+      !this.game.flags.embryoImplanted
+    )
+      return;
+
+    this.gestationStartButton.disabled = true;
+    this.gestationStartButton.classList.add("hidden");
+    this.gestationOverlay.classList.add("is-gestating");
+    this.typeInstructionText(
+      "La gestación está en curso. Observa el desarrollo del clon durante 19 días.",
+    );
+    this.setGestationProgress("development");
+    this.startGestationCalendar();
+
+    this.schedule(() => {
+      this.game.flags.birthReady = true;
+      this.gestationOverlay.classList.add("birth-ready");
+      this.setGestationProgress("birth");
+      this.typeInstructionText(
+        "La gestación se completó. Pulsa Revelar el nacimiento para conocer a la cría.",
+      );
+      this.gestationBirthButton.disabled = false;
+      this.gestationBirthButton.focus();
+    }, 11000);
+  }
+
+  startGestationCalendar() {
+    this.gestationDay.textContent = "1";
+    this.gestationCalendar.classList.remove("turning");
+    for (let day = 2; day <= 19; day += 1) {
+      this.schedule(
+        () => {
+          this.turnGestationCalendar(day);
+        },
+        (day - 1) * 550,
+      );
+    }
+  }
+
+  turnGestationCalendar(day) {
+    this.gestationCalendar.classList.remove("turning");
+    void this.gestationCalendar.offsetWidth;
+    this.gestationDay.textContent = String(day);
+    this.gestationCalendar.classList.add("turning");
+  }
+
+  setGestationProgress(activeStep) {
+    const order = ["implantation", "development", "birth"];
+    const activeIndex = order.indexOf(activeStep);
+
+    document
+      .querySelectorAll("[data-gestation-step]")
+      .forEach((element, index) => {
+        element.classList.toggle("current", index === activeIndex);
+        element.classList.toggle("done", index < activeIndex);
+      });
+  }
+
   handleBirth() {
     if (
       this.game.step !== 16 ||
@@ -889,9 +978,18 @@ class UIController {
     )
       return;
     this.game.flags.completed = true;
-    document.querySelector(".baby-mouse").classList.add("revealed");
-    document.querySelector(".belly-target").tabIndex = -1;
-    this.instructionTitle.textContent = "¡Ha nacido una cría gris!";
+    this.gestationOverlay.classList.add("completed");
+    this.gestationBirthButton.disabled = true;
+    this.gestationBirthButton.textContent = "Nacimiento revelado";
+    this.gestationCompleteMessage.classList.add("visible");
+    this.setGestationProgress("birth");
+    const birthProgress = document.querySelector(
+      "[data-gestation-step='birth']",
+    );
+    birthProgress.classList.remove("current");
+    birthProgress.classList.add("done");
+    this.instructionTitle.textContent =
+      "¡Simulación completada! Ha nacido una cría gris";
     this.typeInstructionText(
       "Su pelaje confirma que es genéticamente idéntica a la donante del núcleo, no a la donante del ovocito ni a la madre sustituta.",
     );
@@ -1010,6 +1108,15 @@ class UIController {
       .classList.remove("is-pregnant", "birth-ready");
     document.querySelector(".baby-mouse").classList.remove("revealed");
     document.querySelector(".belly-target").tabIndex = -1;
+    this.gestationOverlay.className = "gestation-overlay hidden";
+    this.gestationDay.textContent = "1";
+    this.gestationCalendar.classList.remove("turning");
+    this.gestationStartButton.disabled = false;
+    this.gestationStartButton.classList.remove("hidden");
+    this.gestationBirthButton.disabled = true;
+    this.gestationBirthButton.textContent = "Revelar el nacimiento";
+    this.gestationCompleteMessage.classList.remove("visible");
+    this.setGestationProgress("implantation");
     document
       .querySelector("[data-draggable='injection-needle']")
       .classList.remove("loaded");

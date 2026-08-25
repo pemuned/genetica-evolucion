@@ -1048,7 +1048,8 @@ button:focus-visible,
 }
 
 .screen-overlay.hidden,
-.microscope-overlay.hidden {
+.microscope-overlay.hidden,
+.gestation-overlay.hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -1413,21 +1414,38 @@ button:focus-visible,
   box-shadow: inset 0 0 45px rgba(120, 90, 20, .45)
 }
 
+.lens.reagent-wash::before,
 .lens.reagent-wash::after {
   content: "";
   position: absolute;
-  left: 54%;
-  top: 44%;
+  left: 50%;
+  top: 50%;
   z-index: 7;
-  width: 28%;
   aspect-ratio: 1;
   border-radius: 50%;
   pointer-events: none;
-  translate: -50% -50%;
+  translate: -50% -50%
+}
+
+.lens.reagent-wash::before {
+  width: 24%;
   background:
-    radial-gradient(circle, rgba(255, 244, 170, .8) 0%, rgba(236, 196, 70, .55) 42%, rgba(210, 160, 40, .18) 68%, transparent 78%);
-  filter: blur(1px);
-  animation: reagentSpread 2.6s cubic-bezier(.12, .7, .2, 1) forwards
+    radial-gradient(circle, rgba(255, 252, 208, .96) 0 10%, rgba(247, 220, 111, .82) 28%, rgba(225, 174, 47, .48) 56%, rgba(198, 139, 28, .12) 76%, transparent 82%);
+  filter: blur(1.5px);
+  will-change: transform, opacity;
+  animation: reagentSpread 3.2s cubic-bezier(.18, .68, .22, 1) forwards
+}
+
+.lens.reagent-wash::after {
+  width: 13%;
+  border: 3px solid rgba(255, 247, 184, .95);
+  background: rgba(255, 239, 142, .12);
+  box-shadow:
+    0 0 0 9px rgba(245, 215, 99, .5),
+    0 0 0 20px rgba(229, 187, 62, .3),
+    0 0 0 34px rgba(202, 148, 34, .15);
+  will-change: transform, opacity, box-shadow;
+  animation: reagentRipples 3.1s cubic-bezier(.16, .62, .24, 1) forwards
 }
 
 .lens.reagent-wash-fade {
@@ -1436,6 +1454,7 @@ button:focus-visible,
   box-shadow: inset 0 0 45px rgba(20, 69, 76, .65)
 }
 
+.lens.reagent-wash-fade::before,
 .lens.reagent-wash-fade::after {
   animation: reagentWashOut 1.1s ease forwards
 }
@@ -1718,49 +1737,51 @@ button:focus-visible,
 .reagent-drop {
   position: absolute;
   z-index: 9;
-  left: 54%;
-  top: -22%;
-  width: 26px;
-  height: 34px;
-  border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
+  left: 50%;
+  top: -18%;
+  width: 31px;
+  height: 42px;
+  border-radius: 50% 50% 48% 48% / 68% 68% 32% 32%;
   background:
-    radial-gradient(circle at 32% 28%, rgba(255, 255, 255, .95) 0 18%, transparent 42%),
-    linear-gradient(165deg, #fff7c4 8%, #efc84a 48%, #c89218 100%);
+    radial-gradient(ellipse at 31% 26%, rgba(255, 255, 255, .98) 0 11%, rgba(255, 255, 255, .38) 12% 22%, transparent 38%),
+    radial-gradient(circle at 58% 64%, rgba(255, 226, 105, .85), transparent 52%),
+    linear-gradient(155deg, #fffbd5 3%, #f4d45d 42%, #d59b20 75%, #a96b0d 100%);
   box-shadow:
-    inset -3px -4px 6px rgba(150, 100, 10, .28),
-    inset 3px 4px 5px rgba(255, 255, 255, .55),
-    0 8px 18px rgba(180, 130, 20, .35);
-  filter: drop-shadow(0 4px 6px rgba(90, 60, 10, .2));
+    inset -5px -7px 8px rgba(132, 78, 4, .28),
+    inset 4px 5px 7px rgba(255, 255, 255, .62);
+  filter:
+    drop-shadow(0 5px 3px rgba(98, 60, 4, .24)) drop-shadow(0 10px 12px rgba(190, 137, 20, .3));
   transform: translateX(-50%);
   transform-origin: center top;
-  animation: dropFall 1.35s cubic-bezier(.28, .1, .22, 1) forwards;
+  animation: dropFall 1.55s cubic-bezier(.22, .05, .22, 1) forwards;
   pointer-events: none
 }
 
 .reagent-drop::before {
   content: "";
   position: absolute;
-  left: 28%;
-  top: 16%;
-  width: 34%;
-  height: 28%;
+  left: 24%;
+  top: 17%;
+  width: 29%;
+  height: 25%;
   border-radius: 50%;
-  background: rgba(255, 255, 255, .55);
-  filter: blur(.4px)
+  background: rgba(255, 255, 255, .72);
+  filter: blur(.6px)
 }
 
 .reagent-drop::after {
   content: "";
   position: absolute;
   left: 50%;
-  bottom: -6%;
-  width: 42%;
-  height: 22%;
+  top: -95%;
+  width: 34%;
+  height: 100%;
   translate: -50% 0;
-  border-radius: 50%;
-  background: rgba(180, 130, 20, .22);
-  filter: blur(2px);
-  opacity: .7
+  border-radius: 50% 50% 20% 20%;
+  background: linear-gradient(to bottom, transparent, rgba(238, 202, 75, .08) 35%, rgba(241, 207, 81, .42));
+  filter: blur(3px);
+  transform-origin: bottom;
+  animation: dropTrail 1.55s ease-in forwards
 }
 
 .micro-tools {
@@ -1856,6 +1877,867 @@ button:focus-visible,
   color: white;
   font-size: 0.5rem;
   font-weight: 800
+}
+
+.gestation-overlay {
+  position: fixed;
+  z-index: 95;
+  inset: 90px 0 0;
+  padding: clamp(16px, 2.5vw, 34px);
+  overflow: auto;
+  background:
+    radial-gradient(circle at 35% 45%, rgba(255, 248, 239, .98), rgba(228, 242, 241, .96) 62%, rgba(178, 211, 214, .96));
+  transition: opacity .45s ease, visibility .45s ease
+}
+
+.gestation-header {
+  width: min(1240px, 100%);
+  margin: 0 auto clamp(8px, 1.3vh, 16px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px
+}
+
+.gestation-header h2 {
+  margin: 4px 0 0;
+  font-family: Georgia, serif;
+  font-size: clamp(1.75rem, 3vw, 3rem);
+  font-weight: 500
+}
+
+.gestation-layout {
+  width: min(1240px, 100%);
+  min-height: min(610px, calc(100vh - 185px));
+  margin: auto;
+  display: grid
+}
+
+.gestation-stage {
+  border: 1px solid rgba(255, 255, 255, .82);
+  border-radius: 28px;
+  box-shadow: 0 25px 60px rgba(47, 83, 86, .17);
+  backdrop-filter: blur(10px)
+}
+
+.gestation-stage {
+  position: relative;
+  min-height: 500px;
+  padding: clamp(18px, 3vw, 38px);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 78%, rgba(170, 199, 190, .34), transparent 38%),
+    rgba(255, 255, 255, .48)
+}
+
+.gestation-start-button,
+.gestation-birth-button {
+  position: absolute;
+  z-index: 14;
+  left: 50%;
+  top: 50%;
+  min-width: 220px;
+  min-height: 58px;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 14px 34px rgba(28, 82, 94, .3),
+    0 0 0 10px rgba(255, 255, 255, .42);
+  transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
+  animation: cloneCallout 1.6s ease-in-out infinite
+}
+
+.gestation-start-button.hidden,
+.gestation-birth-button {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, -42%) scale(.85);
+  animation: none
+}
+
+.gestation-start-button:hover,
+.gestation-birth-button:hover {
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 17px 38px rgba(28, 82, 94, .34),
+    0 0 0 12px rgba(255, 255, 255, .3)
+}
+
+.gestation-start-button:active,
+.gestation-birth-button:active {
+  transform: translate(-50%, -50%) scale(.98)
+}
+
+.gestation-mother {
+  position: relative;
+  width: min(100%, 980px);
+  aspect-ratio: 1.28;
+  display: grid;
+  place-items: center;
+  border-radius: 38% 42% 36% 44%;
+  outline-offset: -12px;
+  transition: filter .35s ease;
+  left: -10%;
+}
+
+.gestation-mother-image {
+  width: 100%;
+  height: 90%;
+  object-fit: contain;
+  filter: url("#hand-drawn-filter") drop-shadow(12px 18px 14px rgba(52, 57, 56, .3))
+}
+
+.gestation-womb {
+  position: absolute;
+  z-index: 4;
+  left: 37%;
+  top: 49%;
+  width: 28%;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 3px solid rgba(217, 133, 143, .3);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 42% 38%, rgba(255, 232, 223, .88), rgba(222, 145, 151, .65) 58%, rgba(132, 73, 83, .72));
+  box-shadow:
+    inset 0 0 25px rgba(112, 50, 61, .34),
+    0 0 0 10px rgba(239, 172, 178, .12);
+  transform: translate(-50%, -50%) scale(.72);
+  opacity: .45;
+  transition: opacity .45s ease, transform .55s cubic-bezier(.2, .8, .2, 1), box-shadow .45s ease
+}
+
+.gestation-mother.is-target .gestation-womb {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  box-shadow:
+    inset 0 0 28px rgba(112, 50, 61, .28),
+    0 0 0 9px rgba(255, 255, 255, .78),
+    0 0 0 20px rgba(238, 161, 180, .34),
+    0 0 38px rgba(222, 125, 147, .6);
+  animation: gestationTargetPulse 1.3s ease-in-out infinite
+}
+
+.gestation-overlay.is-gestating .gestation-womb,
+.gestation-overlay.birth-ready .gestation-womb,
+.gestation-overlay.completed .gestation-womb {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  animation: gestationWombPulse 2s ease-in-out infinite
+}
+
+.womb-ring {
+  position: absolute;
+  inset: 9%;
+  border: 1px solid rgba(255, 225, 217, .55);
+  border-radius: 50%;
+  animation: wombFluid 4s ease-in-out infinite alternate
+}
+
+.clone-development,
+.embryo-cluster,
+.clone-mass {
+  position: absolute;
+  inset: 0
+}
+
+.embryo-cluster {
+  inset: 20%;
+  opacity: 0
+}
+
+.embryo-cluster i {
+  position: absolute;
+  width: 23%;
+  aspect-ratio: 1;
+  border-radius: 48% 52% 47% 53%/52% 46% 54% 48%;
+  background: radial-gradient(circle at 34% 29%, #e8ecee, #929da2 62%, #626e74);
+  border: 1px solid rgba(66, 77, 82, .68);
+  box-shadow:
+    inset 2px 2px 3px rgba(255, 255, 255, .55),
+    0 2px 3px rgba(54, 41, 44, .18);
+  transform: translate(-50%, -50%)
+}
+
+.embryo-cluster i::after {
+  content: "";
+  position: absolute;
+  inset: 31%;
+  border-radius: 50%;
+  background: rgba(65, 72, 79, .32)
+}
+
+.embryo-cluster i:nth-child(1) {
+  left: 25%;
+  top: 24%;
+  --turn: -16deg
+}
+
+.embryo-cluster i:nth-child(2) {
+  left: 45%;
+  top: 19%;
+  --turn: 11deg
+}
+
+.embryo-cluster i:nth-child(3) {
+  left: 66%;
+  top: 26%;
+  --turn: -7deg
+}
+
+.embryo-cluster i:nth-child(4) {
+  left: 79%;
+  top: 43%;
+  --turn: 14deg
+}
+
+.embryo-cluster i:nth-child(5) {
+  left: 20%;
+  top: 44%;
+  --turn: 8deg
+}
+
+.embryo-cluster i:nth-child(6) {
+  left: 41%;
+  top: 39%;
+  --turn: -12deg
+}
+
+.embryo-cluster i:nth-child(7) {
+  left: 60%;
+  top: 44%;
+  --turn: 17deg
+}
+
+.embryo-cluster i:nth-child(8) {
+  left: 70%;
+  top: 59%;
+  --turn: -9deg
+}
+
+.embryo-cluster i:nth-child(9) {
+  left: 18%;
+  top: 63%;
+  --turn: 12deg
+}
+
+.embryo-cluster i:nth-child(10) {
+  left: 37%;
+  top: 58%;
+  --turn: -15deg
+}
+
+.embryo-cluster i:nth-child(11) {
+  left: 53%;
+  top: 63%;
+  --turn: 6deg
+}
+
+.embryo-cluster i:nth-child(12) {
+  left: 82%;
+  top: 68%;
+  --turn: -11deg
+}
+
+.embryo-cluster i:nth-child(13) {
+  left: 29%;
+  top: 79%;
+  --turn: 13deg
+}
+
+.embryo-cluster i:nth-child(14) {
+  left: 48%;
+  top: 82%;
+  --turn: -8deg
+}
+
+.embryo-cluster i:nth-child(15) {
+  left: 66%;
+  top: 77%;
+  --turn: 16deg
+}
+
+.embryo-cluster i:nth-child(16) {
+  left: 52%;
+  top: 51%;
+  --turn: -5deg
+}
+
+.clone-mass {
+  width: 48%;
+  height: 43%;
+  inset: 29% 26%;
+  border: 2px solid rgba(59, 68, 74, .62);
+  border-radius: 44% 56% 51% 49%/57% 43% 55% 45%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(239, 242, 243, .78), transparent 18%),
+    radial-gradient(circle at 62% 67%, rgba(52, 61, 67, .28), transparent 32%),
+    linear-gradient(145deg, #aeb7bb, #68747a 72%, #4c585e);
+  box-shadow:
+    inset 5px 5px 9px rgba(255, 255, 255, .32),
+    inset -6px -7px 10px rgba(41, 47, 51, .28),
+    0 6px 12px rgba(64, 38, 45, .28);
+  opacity: 0;
+  transform: scale(.08) rotate(-10deg);
+}
+
+.clone-mass::before,
+.clone-mass::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(58, 66, 72, .25);
+  filter: blur(1px)
+}
+
+.clone-mass::before {
+  width: 23%;
+  aspect-ratio: 1;
+  left: 24%;
+  top: 43%
+}
+
+.clone-mass::after {
+  width: 16%;
+  aspect-ratio: 1;
+  right: 21%;
+  top: 29%
+}
+
+.gestation-overlay.is-gestating .embryo-cluster {
+  animation: embryoImplant 7.2s ease forwards
+}
+
+.gestation-overlay.is-gestating .embryo-cluster i {
+  animation: embryoCellMerge 6.8s cubic-bezier(.3, .02, .22, 1) forwards
+}
+
+.gestation-overlay.is-gestating .clone-mass {
+  animation:
+    cloneMassForm 10.5s cubic-bezier(.16, .7, .2, 1) forwards,
+    cloneMassMorph 2.6s ease-in-out 10.5s infinite alternate
+}
+
+.gestation-overlay.completed .clone-mass {
+  animation:
+    cloneMassExit 1.25s ease forwards,
+    activeFloat 1.5s ease-in-out infinite alternate forwards
+}
+
+.gestation-overlay.completed .gestation-womb {
+  animation: gestationWombReveal 1.6s ease forwards
+}
+
+.gestation-calendar {
+  position: absolute;
+  z-index: 12;
+  left: 18px;
+  top: 16px;
+  width: 108px;
+  height: 124px;
+  margin: 0;
+  perspective: 500px
+}
+
+.calendar-pages {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d
+}
+
+.calendar-face,
+.calendar-sheet {
+  position: absolute;
+  border: 1px solid rgba(137, 88, 84, .18);
+  border-radius: 10px;
+  background: #fffdf9;
+  box-shadow: 0 7px 18px rgba(80, 51, 47, .16)
+}
+
+.calendar-sheet {
+  inset: 5px 3px -5px;
+  z-index: 1;
+  transform: rotate(1.5deg);
+  background: #f1e8de
+}
+
+.calendar-sheet:nth-child(2) {
+  inset: 3px 2px -3px;
+  z-index: 2;
+  transform: rotate(-1deg);
+  background: #f8f1e9
+}
+
+.calendar-sheet:nth-child(3) {
+  inset: 1px;
+  z-index: 3;
+  transform: rotate(.5deg);
+  background: #fffaf3
+}
+
+.calendar-face {
+  inset: 0;
+  z-index: 4;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 28px 1fr 21px;
+  place-items: center;
+  transform-origin: top;
+  backface-visibility: hidden
+}
+
+.calendar-label {
+  align-self: stretch;
+  width: 100%;
+  display: grid;
+  place-items: center;
+  background: #be6970;
+  color: white;
+  font-size: .67rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .14em
+}
+
+.gestation-calendar strong {
+  color: #65494a;
+  font-family: Georgia, serif;
+  font-size: 3.1rem;
+  line-height: 1
+}
+
+.gestation-calendar small {
+  color: #9a7772;
+  font-size: .62rem;
+  font-weight: 750
+}
+
+.gestation-calendar.turning .calendar-face {
+  animation: calendarNumberReveal .52s cubic-bezier(.3, .02, .2, 1)
+}
+
+.gestation-calendar.turning .calendar-sheet:nth-child(3) {
+  animation: calendarSheetPeel .52s cubic-bezier(.35, .02, .22, 1)
+}
+
+.gestation-progress {
+  position: absolute;
+  z-index: 12;
+  right: 22px;
+  top: 24px;
+  max-width: calc(100% - 180px);
+  margin: 0;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: clamp(14px, 2.5vw, 34px);
+  list-style: none
+}
+
+.gestation-progress li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #7b8b8e;
+  font-size: .8rem;
+  font-weight: 750
+}
+
+.gestation-progress li:not(:last-child)::after {
+  content: "";
+  width: clamp(20px, 3vw, 48px);
+  height: 2px;
+  margin-left: clamp(4px, 1vw, 12px);
+  background: rgba(107, 139, 142, .22)
+}
+
+.gestation-progress li span {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e6eeee;
+  color: #718286
+}
+
+.gestation-progress li.current {
+  color: #a05e67
+}
+
+.gestation-progress li.current span {
+  background: #d98b98;
+  color: white;
+  box-shadow: 0 0 0 6px rgba(217, 139, 152, .14)
+}
+
+.gestation-progress li.done span {
+  background: #58a79e;
+  color: white
+}
+
+.gestation-progress li.done span::before {
+  content: "✓"
+}
+
+.gestation-progress li.done span {
+  font-size: 0
+}
+
+.gestation-progress li.done span::before {
+  font-size: 1rem
+}
+
+.gestation-birth-button {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none
+}
+
+.gestation-birth-button:disabled {
+  opacity: .42;
+  cursor: not-allowed;
+  filter: grayscale(.6)
+}
+
+.gestation-overlay.birth-ready .gestation-birth-button:not(:disabled) {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  animation: cloneCallout 1.5s ease-in-out infinite
+}
+
+.gestation-overlay.completed .gestation-birth-button {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none
+}
+
+.gestation-newborn {
+  position: absolute;
+  z-index: 8;
+  right: -18%;
+  bottom: 3%;
+  width: 58%;
+  padding: 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .82);
+  box-shadow: 0 16px 38px rgba(42, 73, 75, .2);
+  opacity: 0;
+  transform: translateY(30px) scale(.7);
+  pointer-events: none
+}
+
+.gestation-newborn span {
+  padding: 5px 10px;
+  border-radius: 99px;
+  background: #496f78;
+  color: white;
+  font-size: .7rem;
+  font-weight: 800
+}
+
+.gestation-newborn img {
+  width: 100%;
+  max-height: 310px;
+  object-fit: contain;
+  filter: drop-shadow(6px 9px 8px rgba(42, 48, 49, .25))
+}
+
+.gestation-overlay.completed .gestation-newborn {
+  animation: gestationNewbornReveal 1s cubic-bezier(.2, 1.25, .35, 1) forwards
+}
+
+.gestation-complete-message {
+  position: absolute;
+  z-index: 16;
+  left: 50%;
+  top: 40%;
+  width: min(560px, calc(100% - 36px));
+  transform: translate(-50%, 18px);
+  max-height: 0;
+  margin-top: 0;
+  padding: 0 14px;
+  overflow: hidden;
+  display: grid;
+  gap: 5px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  opacity: 0;
+  transition: max-height .5s ease, margin .5s ease, padding .5s ease, opacity .4s ease;
+  text-align: center;
+}
+
+.gestation-complete-message.visible {
+  max-height: 150px;
+  margin-top: 0;
+  padding: 16px 20px;
+  border-color: rgba(71, 151, 137, .24);
+  background: #e7f6f1;
+  color: #275f5a;
+  box-shadow: 0 14px 34px rgba(48, 103, 94, .2);
+  opacity: 1;
+  transform: translate(-50%, 0)
+}
+
+.gestation-complete-message span {
+  font-size: .72rem;
+  line-height: 1.45
+}
+
+@keyframes gestationTargetPulse {
+  50% {
+    transform: translate(-50%, -50%) scale(1.07)
+  }
+}
+
+@keyframes gestationWombPulse {
+  50% {
+    box-shadow:
+      inset 0 0 32px rgba(112, 50, 61, .3),
+      0 0 0 14px rgba(238, 161, 180, .16),
+      0 0 32px rgba(222, 125, 147, .32)
+  }
+}
+
+@keyframes wombFluid {
+  to {
+    inset: 14%;
+    border-radius: 46% 54% 52% 48%
+  }
+}
+
+@keyframes embryoImplant {
+  0% {
+    opacity: 0;
+    transform: scale(.72)
+  }
+
+  12%,
+  68% {
+    opacity: 1;
+    transform: scale(1)
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(.88)
+  }
+}
+
+@keyframes embryoCellMerge {
+
+  0%,
+  34% {
+    transform: translate(-50%, -50%) rotate(var(--turn)) scale(1)
+  }
+
+  55% {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(var(--turn)) scale(1.08)
+  }
+
+  76% {
+    left: 50%;
+    top: 50%;
+    border-radius: 42% 58% 55% 45%/57% 44% 56% 43%;
+    transform: translate(-50%, -50%) rotate(0) scale(1.24)
+  }
+
+  100% {
+    left: 50%;
+    top: 50%;
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(0) scale(.86)
+  }
+}
+
+@keyframes cloneMassForm {
+
+  0%,
+  42% {
+    opacity: 0;
+    transform: scale(.08) rotate(-10deg);
+    border-radius: 50%
+  }
+
+  58% {
+    opacity: .3;
+    transform: scale(.35) rotate(-6deg)
+  }
+
+  78% {
+    opacity: .78;
+    transform: scale(.82) rotate(-2deg);
+    border-radius: 48% 52% 45% 55%/54% 46% 58% 42%
+  }
+
+  100% {
+    opacity: .96;
+    transform: scale(1) rotate(0);
+    border-radius: 44% 56% 51% 49%/57% 43% 55% 45%
+  }
+}
+
+@keyframes cloneMassMorph {
+  from {
+    transform: scale(1) rotate(-1deg);
+    border-radius: 44% 56% 51% 49%/57% 43% 55% 45%
+  }
+
+  to {
+    transform: scale(1.05) rotate(2deg);
+    border-radius: 57% 43% 46% 54%/44% 58% 42% 56%
+  }
+}
+
+@keyframes cloneMassExit {
+  0% {
+    opacity: .96;
+    transform: scale(1);
+    filter: blur(0)
+  }
+
+  45% {
+    opacity: .48;
+    transform: scale(.82);
+    filter: blur(1px)
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(.35);
+    filter: blur(4px)
+  }
+}
+
+@keyframes gestationWombReveal {
+  0% {
+    opacity: 1;
+    filter: saturate(1)
+  }
+
+  100% {
+    opacity: .18;
+    filter: saturate(.45) blur(1.5px);
+    box-shadow:
+      inset 0 0 20px rgba(112, 50, 61, .12),
+      0 0 0 5px rgba(238, 161, 180, .06)
+  }
+}
+
+@keyframes calendarNumberReveal {
+  0% {
+    transform: rotateX(-72deg);
+    opacity: .25
+  }
+
+  58% {
+    transform: rotateX(8deg);
+    opacity: 1
+  }
+
+  100% {
+    transform: rotateX(0);
+    opacity: 1
+  }
+}
+
+@keyframes calendarSheetPeel {
+  0% {
+    opacity: 1;
+    transform: rotateX(0) translateY(0)
+  }
+
+  68% {
+    opacity: .92;
+    transform: rotateX(-112deg) translateY(5px)
+  }
+
+  100% {
+    opacity: 0;
+    transform: rotateX(-168deg) translateY(18px)
+  }
+}
+
+@keyframes gestationNewbornReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1)
+  }
+}
+
+@media(max-width:1000px) {
+  .gestation-stage {
+    min-height: 410px
+  }
+}
+
+@media(max-width:600px) {
+  .gestation-overlay {
+    inset-block-start: 130px;
+    padding: 12px
+  }
+
+  .gestation-header {
+    align-items: flex-start;
+    flex-direction: column
+  }
+
+  .gestation-layout {
+    min-height: 0
+  }
+
+  .gestation-stage {
+    min-height: 310px;
+    padding: 10px
+  }
+
+  .gestation-calendar {
+    left: 9px;
+    top: 9px;
+    width: 94px;
+    height: 108px
+  }
+
+  .gestation-progress {
+    right: 10px;
+    top: 124px;
+    max-width: calc(100% - 20px);
+    gap: 8px;
+    padding: 7px
+  }
+
+  .gestation-progress li {
+    gap: 5px;
+    font-size: .62rem
+  }
+
+  .gestation-progress li:not(:last-child)::after {
+    display: none
+  }
+
+  .gestation-progress li span {
+    width: 22px;
+    height: 22px
+  }
+
+  .gestation-start-button,
+  .gestation-birth-button {
+    min-width: 190px;
+    min-height: 52px
+  }
+
+  .gestation-newborn {
+    width: 68%
+  }
 }
 
 .toast {
@@ -2195,70 +3077,195 @@ dialog form {
 
 @keyframes dropFall {
   0% {
-    top: -24%;
+    top: -18%;
     opacity: 0;
-    border-radius: 50% 50% 48% 48% / 58% 58% 42% 42%;
-    transform: translateX(-50%) scaleX(1.05) scaleY(.82) rotate(-4deg)
+    transform: translateX(-50%) scaleX(.88) scaleY(1.08) rotate(-2deg)
+  }
+
+  8% {
+    opacity: 1;
+    transform: translateX(-50%) scaleX(.92) scaleY(1.1) rotate(1deg)
+  }
+
+  30% {
+    top: 3%;
+    transform: translateX(-50%) scaleX(.84) scaleY(1.18) rotate(-1deg)
+  }
+
+  58% {
+    top: 28%;
+    opacity: 1;
+    transform: translateX(-50%) scaleX(.76) scaleY(1.32) rotate(1deg)
+  }
+
+  76% {
+    top: 46%;
+    transform: translateX(-50%) scaleX(.7) scaleY(1.42)
+  }
+
+  84% {
+    top: 49.2%;
+    opacity: 1;
+    transform: translateX(-50%) scaleX(2.15) scaleY(.3)
+  }
+
+  91% {
+    top: 50%;
+    opacity: .72;
+    transform: translateX(-50%) scaleX(2.75) scaleY(.16)
+  }
+
+  100% {
+    top: 50%;
+    opacity: 0;
+    transform: translateX(-50%) scaleX(3.35) scaleY(.08)
+  }
+}
+
+@keyframes dropTrail {
+
+  0%,
+  20% {
+    opacity: 0;
+    transform: scaleY(.2)
+  }
+
+  45% {
+    opacity: .75;
+    transform: scaleY(1)
+  }
+
+  78% {
+    opacity: .46;
+    transform: scaleY(1.35)
+  }
+
+  88%,
+  100% {
+    opacity: 0;
+    transform: scaleY(.15)
+  }
+}
+
+@keyframes reagentSpread {
+  0% {
+    transform: scale(.08);
+    opacity: .9;
+    box-shadow:
+      0 0 0 0 rgba(244, 218, 104, .55),
+      0 0 20px rgba(255, 239, 157, .75)
+  }
+
+  18% {
+    transform: scale(.55);
+    opacity: 1;
+    box-shadow:
+      0 0 0 7px rgba(244, 218, 104, .38),
+      0 0 28px rgba(255, 239, 157, .62)
+  }
+
+  45% {
+    transform: scale(2.1);
+    opacity: .86;
+    box-shadow:
+      0 0 0 16px rgba(235, 198, 67, .2),
+      0 0 38px rgba(249, 219, 103, .38)
+  }
+
+  72% {
+    transform: scale(4);
+    opacity: .66;
+    box-shadow:
+      0 0 0 25px rgba(220, 172, 44, .1),
+      0 0 52px rgba(239, 199, 73, .2)
+  }
+
+  100% {
+    transform: scale(6);
+    opacity: .44;
+    box-shadow:
+      0 0 0 34px rgba(205, 147, 29, .04),
+      0 0 65px rgba(226, 174, 47, .1)
+  }
+}
+
+@keyframes reagentRipples {
+  0% {
+    transform: scale(.08);
+    opacity: 0
   }
 
   10% {
     opacity: 1
   }
 
-  48% {
-    top: 28%;
-    opacity: 1;
-    border-radius: 50% 50% 46% 46% / 62% 62% 38% 38%;
-    transform: translateX(-50%) scaleX(.78) scaleY(1.38) rotate(2deg)
+  32% {
+    transform: scale(1.7);
+    opacity: .95;
+    border-width: 3px;
+    box-shadow:
+      0 0 0 10px rgba(250, 229, 133, .58),
+      0 0 0 26px rgba(235, 198, 68, .4),
+      0 0 0 48px rgba(207, 151, 30, .22)
   }
 
-  68% {
-    top: 43%;
-    border-radius: 48% 52% 55% 45% / 40% 40% 60% 60%;
-    transform: translateX(-50%) scaleX(1.55) scaleY(.42) rotate(0deg)
+  60% {
+    transform: scale(3.65);
+    opacity: .72;
+    border-width: 2px;
+    box-shadow:
+      0 0 0 14px rgba(250, 229, 133, .38),
+      0 0 0 36px rgba(235, 198, 68, .25),
+      0 0 0 66px rgba(207, 151, 30, .13)
   }
 
-  82% {
-    top: 45%;
-    opacity: .55;
-    border-radius: 50%;
-    transform: translateX(-50%) scale(1.9) rotate(0deg)
+  84% {
+    transform: scale(5.55);
+    opacity: .38;
+    border-width: 1px;
+    box-shadow:
+      0 0 0 19px rgba(250, 229, 133, .18),
+      0 0 0 49px rgba(235, 198, 68, .11),
+      0 0 0 88px rgba(207, 151, 30, .05)
   }
 
   100% {
-    top: 47%;
+    transform: scale(7.1);
     opacity: 0;
-    border-radius: 50%;
-    transform: translateX(-50%) scale(2.6)
-  }
-}
-
-@keyframes reagentSpread {
-  0% {
-    transform: scale(.12);
-    opacity: .25
-  }
-
-  35% {
-    opacity: .85
-  }
-
-  100% {
-    transform: scale(5.2);
-    opacity: 1
+    box-shadow:
+      0 0 0 24px transparent,
+      0 0 0 61px transparent,
+      0 0 0 108px transparent
   }
 }
 
 @keyframes reagentWashOut {
   to {
     opacity: 0;
-    transform: scale(5.4)
+    transform: scale(6.4)
   }
 }
 
 @keyframes activationPulse {
-  50% {
-    filter: drop-shadow(0 0 18px rgba(248, 207, 98, .9))
+  0% {
+    box-shadow:
+      0 0 0 0 rgba(248, 207, 98, .48),
+      0 0 0 0 rgba(248, 207, 98, .28),
+      0 0 0 0 rgba(248, 207, 98, .15);
+  }
+
+  48% {
+    box-shadow:
+      0 0 0 22px rgba(248, 207, 98, .3),
+      0 0 0 49px rgba(248, 207, 98, .17),
+      0 0 0 78px rgba(248, 207, 98, .08);
+  }
+
+  100% {
+    box-shadow:
+      0 0 0 58px rgba(248, 207, 98, 0),
+      0 0 0 102px rgba(248, 207, 98, 0),
+      0 0 0 150px rgba(248, 207, 98, 0);
   }
 }
 

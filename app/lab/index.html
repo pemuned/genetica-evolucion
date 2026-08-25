@@ -263,6 +263,71 @@
     </div>
   </div>
 
+  <div class="gestation-overlay hidden" id="gestation-overlay" role="dialog" aria-modal="true"
+    aria-labelledby="gestation-title">
+    <header class="gestation-header">
+      <div>
+        <p class="eyebrow">Etapa final · Desarrollo embrionario</p>
+        <h2 id="gestation-title">Gestación en la madre sustituta</h2>
+      </div>
+    </header>
+
+    <div class="gestation-layout">
+      <section class="gestation-stage" aria-label="Vista ampliada de la madre sustituta">
+        <ol class="gestation-progress" aria-label="Progreso de la etapa final">
+          <li class="current" data-gestation-step="implantation"><span>1</span>Implantación</li>
+          <li data-gestation-step="development"><span>2</span>Desarrollo</li>
+          <li data-gestation-step="birth"><span>3</span>Nacimiento</li>
+        </ol>
+
+        <div class="gestation-calendar" aria-label="Días transcurridos de gestación">
+          <div class="calendar-pages">
+            <i class="calendar-sheet" aria-hidden="true"></i>
+            <i class="calendar-sheet" aria-hidden="true"></i>
+            <i class="calendar-sheet" aria-hidden="true"></i>
+            <div class="calendar-face">
+              <span class="calendar-label">Día</span>
+              <strong id="gestation-day">1</strong>
+              <small>de 19</small>
+            </div>
+          </div>
+        </div>
+
+        <button class="primary-button gestation-start-button" id="gestation-start-button" type="button">
+          Visualizar gestación <span aria-hidden="true">→</span>
+        </button>
+
+        <button class="primary-button gestation-birth-button" id="gestation-birth-button" type="button" disabled>
+          Revelar el nacimiento
+        </button>
+
+        <div class="gestation-mother" aria-label="Madre sustituta durante la gestación">
+          <img class="gestation-mother-image hand-drawn-filter" src="app/img/raton-blanco.png" alt="Madre sustituta blanca">
+
+          <div class="gestation-womb" aria-hidden="true">
+            <span class="womb-ring"></span>
+            <div class="clone-development">
+              <span class="embryo-cluster">
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              </span>
+              <span class="clone-mass"></span>
+            </div>
+          </div>
+
+          <div class="gestation-newborn" aria-hidden="true">
+            <span>Nueva cría</span>
+            <img src="app/img/raton-gris.png" alt="Cría gris clonada" class="hand-drawn-filter">
+          </div>
+        </div>
+
+        <div class="gestation-complete-message" id="gestation-complete-message" role="status" aria-live="polite">
+          <strong>¡Simulación completada!</strong>
+        </div>
+      </section>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <dialog id="reset-dialog">
