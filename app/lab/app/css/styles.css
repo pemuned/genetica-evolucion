@@ -120,6 +120,7 @@ body.is-dragging * {
 button,
 [role="button"] {
   -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-main);
 }
 
 button:focus-visible,
