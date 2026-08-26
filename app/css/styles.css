@@ -403,6 +403,18 @@ body.a11y-high-contrast .prelab-tab-btn.is-active::after {
     padding: 2px;
 }
 
+/* Replace decorative spray edges with clear solid borders in high contrast. */
+body.a11y-high-contrast .spray-border::after {
+    padding: 0 !important;
+    border: 2px solid #ffffff;
+    background: transparent !important;
+    filter: none !important;
+    opacity: 1;
+    mix-blend-mode: normal;
+    mask: none;
+    -webkit-mask: none;
+}
+
 /* ============================================================
    TYPOGRAPHY
    ============================================================ */

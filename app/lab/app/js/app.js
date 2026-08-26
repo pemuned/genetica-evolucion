@@ -152,6 +152,8 @@ class GameState {
 
   isValidDrop(action, target) {
     const config = this.config;
+    this.toastElement = document.querySelector("#toast");
+    this.toastElement.classList.remove("show");
     if (this.step === 12 && this.flags.somaticCellHeld) {
       return action === "injection-needle" && target === "micro-somatic";
     }
@@ -502,15 +504,28 @@ class UIController {
     );
   }
 
+  updateMainProgress() {
+    const displayStep = Math.max(1, this.game.step - VISIBLE_STEP_OFFSET);
+    const isPendingFinalAction =
+      displayStep === TOTAL_VISIBLE_STEPS && !this.game.flags.completed;
+    const completedSteps = isPendingFinalAction
+      ? TOTAL_VISIBLE_STEPS - 1
+      : displayStep;
+    const percent = Math.round(
+      (completedSteps / TOTAL_VISIBLE_STEPS) * 100,
+    );
+
+    this.stepLabel.textContent = `Paso ${displayStep} de ${TOTAL_VISIBLE_STEPS}`;
+    this.progressPercent.textContent = `${percent}%`;
+    this.progressFill.style.width = `${percent}%`;
+    this.progressTrack.setAttribute("aria-valuenow", String(completedSteps));
+  }
+
   renderStep() {
     const step = this.game.step;
     const config = this.game.config;
     const displayStep = Math.max(1, step - VISIBLE_STEP_OFFSET);
-    const percent = Math.round((displayStep / TOTAL_VISIBLE_STEPS) * 100);
-    this.stepLabel.textContent = `Paso ${displayStep} de ${TOTAL_VISIBLE_STEPS}`;
-    this.progressPercent.textContent = `${percent}%`;
-    this.progressFill.style.width = `${percent}%`;
-    this.progressTrack.setAttribute("aria-valuenow", String(displayStep));
+    this.updateMainProgress();
     this.instructionNumber.textContent = String(displayStep).padStart(2, "0");
     this.instructionTitle.textContent = config.title;
     this.typeInstructionText(config.instruction);
@@ -989,10 +1004,13 @@ class UIController {
     )
       return;
     this.game.flags.completed = true;
+    this.updateMainProgress();
     this.gestationOverlay.classList.add("completed");
     this.gestationBirthButton.disabled = true;
     this.gestationBirthButton.textContent = "Nacimiento revelado";
-    this.gestationCompleteMessage.classList.add("visible");
+    this.schedule(() => {
+      this.gestationCompleteMessage.classList.add("visible");
+    }, 1300);
     this.setGestationProgress("birth");
     const birthProgress = document.querySelector(
       "[data-gestation-step='birth']",

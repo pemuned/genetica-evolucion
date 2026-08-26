@@ -268,7 +268,7 @@ button:focus-visible,
   padding: 0 13px;
   border: 1px solid var(--line);
   border-radius: 12px;
-  background: white;
+  background: #ffffff;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -295,7 +295,7 @@ button:focus-visible,
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   padding: 10px 42px 10px 12px;
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
 }
@@ -744,11 +744,13 @@ button:focus-visible,
   background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, .9), rgba(139, 222, 223, .8) 62%, rgba(59, 152, 176, .6));
   box-shadow: inset 0 0 12px rgba(255, 255, 255, .85), 0 5px 12px rgba(30, 105, 124, .22);
   animation: cellMorph 4s ease-in-out infinite alternate;
+  background-clip: padding-box;
 }
 
 .oocyte-token .cell-membrane {
   border-color: rgba(206, 152, 96, .8);
   background: radial-gradient(circle at 35% 30%, #fff, #f3d3a9 60%, #c98c65);
+  background-clip: padding-box;
 }
 
 .cell-nucleus {
@@ -760,6 +762,7 @@ button:focus-visible,
   border: 2px solid rgba(78, 52, 120, .35);
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #dfc8f3, #775e9c);
+  background-clip: padding-box;
 }
 
 .cell-membrane i {
@@ -955,6 +958,7 @@ button:focus-visible,
   margin: auto;
   background: radial-gradient(circle at 35% 30%, #fff, #f3d3a9 60%, #c98c65);
   animation: cellMorph 4s ease-in-out infinite alternate;
+  background-clip: padding-box;
 }
 
 .mini-cell.no-nucleus,
@@ -1601,6 +1605,7 @@ button:focus-visible,
   top: 30%;
   border: 10px double rgba(183, 139, 83, .55);
   background: radial-gradient(circle at 35% 30%, #fff, #f3d3a9 60%, #c98c65);
+  background-clip: padding-box;
 }
 
 .micro-somatic {
@@ -1608,7 +1613,8 @@ button:focus-visible,
   left: 12%;
   top: 33%;
   border: 8px double rgba(58, 141, 157, .55);
-  background: radial-gradient(circle at 35% 32%, #fff, rgba(148, 220, 216, .9) 65%, rgba(56, 139, 157, .8))
+  background: radial-gradient(circle at 35% 32%, #fff, rgba(148, 220, 216, .9) 65%, rgba(56, 139, 157, .8));
+  background-clip: padding-box;
 }
 
 .micro-cell .cytoplasm {
@@ -1902,7 +1908,7 @@ button:focus-visible,
 
 .micro-tools {
   padding: 22px;
-  border: 1px solid rgb(0, 0, 0, 0.5);
+  border: 1px solid rgb(84 84 84 / 50%);
   border-radius: 22px;
   background: rgba(0, 0, 0, 0.3);
   box-shadow: var(--shadow);
@@ -2560,7 +2566,8 @@ button:focus-visible,
   width: 100%;
   max-height: 310px;
   object-fit: contain;
-  filter: url("#hand-drawn-filter") drop-shadow(6px 9px 8px rgba(42, 48, 49, .25))
+  filter: url("#hand-drawn-filter") drop-shadow(5px 5px 5px rgb(0, 0, 0));
+  animation: activeFloat 1.8s ease-in-out infinite;
 }
 
 .gestation-overlay.completed .gestation-newborn {
@@ -2583,8 +2590,15 @@ button:focus-visible,
   border: 1px solid transparent;
   border-radius: 14px;
   opacity: 0;
-  transition: max-height .5s ease, margin .5s ease, padding .5s ease, opacity .4s ease;
+  transition:
+    max-height .55s ease,
+    padding .55s ease,
+    border-color .35s ease,
+    background-color .35s ease,
+    opacity .45s ease,
+    transform .55s cubic-bezier(.22, 1, .36, 1);
   text-align: center;
+  will-change: opacity, transform;
 }
 
 .gestation-complete-message.visible {
@@ -2947,7 +2961,7 @@ button:focus-visible,
   position: fixed;
   z-index: 120;
   left: 50%;
-  top: 100px;
+  top: 50%;
   max-width: min(520px, calc(100% - 30px));
   padding: 12px 18px;
   border-radius: 12px;
