@@ -29,7 +29,7 @@
   --color-card-text: rgba(255, 255, 255, 0.82);
   --font-main: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --color-accent: #adbeb5;
-  --color-accent-dim: #3ab8c7;
+  --color-accent-dim: #66e4f2;
 }
 
 * {
@@ -84,7 +84,8 @@ body::after,
 
 body::before,
 .screen-overlay::before,
-.microscope-overlay::before {
+.microscope-overlay::before,
+.gestation-overlay::before {
   background:
     radial-gradient(42% 36% at 18% 24%, rgba(96, 225, 236, 0.20) 0%, transparent 72%),
     radial-gradient(38% 34% at 82% 22%, rgba(80, 179, 214, 0.18) 0%, transparent 70%),
@@ -99,7 +100,8 @@ body::before,
 
 body::after,
 .screen-overlay::after,
-.microscope-overlay::after {
+.microscope-overlay::after,
+.gestation-overlay::after {
   background:
     radial-gradient(120% 85% at 50% 10%, rgba(110, 233, 246, 0.085) 0%, transparent 62%),
     linear-gradient(125deg, rgba(120, 236, 245, 0.05) 0%, transparent 38%, rgba(85, 204, 184, 0.045) 62%, transparent 100%),
@@ -361,7 +363,8 @@ button:focus-visible,
   font-weight: 850;
   letter-spacing: .05em;
   text-transform: uppercase;
-  text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.877);
+  text-shadow: 2px 2px 2px rgb(0, 0, 0);
+  padding: 4px 8px;
 }
 
 #instruction-text {
@@ -496,7 +499,7 @@ button:focus-visible,
   border-radius: 99px;
   color: var(--cream);
   background: rgba(27, 67, 78, .85);
-  box-shadow: 0 5px 15px rgba(27, 67, 78, .12);
+  box-shadow: 3px 3px 7px rgba(0, 0, 0, .3);
   font-size: 0.95rem;
   font-weight: 750;
   text-align: center;
@@ -612,6 +615,7 @@ button:focus-visible,
   font-weight: 750;
   text-align: center;
   box-shadow: 0 5px 10px rgba(35, 74, 84, .1);
+  line-height: normal;
 }
 
 .petri-label::before {
@@ -812,6 +816,7 @@ button:focus-visible,
   font-weight: 800;
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  font-family:var(--font-main);
 }
 
 .primary-button {
@@ -853,6 +858,7 @@ button:focus-visible,
   font-size: 1.6rem;
   padding: 20px !important;
   border: #fff solid 2px !important;
+  font-family:var(--font-main);
 }
 
 .clone-button:hover {
@@ -961,6 +967,8 @@ button:focus-visible,
   background: white;
   font-size: 0.7rem;
   font-weight: 750;
+  color: var(--blue-dark);
+  line-height: normal;
 }
 
 .no-nucleus::after {
@@ -1371,7 +1379,8 @@ button:focus-visible,
   padding: 0 clamp(22px, 2vw, 34px);
 }
 
-.microscope-overlay {
+.microscope-overlay,
+.gestation-overlay {
   position: fixed;
   z-index: 9;
   inset: 0;
@@ -1383,7 +1392,8 @@ button:focus-visible,
   -webkit-backdrop-filter: blur(42px);
 }
 
-.micro-header {
+.micro-header,
+.gestation-header {
   width: min(1180px, 100%);
   margin: auto;
   display: flex;
@@ -1392,7 +1402,8 @@ button:focus-visible,
   margin-top: 20px;
 }
 
-.micro-header h2 {
+.micro-header h2,
+.gestation-header h2 {
   margin: 3px 0 12px;
   font-size: clamp(1.625rem, 3vw, 2.625rem);
   font-weight: 500
@@ -1886,7 +1897,7 @@ button:focus-visible,
 
 .micro-tools {
   padding: 22px;
-  border: 1px solid rgba(255, 255, 255, .8);
+  border: 1px solid rgb(0, 0, 0, 0.5);
   border-radius: 22px;
   background: rgba(0, 0, 0, 0.3);
   box-shadow: var(--shadow);
@@ -1991,33 +2002,6 @@ button:focus-visible,
   font-weight: 800
 }
 
-.gestation-overlay {
-  position: fixed;
-  z-index: 95;
-  inset: 90px 0 0;
-  padding: clamp(16px, 2.5vw, 34px);
-  overflow: auto;
-  background:
-    radial-gradient(circle at 35% 45%, rgba(255, 248, 239, .98), rgba(228, 242, 241, .96) 62%, rgba(178, 211, 214, .96));
-  transition: opacity .45s ease, visibility .45s ease
-}
-
-.gestation-header {
-  width: min(1240px, 100%);
-  margin: 0 auto clamp(8px, 1.3vh, 16px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px
-}
-
-.gestation-header h2 {
-  margin: 4px 0 0;
-  font-family: Georgia, serif;
-  font-size: clamp(1.75rem, 3vw, 3rem);
-  font-weight: 500
-}
-
 .gestation-layout {
   width: min(1240px, 100%);
   min-height: min(610px, calc(100vh - 185px));
@@ -2026,22 +2010,13 @@ button:focus-visible,
 }
 
 .gestation-stage {
-  border: 1px solid rgba(255, 255, 255, .82);
-  border-radius: 28px;
-  box-shadow: 0 25px 60px rgba(47, 83, 86, .17);
-  backdrop-filter: blur(10px)
-}
-
-.gestation-stage {
   position: relative;
   min-height: 500px;
   display: grid;
   place-items: center;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 78%, rgba(170, 199, 190, .34), transparent 38%),
-    rgba(255, 255, 255, .48)
 }
+
 
 .gestation-start-button,
 .gestation-birth-button {
@@ -2051,12 +2026,13 @@ button:focus-visible,
   top: 50%;
   min-width: 220px;
   min-height: 58px;
+  font-size: 1.1rem;
   transform: translate(-50%, -50%);
   box-shadow:
     0 14px 34px rgba(28, 82, 94, .3),
     0 0 0 10px rgba(255, 255, 255, .42);
   transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
-  animation: cloneCallout 1.6s ease-in-out infinite
+  animation: cloneCallout 1.6s ease-in-out infinite;
 }
 
 .gestation-start-button.hidden,
@@ -2467,24 +2443,27 @@ button:focus-visible,
 .gestation-progress {
   position: absolute;
   z-index: 12;
-  right: 22px;
-  top: 24px;
+  left: 152px;
+  top: 16px;
   max-width: calc(100% - 180px);
   margin: 0;
   padding: 9px 14px;
   display: flex;
   align-items: center;
   gap: clamp(14px, 2.5vw, 34px);
-  list-style: none
+  list-style: none;
+  border-radius: 28px;
+  background: rgb(0, 0, 0, 0.2);
 }
 
 .gestation-progress li {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #7b8b8e;
+  color: #ffffff;
   font-size: .8rem;
-  font-weight: 750
+  font-weight: 750;
+  text-shadow: 1px 1px 10px rgb(0, 0, 0);
 }
 
 .gestation-progress li:not(:last-child)::after {
@@ -2492,7 +2471,7 @@ button:focus-visible,
   width: clamp(20px, 3vw, 48px);
   height: 2px;
   margin-left: clamp(4px, 1vw, 12px);
-  background: rgba(107, 139, 142, .22)
+  background: rgba(216, 234, 235, 0.687)
 }
 
 .gestation-progress li span {
@@ -2506,11 +2485,11 @@ button:focus-visible,
 }
 
 .gestation-progress li.current {
-  color: #a05e67
+  color: #eb808e
 }
 
 .gestation-progress li.current span {
-  background: #d98b98;
+  background: #eb808e;
   color: white;
   box-shadow: 0 0 0 6px rgba(217, 139, 152, .14)
 }
@@ -2567,21 +2546,9 @@ button:focus-visible,
   padding: 12px;
   display: grid;
   place-items: center;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, .82);
-  box-shadow: 0 16px 38px rgba(42, 73, 75, .2);
   opacity: 0;
   transform: translateY(30px) scale(.7);
   pointer-events: none
-}
-
-.gestation-newborn span {
-  padding: 5px 10px;
-  border-radius: 99px;
-  background: #496f78;
-  color: white;
-  font-size: .7rem;
-  font-weight: 800
 }
 
 .gestation-newborn img {
@@ -2613,6 +2580,7 @@ button:focus-visible,
   opacity: 0;
   transition: max-height .5s ease, margin .5s ease, padding .5s ease, opacity .4s ease;
   text-align: center;
+  display: none;
 }
 
 .gestation-complete-message.visible {

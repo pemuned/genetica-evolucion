@@ -20,7 +20,7 @@ const STEP_CONFIG = {
   3: {
     title: "Prepara la mesa de trabajo",
     instruction:
-      "Pulsa «Empecemos la clonación» para activar la mesa de trabajo.",
+      "Pulsa el botón «Empecemos la clonación» para activar la mesa de trabajo.",
   },
   4: {
     title: "Obtén una célula somática",
@@ -404,7 +404,6 @@ class UIController {
     this.instructionPanel = document.querySelector(".instruction-panel");
     this.instructionTitle = document.querySelector("#instruction-title");
     this.instructionText = document.querySelector("#instruction-text");
-    this.status = document.querySelector("#status-message");
     this.toastElement = document.querySelector("#toast");
     this.intro = document.querySelector("#intro-screen");
     this.materials = document.querySelector("#materials-screen");
@@ -515,7 +514,6 @@ class UIController {
     this.instructionNumber.textContent = String(displayStep).padStart(2, "0");
     this.instructionTitle.textContent = config.title;
     this.typeInstructionText(config.instruction);
-    this.status.textContent = step >= 4 && step <= 15 ? "" : "";
 
     document
       .querySelector("#clone-button")
@@ -1006,8 +1004,6 @@ class UIController {
     this.typeInstructionText(
       "Su pelaje confirma que es genéticamente idéntica a la donante del núcleo, no a la donante del ovocito ni a la madre sustituta.",
     );
-    this.status.textContent =
-      "Experimento completado. Puedes reiniciarlo para repetir el procedimiento.";
   }
 
   toast(message, type = "") {
