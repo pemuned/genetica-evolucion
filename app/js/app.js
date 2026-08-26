@@ -208,6 +208,7 @@ function initContentSliders() {
 
 /**
  * Fullscreen simulation overlay (iframe stays on this page).
+ * Expands from the open button so it feels in-page, not a hard cut.
  */
 function initSimFullscreen() {
   const openBtn = document.getElementById("sim-open-btn");
@@ -215,22 +216,42 @@ function initSimFullscreen() {
   const closeBtn = document.getElementById("sim-close-btn");
   const frame = document.getElementById("sim-fullscreen-frame");
   const LAB_SRC = "app/lab/index.html";
+  const ANIM_MS = 520;
 
   if (!openBtn || !overlay || !closeBtn || !frame) return;
 
   let lastFocus = null;
+  let animTimer = null;
+  let prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
 
-  function openSim() {
-    lastFocus = document.activeElement;
-    if (!frame.getAttribute("src") || frame.getAttribute("src") === "about:blank") {
-      frame.setAttribute("src", LAB_SRC);
+  window
+    .matchMedia("(prefers-reduced-motion: reduce)")
+    .addEventListener("change", (event) => {
+      prefersReducedMotion = event.matches;
+    });
+
+  function clearAnimTimer() {
+    if (animTimer) {
+      clearTimeout(animTimer);
+      animTimer = null;
     }
-    overlay.hidden = false;
-    document.body.classList.add("sim-fullscreen-open");
-    closeBtn.focus();
   }
 
-  function closeSim() {
+  function setOriginFromButton() {
+    const rect = openBtn.getBoundingClientRect();
+    overlay.style.setProperty("--sim-from-top", `${rect.top}px`);
+    overlay.style.setProperty("--sim-from-left", `${rect.left}px`);
+    overlay.style.setProperty("--sim-from-width", `${Math.max(rect.width, 48)}px`);
+    overlay.style.setProperty(
+      "--sim-from-height",
+      `${Math.max(rect.height, 40)}px`,
+    );
+  }
+
+  function finishClose() {
+    clearAnimTimer();
     overlay.hidden = true;
     document.body.classList.remove("sim-fullscreen-open");
     if (lastFocus && typeof lastFocus.focus === "function") {
@@ -238,6 +259,73 @@ function initSimFullscreen() {
     } else {
       openBtn.focus();
     }
+  }
+
+  function openSim() {
+    if (!overlay.hidden && overlay.classList.contains("is-open")) return;
+
+    clearAnimTimer();
+    lastFocus = document.activeElement;
+    setOriginFromButton();
+
+    if (
+      !frame.getAttribute("src") ||
+      frame.getAttribute("src") === "about:blank"
+    ) {
+      frame.setAttribute("src", LAB_SRC);
+    }
+
+    overlay.hidden = false;
+    document.body.classList.add("sim-fullscreen-open");
+
+    if (prefersReducedMotion) {
+      overlay.classList.add("is-open");
+      closeBtn.focus();
+      return;
+    }
+
+    void overlay.offsetWidth;
+    overlay.classList.add("is-open");
+
+    const onOpenEnd = (event) => {
+      if (event.target !== overlay || event.propertyName !== "width") return;
+      overlay.removeEventListener("transitionend", onOpenEnd);
+      clearAnimTimer();
+      closeBtn.focus();
+    };
+
+    overlay.addEventListener("transitionend", onOpenEnd);
+    animTimer = setTimeout(() => {
+      overlay.removeEventListener("transitionend", onOpenEnd);
+      closeBtn.focus();
+    }, ANIM_MS);
+  }
+
+  function closeSim() {
+    if (overlay.hidden) return;
+
+    clearAnimTimer();
+
+    if (prefersReducedMotion || !overlay.classList.contains("is-open")) {
+      overlay.classList.remove("is-open");
+      finishClose();
+      return;
+    }
+
+    setOriginFromButton();
+    overlay.classList.remove("is-open");
+
+    const onCloseEnd = (event) => {
+      if (event.target !== overlay || event.propertyName !== "width") return;
+      overlay.removeEventListener("transitionend", onCloseEnd);
+      finishClose();
+    };
+
+    overlay.addEventListener("transitionend", onCloseEnd);
+    animTimer = setTimeout(() => {
+      overlay.removeEventListener("transitionend", onCloseEnd);
+      finishClose();
+    }, ANIM_MS);
   }
 
   openBtn.addEventListener("click", openSim);
