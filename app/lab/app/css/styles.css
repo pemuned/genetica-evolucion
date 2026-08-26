@@ -133,7 +133,6 @@ button:focus-visible,
 
 .spray-border {
   position: relative;
-  overflow: hidden;
   isolation: isolate;
 }
 
@@ -2586,19 +2585,17 @@ button:focus-visible,
   opacity: 0;
   transition: max-height .5s ease, margin .5s ease, padding .5s ease, opacity .4s ease;
   text-align: center;
-  display: none;
 }
 
 .gestation-complete-message.visible {
   max-height: 150px;
   margin-top: 0;
   padding: 16px 20px;
-  border-color: rgba(71, 151, 137, .24);
-  background: #e7f6f1;
-  color: #275f5a;
-  box-shadow: 0 14px 34px rgba(48, 103, 94, .2);
+  border-color: #e7f6f1;
+  background: rgb(13 27 25 / 83%);
+  color: #ffffff;
   opacity: 1;
-  transform: translate(-50%, 0)
+  transform: translate(-50%, 0);
 }
 
 .gestation-complete-message span {
