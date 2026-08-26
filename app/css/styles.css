@@ -888,7 +888,7 @@ hr {
 }
 
 .prelab-tab-btn.is-active::after {
-    background: rgba(173, 190, 181, 0.75);
+    background: rgb(173, 190, 181);
     border-color: rgba(255, 255, 255, 0.8);
 }
 
