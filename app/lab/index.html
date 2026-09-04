@@ -13,15 +13,6 @@
 <body>
   <main class="app-shell">
     <header class="topbar" aria-label="Progreso del laboratorio">
-      <div class="top-actions">
-        <button class="icon-button previous-step-button" id="previous-step-button" type="button"
-          aria-label="Volver al paso anterior" disabled>
-          <span aria-hidden="true"><img src="app/img/back.svg" alt="Anterior"></span><span class="button-word">Anterior</span>
-        </button>
-        <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
-          <span aria-hidden="true"><img src="app/img/restart.svg" alt="Reiniciar"></span><span class="button-word">Reiniciar</span>
-        </button>
-      </div>
       <nav class="progress-wrap" aria-label="Pasos de la simulación">
         <span class="progress-summary" id="step-label">Paso 1 de 14</span>
         <ol class="step-progress">
@@ -57,6 +48,12 @@
               class="progress-step-marker">FIN</span></li>
         </ol>
       </nav>
+      <div class="top-actions">
+        <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
+          <span aria-hidden="true"><img src="app/img/restart.svg" alt=""></span><span
+            class="button-word">Reiniciar</span>
+        </button>
+      </div>
     </header>
 
     <aside class="instruction-panel spray-border" role="region" aria-label="Indicación del paso actual"
@@ -67,6 +64,11 @@
         <p id="instruction-text">Descubre cómo el núcleo de una célula puede dirigir la formación de un nuevo
           organismo.</p>
       </div>
+      <button class="icon-button previous-step-button" id="previous-step-button" type="button"
+        aria-label="Volver al paso anterior" disabled>
+        <span aria-hidden="true"><img src="app/img/back.svg" alt=""></span><span
+          class="button-word">Anterior</span>
+      </button>
     </aside>
 
     <section class="lab-frame" id="lab-frame" aria-label="Laboratorio interactivo">
