@@ -178,16 +178,17 @@ button:focus-visible,
 }
 
 .topbar {
-  min-height: 110px;
+  height: 110px;
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(350px, 3fr) minmax(350px, auto) minmax(100px, auto);
+  grid-template-columns: 118px minmax(0, 1fr);
   align-items: center;
-  gap: 24px;
-  padding: 9px 16px;
-  background: rgba(0, 0, 0, 0.1);
+  gap: 16px;
+  padding: 8px 18px;
+  background: rgba(4, 25, 34, .76);
   box-shadow: 0 10px 35px rgba(40, 91, 104, .1);
   backdrop-filter: blur(14px);
-  z-index: 10;
+  z-index: 30;
 }
 
 .brand {
@@ -227,39 +228,133 @@ button:focus-visible,
 }
 
 .progress-wrap {
+  min-width: 0;
   width: 100%;
-  padding: 0 20px 0 20px;
+  overflow-x: auto;
+  padding: 4px 4px 8px;
+  scrollbar-color: rgba(99, 190, 213, .5) transparent;
+  scrollbar-width: thin
 }
 
-.progress-copy {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 7px;
-  font-size: 0.75rem;
-  font-weight: 750;
-  color: var(--color-accent);
-}
-
-.progress-track {
-  height: 20px;
+.progress-summary {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
-  border-radius: 99px;
-  background: rgba(0, 0, 0, 0.5);
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap
 }
 
-#progress-fill {
-  display: block;
-  width: 6.25%;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, var(--blue), var(--cyan));
-  transition: width .5s cubic-bezier(.2, .8, .2, 1);
+.step-progress {
+  min-width: 1060px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: flex-start;
+  list-style: none
+}
+
+.step-progress li {
+  position: relative;
+  flex: 1 0 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(232, 244, 247, .56);
+  text-align: center;
+  transition: color .3s ease
+}
+
+.step-progress li::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 45px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 2px;
+  background: rgba(174, 205, 212, .3);
+  transition: background .35s ease, box-shadow .35s ease
+}
+
+.step-progress li:last-child::after {
+  display: none
+}
+
+.progress-step-label {
+  height: 26px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  font-size: .63rem;
+  font-weight: 750;
+  line-height: 1.05
+}
+
+.progress-step-marker {
+  position: relative;
+  z-index: 2;
+  width: 40px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(194, 219, 225, .42);
+  border-radius: 16px;
+  background: rgba(2, 16, 22, .88);
+  color: rgba(255, 255, 255, .72);
+  font-size: .72rem;
+  font-weight: 900;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, .28);
+  transition: color .3s ease, border-color .3s ease, background .3s ease, transform .3s ease
+}
+
+.step-progress li.done {
+  color: rgba(150, 220, 235, .84)
+}
+
+.step-progress li.done::after {
+  background: rgba(76, 177, 201, .72);
+  box-shadow: 0 0 7px rgba(76, 177, 201, .28)
+}
+
+.step-progress li.done .progress-step-marker {
+  border-color: #70c6d9;
+  background: #347f97;
+  color: white
+}
+
+.step-progress li.current {
+  color: white
+}
+
+.step-progress li.current .progress-step-marker {
+  border-color: #b7edf5;
+  background: linear-gradient(145deg, var(--blue), var(--cyan));
+  color: white;
+  transform: scale(1.12);
+  box-shadow:
+    0 0 0 4px rgba(74, 181, 203, .14),
+    0 0 15px rgba(86, 206, 226, .45);
+  animation: instructionNumberPulse 1.7s ease-in-out infinite
+}
+
+.step-progress .progress-final .progress-step-marker {
+  border-style: dashed;
+  font-size: .62rem;
+  letter-spacing: .04em
+}
+
+.step-progress .progress-final.current .progress-step-marker,
+.step-progress .progress-final.done .progress-step-marker {
+  border-style: solid
 }
 
 .top-actions {
-  justify-self: center;
+  justify-self: stretch;
   display: flex;
-  gap: 8px;
+  justify-content: center
 }
 
 .icon-button {
@@ -285,36 +380,20 @@ button:focus-visible,
 }
 
 .instruction-panel {
+  position: absolute;
+  z-index: 20;
+  top: 128px;
+  left: 18px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 14px;
-  width: 100%;
-  min-height: 72px;
-  border-left: 10px solid var(--color-accent);
+  width: min(390px, calc(100% - 36px));
+  min-height: 156px;
   border-radius: 14px;
-  border-top-left-radius: 0px;
-  border-bottom-left-radius: 0px;
-  padding: 10px 42px 10px 12px;
+  padding: 18px 44px 20px 16px;
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-}
-
-.instruction-panel::before {
-  content: "";
-  position: absolute;
-  z-index: 3;
-  right: 18px;
-  top: 50%;
-  width: 0;
-  height: 0;
-  border-top: 9px solid transparent;
-  border-bottom: 9px solid transparent;
-  border-right: 14px solid var(--color-accent);
-  filter: drop-shadow(6px 6px 6px #000);
-  transform: translateY(-50%);
-  pointer-events: none;
-  animation: instructionPointerBlink 1.25s ease-in-out infinite;
 }
 
 .instruction-panel.step-attention {
@@ -359,6 +438,11 @@ button:focus-visible,
   margin: 0;
 }
 
+.instruction-copy {
+  min-width: 0;
+  padding-top: 2px
+}
+
 .eyebrow {
   color: var(--color-accent-dim);
   font-size: 0.8rem;
@@ -373,7 +457,6 @@ button:focus-visible,
   margin-top: 4px;
   color: #ffffff;
   font-size: clamp(0.8125rem, 1.2vw, 1rem);
-  font-weight: 620;
   line-height: 1.35;
 }
 
@@ -406,7 +489,7 @@ button:focus-visible,
   overflow: hidden;
   background: linear-gradient(rgba(235, 246, 247, .08), rgba(219, 236, 237, .08)), url("../img/fondo-lab.png") 50% 75% no-repeat;
   isolation: isolate;
-  background-size: auto 230%;
+  background-size: cover;
 }
 
 .lab-stage::before {
@@ -490,7 +573,8 @@ button:focus-visible,
 }
 
 .object-label,
-.mouse-role {
+.mouse-role,
+.cell-label {
   position: absolute;
   z-index: 3;
   left: 50%;
@@ -501,22 +585,15 @@ button:focus-visible,
   padding: 5px 10px;
   border-radius: 99px;
   color: var(--cream);
-  background: rgba(27, 67, 78, .85);
+  background: rgba(0, 0, 0, 0.5);
   box-shadow: 3px 3px 7px rgba(0, 0, 0, .3);
   font-size: 0.95rem;
   font-weight: 750;
   text-align: center;
 }
 
-.object-label::before,
-.mouse-role::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -20px;
-  transform: translateX(-50%);
-  border: 10px solid transparent;
-  border-bottom-color: rgba(27, 67, 78, .85);
+.cell-label {
+  top: -60%;
 }
 
 .station-glow {
@@ -608,32 +685,17 @@ button:focus-visible,
 
 .petri-label {
   position: absolute;
-  top: 80%;
-  width: 95%;
-  padding: 5px 4px;
-  border-radius: 99px;
-  background: rgba(255, 255, 255, .86);
-  color: var(--muted);
+  top: 0%;
+  min-width: 90px;
+  padding: 4px;
+  border-radius: 32px;
+  background: rgba(0, 0, 0, .5);
+  color: var(--cream);
   font-size: 0.9rem;
-  font-weight: 750;
+  font-weight: bold;
   text-align: center;
   box-shadow: 0 5px 10px rgba(35, 74, 84, .1);
   line-height: normal;
-}
-
-.petri-label::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -20px;
-  transform: translateX(-50%);
-  border: 10px solid transparent;
-  border-bottom-color: rgba(255, 255, 255, .86);
-}
-
-.petri-label b {
-  margin-right: 5px;
-  color: var(--blue);
 }
 
 .petri-slot .cell-token {
@@ -653,6 +715,7 @@ button:focus-visible,
   display: block;
   width: 100%;
   height: 100%;
+  transform: scaleX(-1);
 }
 
 .mouse-station .hand-drawn-filter img {
@@ -662,19 +725,19 @@ button:focus-visible,
 }
 
 .gray-mouse {
-  left: 2.5%;
+  left: -4.5%;
   bottom: 5%;
   width: 30%;
 }
 
 .brown-mouse {
-  right: 3.5%;
+  right: -7.5%;
   bottom: 5%;
   width: 35%;
 }
 
 .white-mouse {
-  right: 2.5%;
+  right: 2%;
   top: 30%;
   width: 27%;
   /* Kept clear of the microscope/petri stack by staying to the right and higher up. */
@@ -1264,7 +1327,6 @@ button:focus-visible,
   width: clamp(105px, 16vw, 180px);
   max-height: clamp(82px, 10vw, 128px);
   object-fit: contain;
-  filter: url("#hand-drawn-filter");
   transform: scaleX(-1);
 }
 
@@ -1447,16 +1509,18 @@ button:focus-visible,
   width: min(1180px, 100%);
   margin: auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   margin-top: 20px;
+  text-align: right;
 }
 
 .micro-header h2,
 .gestation-header h2 {
   margin: 3px 0 12px;
   font-size: clamp(1.625rem, 3vw, 2.625rem);
-  font-weight: 500
+  font-weight: 500;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .close-micro {
@@ -2403,8 +2467,8 @@ button:focus-visible,
 .gestation-calendar {
   position: absolute;
   z-index: 12;
-  left: 18px;
-  top: 16px;
+  right: 0px;
+  top: 80px;
   width: 108px;
   height: 124px;
   margin: 0;
@@ -2496,7 +2560,7 @@ button:focus-visible,
 .gestation-progress {
   position: absolute;
   z-index: 12;
-  left: 152px;
+  right: 0px;
   top: 16px;
   max-width: calc(100% - 180px);
   margin: 0;
@@ -2628,7 +2692,7 @@ button:focus-visible,
   padding: 0 14px;
   overflow: hidden;
   display: grid;
-  gap: 5px;
+  gap: 20px;
   border: 1px solid transparent;
   border-radius: 14px;
   opacity: 0;
@@ -2644,7 +2708,7 @@ button:focus-visible,
 }
 
 .gestation-complete-message.visible {
-  max-height: 150px;
+  max-height: 400px;
   margin-top: 0;
   padding: 16px 20px;
   border-color: #e7f6f1;
@@ -3602,17 +3666,18 @@ dialog form {
 
 @media(max-width:900px) {
   .topbar {
-    grid-template-columns: 1fr auto;
-    min-height: 150px;
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 8px;
+    padding-inline: 10px
   }
 
   .progress-wrap {
-    grid-column: 1/-1;
-    grid-row: 2
+    grid-column: 2;
+    grid-row: 1
   }
 
   .top-actions {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1
   }
 
@@ -3666,13 +3731,24 @@ dialog form {
   }
 
   .instruction-panel {
-    width: calc(100% - 12px);
-    padding: 10px 38px 10px 12px
+    top: 122px;
+    left: 12px;
+    width: calc(100% - 24px);
+    min-height: 132px;
+    padding: 14px 38px 16px 12px
   }
 
   .instruction-number {
     flex-basis: 40px;
     height: 40px
+  }
+
+  .step-progress {
+    min-width: 980px
+  }
+
+  .progress-step-label {
+    font-size: .58rem
   }
 
   .lab-frame {

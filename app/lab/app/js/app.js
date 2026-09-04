@@ -399,9 +399,10 @@ class UIController {
 
   cacheElements() {
     this.stepLabel = document.querySelector("#step-label");
-    this.progressPercent = document.querySelector("#progress-percent");
-    this.progressFill = document.querySelector("#progress-fill");
-    this.progressTrack = document.querySelector(".progress-track");
+    this.progressSteps = [
+      ...document.querySelectorAll("[data-progress-step]"),
+    ];
+    this.finalProgressStep = document.querySelector("[data-progress-final]");
     this.instructionNumber = document.querySelector("#instruction-number");
     this.instructionPanel = document.querySelector(".instruction-panel");
     this.instructionTitle = document.querySelector("#instruction-title");
@@ -506,19 +507,38 @@ class UIController {
 
   updateMainProgress() {
     const displayStep = Math.max(1, this.game.step - VISIBLE_STEP_OFFSET);
-    const isPendingFinalAction =
-      displayStep === TOTAL_VISIBLE_STEPS && !this.game.flags.completed;
-    const completedSteps = isPendingFinalAction
-      ? TOTAL_VISIBLE_STEPS - 1
-      : displayStep;
-    const percent = Math.round(
-      (completedSteps / TOTAL_VISIBLE_STEPS) * 100,
-    );
-
     this.stepLabel.textContent = `Paso ${displayStep} de ${TOTAL_VISIBLE_STEPS}`;
-    this.progressPercent.textContent = `${percent}%`;
-    this.progressFill.style.width = `${percent}%`;
-    this.progressTrack.setAttribute("aria-valuenow", String(completedSteps));
+    this.progressSteps.forEach((element, index) => {
+      const stepNumber = index + 1;
+      const isDone =
+        stepNumber < displayStep ||
+        (this.game.flags.completed &&
+          stepNumber === TOTAL_VISIBLE_STEPS);
+      const isCurrent = stepNumber === displayStep && !isDone;
+      element.classList.toggle("done", isDone);
+      element.classList.toggle("current", isCurrent);
+      if (isCurrent) element.setAttribute("aria-current", "step");
+      else element.removeAttribute("aria-current");
+    });
+
+    this.finalProgressStep.classList.toggle(
+      "done",
+      this.game.flags.completed,
+    );
+    this.finalProgressStep.classList.remove("current");
+    this.finalProgressStep.removeAttribute("aria-current");
+    if (this.game.flags.completed)
+      this.stepLabel.textContent = "Simulación finalizada";
+
+    const currentStep =
+      this.game.flags.completed
+        ? this.finalProgressStep
+        : this.progressSteps[displayStep - 1];
+    currentStep?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
   }
 
   renderStep() {
@@ -754,11 +774,13 @@ class UIController {
     const handlers = {
       "4:somatic-cell:petri1": () => {
         document.querySelector("[data-drop-zone='petri1']").append(source);
+        document.querySelector("[data-drop-zone='petri1']").querySelector(".cell-label").style.display = "none";
         this.game.flags.somaticCellCollected = true;
         this.completeStep();
       },
       "5:oocyte:petri2": () => {
         document.querySelector("[data-drop-zone='petri2']").append(source);
+        document.querySelector("[data-drop-zone='petri2']").querySelector(".cell-label").style.display = "none";
         this.game.flags.oocyteCollected = true;
         this.completeStep();
       },
@@ -954,6 +976,7 @@ class UIController {
 
     this.schedule(() => {
       this.game.flags.birthReady = true;
+      this.updateMainProgress();
       this.gestationOverlay.classList.add("birth-ready");
       this.setGestationProgress("birth");
       this.typeInstructionText(
@@ -1101,6 +1124,7 @@ class UIController {
     somaticToken.style.removeProperty("opacity");
     somaticToken.style.removeProperty("transform");
     somaticToken.style.removeProperty("transition");
+    somaticToken.querySelector(".cell-label").style.display = "block";
 
     oocyteToken.hidden = false;
     oocyteToken.className = "cell-token oocyte-token draggable cell-hidden";
@@ -1108,6 +1132,7 @@ class UIController {
     oocyteToken.style.removeProperty("opacity");
     oocyteToken.style.removeProperty("transform");
     oocyteToken.style.removeProperty("transition");
+    oocyteToken.querySelector(".cell-label").style.display = "block";
 
     enucleatedSample.className = "sample-token enucleated-sample draggable";
     enucleatedSample.style.removeProperty("display");

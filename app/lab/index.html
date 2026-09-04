@@ -13,39 +13,64 @@
 <body>
   <main class="app-shell">
     <header class="topbar" aria-label="Progreso del laboratorio">
-      <div class="instruction-panel spray-border" role="region" aria-label="Indicación del paso actual"
-        aria-labelledby="instruction-title">
-        <span class="instruction-number" id="instruction-number">01</span>
-        <div>
-          <p class="eyebrow" id="instruction-title">Bienvenida al laboratorio</p>
-          <p id="instruction-text">Descubre cómo el núcleo de una célula puede dirigir la formación de un nuevo
-            organismo.
-          </p>
-        </div>
-      </div>
-      <div class="progress-wrap">
-        <div class="progress-copy"><span id="step-label">Paso 1 de 14</span><span id="progress-percent">7%</span></div>
-        <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="14" aria-valuenow="1"
-          aria-label="Progreso">
-          <span id="progress-fill"></span>
-        </div>
-      </div>
       <div class="top-actions">
         <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
           <span aria-hidden="true">↻</span><span class="button-word">Reiniciar</span>
         </button>
       </div>
-
+      <nav class="progress-wrap" aria-label="Pasos de la simulación">
+        <span class="progress-summary" id="step-label">Paso 1 de 14</span>
+        <ol class="step-progress">
+          <li class="current" data-progress-step="1"><span class="progress-step-label">Preparación</span><span
+              class="progress-step-marker">01</span></li>
+          <li data-progress-step="2"><span class="progress-step-label">Célula somática</span><span
+              class="progress-step-marker">02</span></li>
+          <li data-progress-step="3"><span class="progress-step-label">Ovocito</span><span
+              class="progress-step-marker">03</span></li>
+          <li data-progress-step="4"><span class="progress-step-label">Observación</span><span
+              class="progress-step-marker">04</span></li>
+          <li data-progress-step="5"><span class="progress-step-label">Sujeción</span><span
+              class="progress-step-marker">05</span></li>
+          <li data-progress-step="6"><span class="progress-step-label">Enucleación</span><span
+              class="progress-step-marker">06</span></li>
+          <li data-progress-step="7"><span class="progress-step-label">Transferencia</span><span
+              class="progress-step-marker">07</span></li>
+          <li data-progress-step="8"><span class="progress-step-label">Unión celular</span><span
+              class="progress-step-marker">08</span></li>
+          <li data-progress-step="9"><span class="progress-step-label">Microscopio</span><span
+              class="progress-step-marker">09</span></li>
+          <li data-progress-step="10"><span class="progress-step-label">Núcleo somático</span><span
+              class="progress-step-marker">10</span></li>
+          <li data-progress-step="11"><span class="progress-step-label">Inyección</span><span
+              class="progress-step-marker">11</span></li>
+          <li data-progress-step="12"><span class="progress-step-label">Activación</span><span
+              class="progress-step-marker">12</span></li>
+          <li data-progress-step="13"><span class="progress-step-label">Implantación</span><span
+              class="progress-step-marker">13</span></li>
+          <li data-progress-step="14"><span class="progress-step-label">Gestación</span><span
+              class="progress-step-marker">14</span></li>
+          <li class="progress-final" data-progress-final><span class="progress-step-label">Nacimiento</span><span
+              class="progress-step-marker">FIN</span></li>
+        </ol>
+      </nav>
     </header>
+
+    <aside class="instruction-panel spray-border" role="region" aria-label="Indicación del paso actual"
+      aria-labelledby="instruction-title">
+      <span class="instruction-number" id="instruction-number">01</span>
+      <div class="instruction-copy">
+        <p class="eyebrow" id="instruction-title">Bienvenida al laboratorio</p>
+        <p id="instruction-text">Descubre cómo el núcleo de una célula puede dirigir la formación de un nuevo
+          organismo.</p>
+      </div>
+    </aside>
+
     <section class="lab-frame" id="lab-frame" aria-label="Laboratorio interactivo">
       <div class="lab-stage" id="lab-stage">
         <div class="ambient ambient-one" aria-hidden="true"></div>
         <div class="ambient ambient-two" aria-hidden="true"></div>
         <div class="stage-dim" id="stage-dim" aria-hidden="true"></div>
 
-        <img class="prop shelf" src="app/img/estante.png" alt="Estante con material de laboratorio">
-        <img class="prop refrigerator" src="app/img/refrigerador.png" alt="Refrigerador de laboratorio">
-        <img class="prop cage" src="app/img/jaula.png" alt="Jaula para ratones">
 
         <div class="microscope-station drop-zone" data-drop-zone="microscope" tabindex="-1"
           aria-label="Microscopio, zona de colocación">
@@ -73,17 +98,17 @@
           <div class="petri-slot petri-one drop-zone" data-drop-zone="petri1" tabindex="-1"
             aria-label="Caja de Petri 1, célula somática">
             <img src="app/img/caja-petri.png" alt="Caja de Petri 1">
-            <span class="petri-label"><b>01</b>Célula somática</span>
+            <span class="petri-label">Petri 1</span>
           </div>
           <div class="petri-slot petri-two draggable drop-zone" data-draggable="petri2" data-drop-zone="petri2"
             tabindex="-1" role="button" aria-label="Caja de Petri 2, ovocito">
             <img src="app/img/caja-petri.png" alt="Caja de Petri 2">
-            <span class="petri-label"><b>02</b>Ovocito</span>
+            <span class="petri-label">Petri 2</span>
           </div>
           <div class="petri-slot petri-three draggable drop-zone" data-draggable="petri3" data-drop-zone="petri3"
             tabindex="-1" role="button" aria-label="Caja de Petri 3, transferencia nuclear">
             <img src="app/img/caja-petri.png" alt="Caja de Petri 3">
-            <span class="petri-label"><b>03</b>Transferencia nuclear</span>
+            <span class="petri-label">Petri 3</span>
           </div>
         </div>
 
@@ -94,6 +119,7 @@
           <span class="mouse-role">Donante somático</span>
           <button class="cell-token somatic-token draggable cell-hidden" data-draggable="somatic-cell" type="button"
             aria-label="Célula somática del ratón gris">
+            <span class="cell-label">Célula somática</span>
             <span class="cell-membrane"><span class="cell-nucleus"></span><i></i><i></i><i></i></span>
           </button>
         </div>
@@ -104,6 +130,7 @@
           <span class="mouse-role">Donante de ovocito</span>
           <button class="cell-token oocyte-token draggable cell-hidden" data-draggable="oocyte" type="button"
             aria-label="Ovocito del ratón café">
+            <span class="cell-label">Ovocito</span>
             <span class="cell-membrane"><span class="cell-nucleus"></span><i></i><i></i><i></i></span>
           </button>
         </div>
@@ -328,7 +355,12 @@
 
         <div class="gestation-complete-message" id="gestation-complete-message" role="status" aria-live="polite">
           <strong>¡Simulación completada!</strong>
-          <small>Has completado la simulación de clonación de un ratón. Puedes reiniciarlo para repetir el procedimiento.</small>
+          <small>Has completado la simulación de clonación de un ratón. Puedes reiniciarlo para repetir el
+            procedimiento.</small>
+          <button class="icon-button" id="gestation-complete-button" type="button" aria-label="Reiniciar simulación"
+            title="Reiniciar">
+            <span aria-hidden="true">↻</span><span class="button-word">Reiniciar</span>
+          </button>
         </div>
       </section>
     </div>
