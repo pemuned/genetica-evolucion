@@ -393,6 +393,7 @@ class UIController {
     this.sequenceTimers = [];
     this.feedbackFrame = null;
     this.drag = null;
+    this.pendingBackStep = null;
     this.cacheElements();
     this.bindEvents();
   }
@@ -403,6 +404,7 @@ class UIController {
       ...document.querySelectorAll("[data-progress-step]"),
     ];
     this.finalProgressStep = document.querySelector("[data-progress-final]");
+    this.previousStepButton = document.querySelector("#previous-step-button");
     this.instructionNumber = document.querySelector("#instruction-number");
     this.instructionPanel = document.querySelector(".instruction-panel");
     this.instructionTitle = document.querySelector("#instruction-title");
@@ -431,6 +433,8 @@ class UIController {
     this.closeMicroLabel =
       this.closeMicroButton.querySelector(".close-micro-label");
     this.resetDialog = document.querySelector("#reset-dialog");
+    this.backDialog = document.querySelector("#back-dialog");
+    this.backStepName = document.querySelector("#back-step-name");
     this.stageDim = document.querySelector("#stage-dim");
   }
 
@@ -509,6 +513,27 @@ class UIController {
     this.gestationCompleteButton.addEventListener("click", () =>
       this.resetExperience(),
     );
+    this.progressSteps.forEach((element) => {
+      element
+        .querySelector(".progress-step-marker")
+        .addEventListener("click", () =>
+          this.requestStepNavigation(Number(element.dataset.progressStep)),
+        );
+    });
+    this.previousStepButton.addEventListener("click", () => {
+      const currentPosition = this.game.flags.completed
+        ? TOTAL_VISIBLE_STEPS + 1
+        : Math.max(1, this.game.step - VISIBLE_STEP_OFFSET);
+      this.requestStepNavigation(currentPosition - 1);
+    });
+    this.backDialog.addEventListener("close", () => {
+      const targetStep = this.pendingBackStep;
+      const shouldNavigate =
+        this.backDialog.returnValue === "confirm" && targetStep !== null;
+      this.backDialog.returnValue = "";
+      this.pendingBackStep = null;
+      if (shouldNavigate) this.navigateToVisibleStep(targetStep);
+    });
   }
 
   updateMainProgress() {
@@ -523,6 +548,14 @@ class UIController {
       const isCurrent = stepNumber === displayStep && !isDone;
       element.classList.toggle("done", isDone);
       element.classList.toggle("current", isCurrent);
+      const marker = element.querySelector(".progress-step-marker");
+      marker.disabled = !isDone;
+      marker.setAttribute(
+        "aria-label",
+        isDone
+          ? `Volver al paso ${stepNumber}: ${STEP_CONFIG[stepNumber + VISIBLE_STEP_OFFSET].title}`
+          : `Paso ${stepNumber}: ${STEP_CONFIG[stepNumber + VISIBLE_STEP_OFFSET].title}`,
+      );
       if (isCurrent) element.setAttribute("aria-current", "step");
       else element.removeAttribute("aria-current");
     });
@@ -535,6 +568,10 @@ class UIController {
     this.finalProgressStep.removeAttribute("aria-current");
     if (this.game.flags.completed)
       this.stepLabel.textContent = "Simulación finalizada";
+    const currentPosition = this.game.flags.completed
+      ? TOTAL_VISIBLE_STEPS + 1
+      : displayStep;
+    this.previousStepButton.disabled = currentPosition <= 1;
 
     const currentStep =
       this.game.flags.completed
@@ -1087,9 +1124,143 @@ class UIController {
     this.toast(message, "error");
   }
 
-  resetExperience() {
+  requestStepNavigation(visibleStep) {
+    const currentPosition = this.game.flags.completed
+      ? TOTAL_VISIBLE_STEPS + 1
+      : Math.max(1, this.game.step - VISIBLE_STEP_OFFSET);
+    if (
+      !Number.isInteger(visibleStep) ||
+      visibleStep < 1 ||
+      visibleStep >= currentPosition
+    )
+      return;
+
+    const gameStep = visibleStep + VISIBLE_STEP_OFFSET;
+    this.pendingBackStep = visibleStep;
+    this.backStepName.textContent =
+      `paso ${visibleStep}: ${STEP_CONFIG[gameStep].title}`;
+    this.backDialog.returnValue = "";
+    this.backDialog.showModal();
+  }
+
+  navigateToVisibleStep(visibleStep) {
+    const gameStep = visibleStep + VISIBLE_STEP_OFFSET;
+    this.resetExperience({ returnToIntro: false });
+
+    const somaticToken = document.querySelector(
+      "[data-draggable='somatic-cell']",
+    );
+    const oocyteToken = document.querySelector("[data-draggable='oocyte']");
+    const enucleatedSample = document.querySelector(".enucleated-sample");
+    const embryoSample = document.querySelector(".embryo-sample");
+    const petri1 = document.querySelector("[data-drop-zone='petri1']");
+    const petri2 = document.querySelector("[data-drop-zone='petri2']");
+    const petri3 = document.querySelector("[data-drop-zone='petri3']");
+    const microOocyte = document.querySelector(".micro-oocyte");
+    const microSomatic = document.querySelector(".micro-somatic");
+    const injectionNeedle = document.querySelector(
+      "[data-draggable='injection-needle']",
+    );
+
+    Object.assign(this.game.flags, {
+      somaticCellCollected: gameStep >= 5,
+      oocyteCollected: gameStep >= 6,
+      oocyteHeld: gameStep >= 8,
+      oocyteEnucleated: gameStep >= 9,
+      somaticCellHeld: gameStep >= 13,
+      somaticNucleusExtracted: gameStep >= 13,
+      nucleusTransferred: gameStep >= 14,
+      embryoActivated: gameStep >= 15,
+      embryoDivisionComplete: gameStep >= 15,
+      embryoImplanted: gameStep >= 16,
+      birthReady: false,
+      completed: false,
+    });
+
+    if (gameStep >= 4) somaticToken.classList.remove("cell-hidden");
+    if (gameStep >= 5) {
+      petri1.append(somaticToken);
+      somaticToken.querySelector(".cell-label").style.display = "none";
+      oocyteToken.classList.remove("cell-hidden");
+    }
+    if (gameStep >= 6) {
+      petri2.append(oocyteToken);
+      oocyteToken.querySelector(".cell-label").style.display = "none";
+    }
+    if (gameStep >= 9) oocyteToken.hidden = true;
+    if (gameStep >= 10) {
+      petri3.append(enucleatedSample);
+      enucleatedSample.classList.add("visible");
+    }
+    if (gameStep >= 11) petri3.append(somaticToken);
+    if (gameStep >= 13) {
+      somaticToken.style.display = "none";
+      enucleatedSample.style.display = "none";
+    }
+    if (gameStep >= 15) embryoSample.classList.add("visible");
+    if (gameStep >= 16) embryoSample.classList.remove("visible");
+
+    if (gameStep >= 7 && gameStep <= 9) {
+      this.openMicroscope("oocyte");
+      if (gameStep >= 8) microOocyte.classList.add("held");
+      if (gameStep >= 9) {
+        microOocyte.classList.add("held-retract");
+        microOocyte.querySelector(".micro-nucleus").classList.add("extracted");
+        this.setCloseButtonState("ready");
+      }
+    }
+
+    if (gameStep >= 12 && gameStep <= 14) {
+      this.openMicroscope("transfer");
+      if (gameStep >= 13) {
+        microSomatic.classList.add("held", "held-retract");
+        microSomatic
+          .querySelector(".micro-nucleus")
+          .classList.add("extracted");
+        injectionNeedle.classList.add("loaded");
+      }
+      if (gameStep >= 14) {
+        microOocyte
+          .querySelector(".micro-nucleus")
+          .classList.remove("extracted");
+        microOocyte.style.animation = "none";
+        microOocyte.style.transform = "translateX(-140px)";
+        microOocyte.style.transition = "transform 1s ease";
+        microSomatic.style.opacity = "0";
+        microSomatic.style.transition =
+          "opacity 0.2s ease, transform 1s ease";
+        this.setCloseButtonState("waiting");
+      }
+    }
+
+    this.game.goTo(gameStep);
+    if (gameStep === 16) this.openGestationView();
+    else this.focusStepAction(gameStep);
+  }
+
+  focusStepAction(gameStep) {
+    const selectors = {
+      3: "#clone-button",
+      4: "[data-draggable='somatic-cell']",
+      5: "[data-draggable='oocyte']",
+      6: "[data-draggable='petri2']",
+      7: "[data-draggable='holding-pipette']",
+      8: "[data-draggable='injection-needle']",
+      9: "#close-micro",
+      10: "[data-draggable='somatic-cell']",
+      11: "[data-draggable='petri3']",
+      12: "[data-draggable='holding-pipette']",
+      13: "[data-draggable='injection-needle']",
+      14: "[data-draggable='reagent']",
+      15: "[data-draggable='embryo']",
+    };
+    document.querySelector(selectors[gameStep])?.focus();
+  }
+
+  resetExperience({ returnToIntro = true } = {}) {
     this.cancelDrag();
     this.selectedAction = null;
+    this.pendingBackStep = null;
     clearInterval(this._typeInterval);
     this._typeInterval = null;
     cancelAnimationFrame(this.feedbackFrame);
@@ -1192,12 +1363,14 @@ class UIController {
     this.setCloseButtonState("waiting");
     this.microOverlay.classList.add("hidden");
     this.materials.classList.add("hidden");
-    this.intro.classList.remove("hidden");
+    this.intro.classList.toggle("hidden", !returnToIntro);
     this.toastElement.className = "toast";
     this.toastElement.replaceChildren();
     this.game.reset();
-    this.renderStep();
-    document.querySelector("#start-button").focus();
+    if (returnToIntro) {
+      this.renderStep();
+      document.querySelector("#start-button").focus();
+    }
   }
 }
 

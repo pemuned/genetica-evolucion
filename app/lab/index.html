@@ -14,41 +14,45 @@
   <main class="app-shell">
     <header class="topbar" aria-label="Progreso del laboratorio">
       <div class="top-actions">
+        <button class="icon-button previous-step-button" id="previous-step-button" type="button"
+          aria-label="Volver al paso anterior" disabled>
+          <span aria-hidden="true"><img src="app/img/back.svg" alt="Anterior"></span><span class="button-word">Anterior</span>
+        </button>
         <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
-          <span aria-hidden="true">↻</span><span class="button-word">Reiniciar</span>
+          <span aria-hidden="true"><img src="app/img/restart.svg" alt="Reiniciar"></span><span class="button-word">Reiniciar</span>
         </button>
       </div>
       <nav class="progress-wrap" aria-label="Pasos de la simulación">
         <span class="progress-summary" id="step-label">Paso 1 de 14</span>
         <ol class="step-progress">
-          <li class="current" data-progress-step="1"><span class="progress-step-label">Preparación</span><span
-              class="progress-step-marker">01</span></li>
-          <li data-progress-step="2"><span class="progress-step-label">Célula somática</span><span
-              class="progress-step-marker">02</span></li>
-          <li data-progress-step="3"><span class="progress-step-label">Ovocito</span><span
-              class="progress-step-marker">03</span></li>
-          <li data-progress-step="4"><span class="progress-step-label">Observación</span><span
-              class="progress-step-marker">04</span></li>
-          <li data-progress-step="5"><span class="progress-step-label">Sujeción</span><span
-              class="progress-step-marker">05</span></li>
-          <li data-progress-step="6"><span class="progress-step-label">Enucleación</span><span
-              class="progress-step-marker">06</span></li>
-          <li data-progress-step="7"><span class="progress-step-label">Transferencia</span><span
-              class="progress-step-marker">07</span></li>
-          <li data-progress-step="8"><span class="progress-step-label">Unión celular</span><span
-              class="progress-step-marker">08</span></li>
-          <li data-progress-step="9"><span class="progress-step-label">Microscopio</span><span
-              class="progress-step-marker">09</span></li>
-          <li data-progress-step="10"><span class="progress-step-label">Núcleo somático</span><span
-              class="progress-step-marker">10</span></li>
-          <li data-progress-step="11"><span class="progress-step-label">Inyección</span><span
-              class="progress-step-marker">11</span></li>
-          <li data-progress-step="12"><span class="progress-step-label">Activación</span><span
-              class="progress-step-marker">12</span></li>
-          <li data-progress-step="13"><span class="progress-step-label">Implantación</span><span
-              class="progress-step-marker">13</span></li>
-          <li data-progress-step="14"><span class="progress-step-label">Gestación</span><span
-              class="progress-step-marker">14</span></li>
+          <li class="current" data-progress-step="1"><span class="progress-step-label">Preparación</span><button
+              class="progress-step-marker" type="button" disabled>01</button></li>
+          <li data-progress-step="2"><span class="progress-step-label">Célula somática</span><button
+              class="progress-step-marker" type="button" disabled>02</button></li>
+          <li data-progress-step="3"><span class="progress-step-label">Ovocito</span><button
+              class="progress-step-marker" type="button" disabled>03</button></li>
+          <li data-progress-step="4"><span class="progress-step-label">Observación</span><button
+              class="progress-step-marker" type="button" disabled>04</button></li>
+          <li data-progress-step="5"><span class="progress-step-label">Sujeción</span><button
+              class="progress-step-marker" type="button" disabled>05</button></li>
+          <li data-progress-step="6"><span class="progress-step-label">Enucleación</span><button
+              class="progress-step-marker" type="button" disabled>06</button></li>
+          <li data-progress-step="7"><span class="progress-step-label">Transferencia</span><button
+              class="progress-step-marker" type="button" disabled>07</button></li>
+          <li data-progress-step="8"><span class="progress-step-label">Unión celular</span><button
+              class="progress-step-marker" type="button" disabled>08</button></li>
+          <li data-progress-step="9"><span class="progress-step-label">Microscopio</span><button
+              class="progress-step-marker" type="button" disabled>09</button></li>
+          <li data-progress-step="10"><span class="progress-step-label">Núcleo somático</span><button
+              class="progress-step-marker" type="button" disabled>10</button></li>
+          <li data-progress-step="11"><span class="progress-step-label">Inyección</span><button
+              class="progress-step-marker" type="button" disabled>11</button></li>
+          <li data-progress-step="12"><span class="progress-step-label">Activación</span><button
+              class="progress-step-marker" type="button" disabled>12</button></li>
+          <li data-progress-step="13"><span class="progress-step-label">Implantación</span><button
+              class="progress-step-marker" type="button" disabled>13</button></li>
+          <li data-progress-step="14"><span class="progress-step-label">Gestación</span><button
+              class="progress-step-marker" type="button" disabled>14</button></li>
           <li class="progress-final" data-progress-final><span class="progress-step-label">Nacimiento</span><span
               class="progress-step-marker">FIN</span></li>
         </ol>
@@ -359,7 +363,7 @@
             procedimiento.</small>
           <button class="icon-button" id="gestation-complete-button" type="button" aria-label="Reiniciar simulación"
             title="Reiniciar">
-            <span aria-hidden="true">↻</span><span class="button-word">Reiniciar</span>
+            <span aria-hidden="true"><img src="app/img/restart.svg" alt="Reiniciar"></span><span class="button-word">Reiniciar</span>
           </button>
         </div>
       </section>
@@ -376,6 +380,20 @@
       <div class="dialog-actions">
         <button class="secondary-button" value="cancel">Cancelar</button>
         <button class="primary-button" value="confirm">Sí, reiniciar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="back-dialog">
+    <form method="dialog">
+      <span class="dialog-icon" aria-hidden="true">
+        <img src="app/img/back.svg" alt="Anterior">
+      </span>
+      <h2>¿Volver al <span id="back-step-name">paso anterior</span>?</h2>
+      <p>El progreso posterior a este paso se descartará y tendrás que repetirlo.</p>
+      <div class="dialog-actions">
+        <button class="secondary-button" value="cancel">Cancelar</button>
+        <button class="primary-button" value="confirm">Sí, volver</button>
       </div>
     </form>
   </dialog>
