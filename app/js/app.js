@@ -71,6 +71,7 @@ function initNav() {
   const sections = document.querySelectorAll(SECTION_SELECTOR);
   const sidebar = document.querySelector(SIDEBAR_SELECTOR);
   const hamburgerBtn = document.getElementById(HAMBURGER_BTN_ID);
+  const footerCreditsLink = document.getElementById("footer-credits-link");
 
   if (!navButtons.length || !sections.length) return;
 
@@ -88,6 +89,21 @@ function initNav() {
       }
     });
   });
+
+  if (footerCreditsLink) {
+    footerCreditsLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      showSection("credits", navButtons, sections);
+
+      if (window.innerWidth <= MOBILE_BREAKPOINT && sidebar && hamburgerBtn) {
+        closeHamburgerMenu(sidebar, hamburgerBtn);
+      }
+    });
+  }
+
+  if (window.location.hash === "#credits") {
+    showSection("credits", navButtons, sections);
+  }
 
   // Hamburger toggle
   if (hamburgerBtn && sidebar) {

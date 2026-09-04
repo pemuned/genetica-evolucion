@@ -37,6 +37,10 @@
                 <p class="brand-subtitle">Genética y evolución</p>
                 <hr>
                 <h1 class="brand-title">Clona tu propio ratón</h1>
+                <span class="brand-mice" aria-hidden="true">
+                    <img src="app/img/web/mouse-transparent.png" alt="">
+                    <img src="app/img/web/mouse-transparent.png" alt="">
+                </span>
             </a>
 
             <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
@@ -150,16 +154,6 @@
 
                     <div class="prelab-slider-nav spray-border" role="navigation"
                         aria-label="Navegación de subsecciones prelaboratorio">
-                        <div class="prelab-arrow-container" id="prelab-prev-btn">
-                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="prev"
-                                aria-label="Ir a subsección anterior" title="Anterior">
-                                <span class="prelab-arrow-icon" aria-hidden="true">
-                                    <img src="app/img/web/arrow-left.svg" alt="Flecha apuntando a la izquierda">
-                                </span>
-                                <span class="prelab-arrow-label">Anterior</span>
-                            </button>
-                        </div>
-
                         <div class="prelab-tab-list" role="tablist" aria-label="Subsecciones de prelaboratorio">
                             <button class="prelab-tab-btn is-active" id="prelab-tab-1" type="button" role="tab"
                                 aria-selected="true" aria-controls="prelab-slide-1" tabindex="0" data-prelab-tab="0">
@@ -176,16 +170,6 @@
                             <button class="prelab-tab-btn" id="prelab-tab-4" type="button" role="tab"
                                 aria-selected="false" aria-controls="prelab-slide-4" tabindex="-1" data-prelab-tab="3">
                                 Desarrollo temático
-                            </button>
-                        </div>
-
-                        <div class="prelab-arrow-container" id="prelab-next-btn">
-                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="next"
-                                aria-label="Ir a subsección siguiente" title="Siguiente">
-                                <span class="prelab-arrow-label">Siguiente</span>
-                                <span class="prelab-arrow-icon" aria-hidden="true">
-                                    <img src="app/img/web/arrow-right.svg" alt="Flecha apuntando a la derecha">
-                                </span>
                             </button>
                         </div>
                     </div>
@@ -324,6 +308,28 @@
                                 </p>
                             </div>
                         </article>
+
+                        <div class="prelab-slider-controls" role="navigation"
+                            aria-label="Controles del prelaboratorio">
+                            <div class="prelab-arrow-container">
+                                <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="prev"
+                                    aria-label="Ir a subsección anterior" title="Anterior">
+                                    <span class="prelab-arrow-icon" aria-hidden="true">
+                                        <img src="app/img/web/arrow-left.svg" alt="">
+                                    </span>
+                                    <span class="prelab-arrow-label">Anterior</span>
+                                </button>
+                            </div>
+                            <div class="prelab-arrow-container">
+                                <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="next"
+                                    aria-label="Ir a subsección siguiente" title="Siguiente">
+                                    <span class="prelab-arrow-label">Siguiente</span>
+                                    <span class="prelab-arrow-icon" aria-hidden="true">
+                                        <img src="app/img/web/arrow-right.svg" alt="">
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <p class="screen-reader-only" id="prelab-slider-status" aria-live="polite"></p>
@@ -338,16 +344,6 @@
 
                     <div class="prelab-slider-nav spray-border" role="navigation"
                         aria-label="Navegación de subsecciones de laboratorio">
-                        <div class="prelab-arrow-container" id="lab-prev-btn">
-                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="prev"
-                                aria-label="Ir a subsección anterior" title="Anterior">
-                                <span class="prelab-arrow-icon" aria-hidden="true">
-                                    <img src="app/img/web/arrow-left.svg" alt="Flecha apuntando a la izquierda">
-                                </span>
-                                <span class="prelab-arrow-label">Anterior</span>
-                            </button>
-                        </div>
-
                         <div class="prelab-tab-list" role="tablist" aria-label="Subsecciones de laboratorio">
                             <button class="prelab-tab-btn is-active" id="lab-tab-1" type="button" role="tab"
                                 aria-selected="true" aria-controls="lab-slide-1" tabindex="0" data-prelab-tab="0">
@@ -364,16 +360,6 @@
                             <button class="prelab-tab-btn" id="lab-tab-4" type="button" role="tab" aria-selected="false"
                                 aria-controls="lab-slide-4" tabindex="-1" data-prelab-tab="3">
                                 Reflexión
-                            </button>
-                        </div>
-
-                        <div class="prelab-arrow-container" id="prelab-next-btn">
-                            <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="next"
-                                aria-label="Ir a subsección siguiente" title="Siguiente">
-                                <span class="prelab-arrow-label">Siguiente</span>
-                                <span class="prelab-arrow-icon" aria-hidden="true">
-                                    <img src="app/img/web/arrow-right.svg" alt="Flecha apuntando a la derecha">
-                                </span>
                             </button>
                         </div>
                     </div>
@@ -460,20 +446,15 @@
                             <h3 class="card-heading">Simulación: Clona tu propio ratón.</h3>
                             <div class="card-body">
                                 <div class="sim-preview">
+                                    <div class="sim-preview-media" role="img"
+                                        aria-label="Espacio para una imagen representativa del simulador">
+                                        <span>Vista previa del simulador</span>
+                                    </div>
                                     <button class="btn-enter sim-fullscreen-btn" id="sim-open-btn" type="button"
                                         aria-haspopup="dialog" aria-controls="sim-fullscreen">
                                         Abrir en pantalla completa
                                     </button>
                                 </div>
-                                <hr>
-                                <p>
-                                    Enlace de referencia para realizar la simulación:
-                                </p>
-                                <p>
-                                    <a href="https://learn.genetics.utah.edu/content/cloning/clickandclone/"
-                                        target="_blank"
-                                        rel="noopener noreferrer">https://learn.genetics.utah.edu/content/cloning/clickandclone/</a>
-                                </p>
                             </div>
                         </article>
 
@@ -510,6 +491,28 @@
                                 </ol>
                             </div>
                         </article>
+
+                        <div class="prelab-slider-controls" role="navigation"
+                            aria-label="Controles del laboratorio virtual">
+                            <div class="prelab-arrow-container">
+                                <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="prev"
+                                    aria-label="Ir a subsección anterior" title="Anterior">
+                                    <span class="prelab-arrow-icon" aria-hidden="true">
+                                        <img src="app/img/web/arrow-left.svg" alt="">
+                                    </span>
+                                    <span class="prelab-arrow-label">Anterior</span>
+                                </button>
+                            </div>
+                            <div class="prelab-arrow-container">
+                                <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="next"
+                                    aria-label="Ir a subsección siguiente" title="Siguiente">
+                                    <span class="prelab-arrow-label">Siguiente</span>
+                                    <span class="prelab-arrow-icon" aria-hidden="true">
+                                        <img src="app/img/web/arrow-right.svg" alt="">
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
                     <p class="screen-reader-only" id="lab-slider-status" aria-live="polite"></p>
@@ -592,6 +595,12 @@
         <!-- /main-content -->
     </div>
     <!-- /app-layout -->
+
+    <footer class="site-footer">
+        <span>© Universidad Estatal a Distancia</span>
+        <span class="site-footer-separator" aria-hidden="true">|</span>
+        <a href="#credits" id="footer-credits-link">Créditos</a>
+    </footer>
 
     <!-- Fullscreen simulation overlay (stays on this page) -->
     <div class="sim-fullscreen" id="sim-fullscreen" role="dialog" aria-modal="true"

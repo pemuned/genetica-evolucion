@@ -1203,60 +1203,102 @@ button:focus-visible,
 
 .intro-card {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   position: relative;
   z-index: 2;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
-  padding: clamp(28px, 6vw, 120px);
-  border-radius: 32px;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
+  align-items: center;
+  top: -70px;
 }
 
-.intro-card .eyebrow {
+.intro-content {
+  width: min(100%, 820px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(14px, 2vh, 22px);
+  text-align: center;
+}
+
+.intro-hero {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(24px, 3vw, 42px) clamp(20px, 4vw, 54px) clamp(18px, 2.5vw, 32px);
+  border-radius: 18px;
+  background: rgba(0, 0, 0, .3);
+  box-shadow: inset 0 0 40px rgba(2, 18, 24, .2)
+}
+
+.intro-hero .eyebrow {
+  margin: 0;
   font-size: clamp(0.6875rem, .6vw + .55rem, 1.125rem);
 }
 
-.intro-card h1 {
-  margin: clamp(12px, 2vw, 28px) 0 clamp(18px, 2.5vw, 34px);
-  font-size: clamp(2.8125rem, 3vw + 3vh, 7.5rem);
-  line-height: .97;
+.intro-hero h1 {
+  margin: clamp(10px, 1.5vw, 20px) 0 clamp(14px, 2vw, 24px);
+  font-size: clamp(2.5rem, 4vw + 1rem, 4.75rem);
+  line-height: 1;
   font-weight: 500;
   letter-spacing: -.04em;
 }
 
-.intro-card h1 em {
+.intro-hero h1 em {
   color: var(--color-accent);
   font-weight: 500;
 }
 
-.intro-card>p:not(.eyebrow) {
-  max-width: min(720px, 90vw);
-  font-size: clamp(1rem, .7vw + .8rem, 1.5rem);
+.intro-mice {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: clamp(2px, 1.5vw, 16px);
+  width: 100%;
+  min-height: clamp(82px, 10vw, 128px);
+  margin: 0
+}
+
+.intro-mice img {
+  width: clamp(105px, 16vw, 180px);
+  max-height: clamp(82px, 10vw, 128px);
+  object-fit: contain;
+  filter: url("#hand-drawn-filter");
+  transform: scaleX(-1);
+}
+
+.intro-mice img:last-child {
+  transform: scaleX(1);
+}
+
+.intro-description {
+  width: min(100%, 560px);
+  margin: 0;
+  font-size: clamp(0.9375rem, .45vw + .82rem, 1.1875rem);
   color: #ffffff;
-  line-height: 1.7;
+  line-height: 1.55;
+  text-align: left;
+  margin-bottom: 20px;
 }
 
 .intro-card .primary-button {
-  margin: clamp(13px, 1.5vw, 24px) 0 clamp(18px, 2vw, 26px);
+  width: min(100%, 350px);
+  margin: 0;
   font-size: clamp(0.9375rem, .5vw + .8rem, 1.25rem);
   min-height: clamp(48px, 4vw, 64px);
   padding: 0 clamp(22px, 2vw, 34px);
   animation: cloneCallout 1.6s ease-in-out .45s infinite;
 }
 
-.intro-card>small {
+.intro-content>small {
   display: block;
   color: #fff;
   font-weight: 700;
   font-size: clamp(0.75rem, .3vw + .6rem, 1.0625rem);
 }
 
-.intro-card.spray-border::after,
+.intro-hero.spray-border::after,
 .materials-card.spray-border::after,
 .instruction-panel.spray-border::after {
   filter: url(#spray-hand-drawn);
