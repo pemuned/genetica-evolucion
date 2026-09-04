@@ -422,6 +422,9 @@ class UIController {
     this.gestationCompleteMessage = document.querySelector(
       "#gestation-complete-message",
     );
+    this.gestationCompleteButton = document.querySelector(
+      "#gestation-complete-button",
+    );
     this.gestationCalendar = document.querySelector(".gestation-calendar");
     this.gestationDay = document.querySelector("#gestation-day");
     this.closeMicroButton = document.querySelector("#close-micro");
@@ -502,6 +505,9 @@ class UIController {
     );
     this.gestationStartButton.addEventListener("click", () =>
       this.startGestationProcess(),
+    );
+    this.gestationCompleteButton.addEventListener("click", () =>
+      this.resetExperience(),
     );
   }
 
