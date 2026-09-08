@@ -15,7 +15,14 @@
     <header class="topbar" aria-label="Progreso del laboratorio">
       <nav class="progress-wrap" aria-label="Pasos de la simulación">
         <span class="progress-summary" id="step-label">Paso 1 de 14</span>
-        <ol class="step-progress">
+        <div class="progress-carousel">
+          <button class="progress-scroll-button progress-scroll-previous" id="progress-scroll-previous" type="button"
+            aria-label="Ver pasos anteriores" aria-controls="progress-viewport" disabled>
+            <span aria-hidden="true">‹</span>
+          </button>
+          <div class="progress-viewport" id="progress-viewport" tabindex="0"
+            aria-label="Progreso de la simulación. Desplázate horizontalmente para consultar todos los pasos.">
+            <ol class="step-progress">
           <li class="current" data-progress-step="1"><span class="progress-step-label">Preparación</span><button
               class="progress-step-marker" type="button" disabled>01</button></li>
           <li data-progress-step="2"><span class="progress-step-label">Célula somática</span><button
@@ -46,7 +53,13 @@
               class="progress-step-marker" type="button" disabled>14</button></li>
           <li class="progress-final" data-progress-final><span class="progress-step-label">Nacimiento</span><span
               class="progress-step-marker">FIN</span></li>
-        </ol>
+            </ol>
+          </div>
+          <button class="progress-scroll-button progress-scroll-next" id="progress-scroll-next" type="button"
+            aria-label="Ver pasos siguientes" aria-controls="progress-viewport">
+            <span aria-hidden="true">›</span>
+          </button>
+        </div>
       </nav>
       <div class="top-actions">
         <button class="icon-button" id="reset-button" type="button" aria-label="Reiniciar simulación" title="Reiniciar">
@@ -311,25 +324,6 @@
 
     <div class="gestation-layout">
       <section class="gestation-stage" aria-label="Vista ampliada de la madre sustituta">
-        <ol class="gestation-progress" aria-label="Progreso de la etapa final">
-          <li class="current" data-gestation-step="implantation"><span>1</span>Implantación</li>
-          <li data-gestation-step="development"><span>2</span>Desarrollo</li>
-          <li data-gestation-step="birth"><span>3</span>Nacimiento</li>
-        </ol>
-
-        <div class="gestation-calendar" aria-label="Días transcurridos de gestación">
-          <div class="calendar-pages">
-            <i class="calendar-sheet" aria-hidden="true"></i>
-            <i class="calendar-sheet" aria-hidden="true"></i>
-            <i class="calendar-sheet" aria-hidden="true"></i>
-            <div class="calendar-face">
-              <span class="calendar-label">Día</span>
-              <strong id="gestation-day">1</strong>
-              <small>de 19</small>
-            </div>
-          </div>
-        </div>
-
         <button class="primary-button gestation-start-button" id="gestation-start-button" type="button">
           Visualizar gestación
         </button>
@@ -369,6 +363,27 @@
           </button>
         </div>
       </section>
+
+      <aside class="gestation-tools" aria-label="Progreso y calendario de gestación">
+        <div class="gestation-calendar" aria-label="Días transcurridos de gestación">
+          <div class="calendar-pages">
+            <i class="calendar-sheet" aria-hidden="true"></i>
+            <i class="calendar-sheet" aria-hidden="true"></i>
+            <i class="calendar-sheet" aria-hidden="true"></i>
+            <div class="calendar-face">
+              <span class="calendar-label">Día</span>
+              <strong id="gestation-day">1</strong>
+              <small>de 19</small>
+            </div>
+          </div>
+        </div>
+
+        <ol class="gestation-progress" aria-label="Progreso de la etapa final">
+          <li class="current" data-gestation-step="implantation"><span>1</span>Implantación</li>
+          <li data-gestation-step="development"><span>2</span>Desarrollo</li>
+          <li data-gestation-step="birth"><span>3</span>Nacimiento</li>
+        </ol>
+      </aside>
     </div>
   </div>
 

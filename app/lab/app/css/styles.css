@@ -191,6 +191,15 @@ button:focus-visible,
   z-index: 30;
 }
 
+.topbar,
+.topbar * {
+  cursor: default
+}
+
+.topbar button:not(:disabled) {
+  cursor: pointer
+}
+
 .brand {
   display: flex;
   align-items: center;
@@ -230,10 +239,7 @@ button:focus-visible,
 .progress-wrap {
   min-width: 0;
   width: 100%;
-  overflow-x: auto;
-  padding: 4px 4px 8px;
-  scrollbar-color: rgba(99, 190, 213, .5) transparent;
-  scrollbar-width: thin
+  padding: 4px
 }
 
 .progress-summary {
@@ -246,18 +252,55 @@ button:focus-visible,
   white-space: nowrap
 }
 
+.progress-carousel {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 760px) 34px;
+  justify-content: center;
+  align-items: center;
+  gap: 7px
+}
+
+.progress-viewport {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x;
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent)
+}
+
+.progress-viewport::-webkit-scrollbar {
+  display: none
+}
+
+.progress-viewport:focus-visible {
+  outline: 2px solid rgba(255, 186, 69, .9);
+  outline-offset: 3px;
+  border-radius: 12px
+}
+
 .step-progress {
-  min-width: 1060px;
+  --progress-item-width: 80px;
+  --progress-edge-space: 0px;
+  width: max-content;
+  min-width: 100%;
+  min-height: 80px;
   margin: 0;
-  padding: 0;
+  padding: 0 var(--progress-edge-space);
   display: flex;
   align-items: flex-start;
-  list-style: none
+  list-style: none;
 }
 
 .step-progress li {
   position: relative;
-  flex: 1 0 70px;
+  flex: 0 0 var(--progress-item-width);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -265,6 +308,43 @@ button:focus-visible,
   color: rgba(232, 244, 247, .56);
   text-align: center;
   transition: color .3s ease
+}
+
+.progress-scroll-button {
+  width: 32px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(178, 215, 224, .32);
+  border-radius: 12px;
+  background: rgba(3, 19, 26, .48);
+  color: rgba(232, 248, 251, .9);
+  cursor: pointer;
+  transition: color .2s ease, border-color .2s ease, background .2s ease, opacity .2s ease, transform .2s ease
+}
+
+.progress-scroll-button span {
+  font-size: 1.65rem;
+  line-height: 1;
+  transform: translateY(-1px)
+}
+
+.progress-scroll-button:hover:not(:disabled) {
+  border-color: rgba(172, 232, 243, .76);
+  background: rgba(36, 113, 133, .42);
+  color: white;
+  transform: scale(1.06)
+}
+
+.progress-scroll-button:focus-visible {
+  outline: 3px solid #ffba45;
+  outline-offset: 2px
+}
+
+.progress-scroll-button:disabled {
+  opacity: .2;
+  cursor: default
 }
 
 .step-progress li::after {
@@ -632,6 +712,11 @@ button:focus-visible,
   text-align: center;
 }
 
+.microscope-station .object-label {
+  top: 0%;
+  left: 90%;
+}
+
 .cell-label {
   top: -60%;
 }
@@ -766,13 +851,13 @@ button:focus-visible,
 
 .gray-mouse {
   left: -4.5%;
-  bottom: 5%;
+  bottom: 7%;
   width: 30%;
 }
 
 .brown-mouse {
   right: -7.5%;
-  bottom: 5%;
+  bottom: 7%;
   width: 35%;
 }
 
@@ -2163,7 +2248,10 @@ button:focus-visible,
   width: min(1240px, 100%);
   min-height: min(610px, calc(100vh - 185px));
   margin: auto;
-  display: grid
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: stretch;
+  gap: 20px
 }
 
 .gestation-stage {
@@ -2171,7 +2259,24 @@ button:focus-visible,
   min-height: 500px;
   display: grid;
   place-items: center;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.gestation-tools {
+  min-width: 0;
+  max-height: fit-content;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 28px;
+  border: 1px solid rgb(84 84 84 / 50%);
+  border-radius: 22px;
+  background: rgba(0, 0, 0, .3);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px)
 }
 
 
@@ -2223,7 +2328,7 @@ button:focus-visible,
   border-radius: 38% 42% 36% 44%;
   outline-offset: -12px;
   transition: filter .35s ease;
-  left: -10%;
+  left: 0;
 }
 
 .gestation-mother-image {
@@ -2505,13 +2610,13 @@ button:focus-visible,
 }
 
 .gestation-calendar {
-  position: absolute;
+  position: relative;
   z-index: 12;
-  right: 0px;
-  top: 80px;
-  width: 108px;
-  height: 124px;
-  margin: 0;
+  right: auto;
+  top: auto;
+  width: 128px;
+  height: 146px;
+  margin: 0 auto;
   perspective: 500px
 }
 
@@ -2598,22 +2703,25 @@ button:focus-visible,
 }
 
 .gestation-progress {
-  position: absolute;
+  position: relative;
   z-index: 12;
-  right: 0px;
-  top: 16px;
-  max-width: calc(100% - 180px);
+  right: auto;
+  top: auto;
+  width: 100%;
+  max-width: none;
   margin: 0;
-  padding: 9px 14px;
+  padding: 4px 0;
   display: flex;
-  align-items: center;
-  gap: clamp(14px, 2.5vw, 34px);
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
   list-style: none;
-  border-radius: 28px;
-  background: rgb(0, 0, 0, 0.2);
+  background: transparent;
 }
 
 .gestation-progress li {
+  position: relative;
+  min-height: 44px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -2625,13 +2733,18 @@ button:focus-visible,
 
 .gestation-progress li:not(:last-child)::after {
   content: "";
-  width: clamp(20px, 3vw, 48px);
-  height: 2px;
-  margin-left: clamp(4px, 1vw, 12px);
+  position: absolute;
+  left: 13px;
+  top: calc(50% + 14px);
+  width: 2px;
+  height: calc(50% + 17px);
+  margin: 0;
   background: rgba(216, 234, 235, 0.687)
 }
 
 .gestation-progress li span {
+  position: relative;
+  z-index: 1;
   width: 27px;
   height: 27px;
   display: grid;
@@ -3045,6 +3158,15 @@ button:focus-visible,
 }
 
 @media(max-width:1000px) {
+  .gestation-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 14px
+  }
+
+  .gestation-tools {
+    padding: 18px
+  }
+
   .gestation-stage {
     min-height: 410px
   }
@@ -3062,7 +3184,8 @@ button:focus-visible,
   }
 
   .gestation-layout {
-    min-height: 0
+    min-height: 0;
+    grid-template-columns: 1fr
   }
 
   .gestation-stage {
@@ -3070,33 +3193,41 @@ button:focus-visible,
     padding: 10px
   }
 
+  .gestation-tools {
+    padding: 16px;
+    gap: 18px
+  }
+
   .gestation-calendar {
-    left: 9px;
-    top: 9px;
+    left: auto;
+    top: auto;
     width: 94px;
     height: 108px
   }
 
   .gestation-progress {
-    right: 10px;
-    top: 124px;
-    max-width: calc(100% - 20px);
-    gap: 8px;
-    padding: 7px
+    right: auto;
+    top: auto;
+    max-width: none;
+    gap: 0;
+    padding: 0
   }
 
   .gestation-progress li {
-    gap: 5px;
-    font-size: .62rem
-  }
-
-  .gestation-progress li:not(:last-child)::after {
-    display: none
+    min-height: 48px;
+    gap: 8px;
+    font-size: .72rem
   }
 
   .gestation-progress li span {
     width: 22px;
     height: 22px
+  }
+
+  .gestation-progress li:not(:last-child)::after {
+    left: 10px;
+    top: calc(50% + 11px);
+    height: calc(50% + 13px)
   }
 
   .gestation-start-button,
@@ -3728,6 +3859,20 @@ dialog form {
     grid-row: 1
   }
 
+  .progress-carousel {
+    grid-template-columns: 30px minmax(0, 1fr) 30px;
+    gap: 5px
+  }
+
+  .progress-scroll-button {
+    width: 30px;
+    height: 40px
+  }
+
+  .step-progress {
+    --progress-item-width: 76px
+  }
+
   .micro-layout {
     grid-template-columns: 1fr
   }
@@ -3796,8 +3941,28 @@ dialog form {
     display: inline
   }
 
+  .progress-carousel {
+    grid-template-columns: 27px minmax(0, 1fr) 27px;
+    gap: 3px
+  }
+
+  .progress-scroll-button {
+    width: 27px;
+    height: 38px;
+    border-radius: 10px
+  }
+
+  .progress-scroll-button span {
+    font-size: 1.4rem
+  }
+
+  .progress-viewport {
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent)
+  }
+
   .step-progress {
-    min-width: 980px
+    --progress-item-width: 72px
   }
 
   .progress-step-label {

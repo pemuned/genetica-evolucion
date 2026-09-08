@@ -392,6 +392,7 @@ class UIController {
     this.toastTimer = null;
     this.sequenceTimers = [];
     this.feedbackFrame = null;
+    this.progressCenterFrame = null;
     this.drag = null;
     this.pendingBackStep = null;
     this.cacheElements();
@@ -404,6 +405,14 @@ class UIController {
       ...document.querySelectorAll("[data-progress-step]"),
     ];
     this.finalProgressStep = document.querySelector("[data-progress-final]");
+    this.stepProgress = document.querySelector(".step-progress");
+    this.progressViewport = document.querySelector("#progress-viewport");
+    this.progressScrollPrevious = document.querySelector(
+      "#progress-scroll-previous",
+    );
+    this.progressScrollNext = document.querySelector(
+      "#progress-scroll-next",
+    );
     this.previousStepButton = document.querySelector("#previous-step-button");
     this.instructionNumber = document.querySelector("#instruction-number");
     this.instructionPanel = document.querySelector(".instruction-panel");
@@ -526,6 +535,20 @@ class UIController {
         : Math.max(1, this.game.step - VISIBLE_STEP_OFFSET);
       this.requestStepNavigation(currentPosition - 1);
     });
+    this.progressScrollPrevious.addEventListener("click", () =>
+      this.scrollProgressViewport(-1),
+    );
+    this.progressScrollNext.addEventListener("click", () =>
+      this.scrollProgressViewport(1),
+    );
+    this.progressViewport.addEventListener(
+      "scroll",
+      () => this.updateProgressScrollButtons(),
+      { passive: true },
+    );
+    window.addEventListener("resize", () => {
+      this.centerCurrentProgressStep("auto");
+    });
     this.backDialog.addEventListener("close", () => {
       const targetStep = this.pendingBackStep;
       const shouldNavigate =
@@ -577,11 +600,69 @@ class UIController {
       this.game.flags.completed
         ? this.finalProgressStep
         : this.progressSteps[displayStep - 1];
-    currentStep?.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest",
-      inline: "center",
+    this.centerProgressStep(currentStep);
+  }
+
+  centerCurrentProgressStep(behavior = "smooth") {
+    const displayStep = Math.max(1, this.game.step - VISIBLE_STEP_OFFSET);
+    const currentStep = this.game.flags.completed
+      ? this.finalProgressStep
+      : this.progressSteps[displayStep - 1];
+    this.centerProgressStep(currentStep, behavior);
+  }
+
+  centerProgressStep(element, behavior = "smooth") {
+    if (!element) return;
+    cancelAnimationFrame(this.progressCenterFrame);
+    this.progressCenterFrame = requestAnimationFrame(() => {
+      const edgeSpace = Math.max(
+        0,
+        (this.progressViewport.clientWidth - element.offsetWidth) / 2,
+      );
+      this.stepProgress.style.setProperty(
+        "--progress-edge-space",
+        `${edgeSpace}px`,
+      );
+
+      const viewportRect = this.progressViewport.getBoundingClientRect();
+      const elementRect = element.getBoundingClientRect();
+      const unclampedTarget =
+        this.progressViewport.scrollLeft +
+        elementRect.left -
+        viewportRect.left +
+        elementRect.width / 2 -
+        this.progressViewport.clientWidth / 2;
+      const maxScroll =
+        this.progressViewport.scrollWidth - this.progressViewport.clientWidth;
+      const targetLeft = Math.max(0, Math.min(maxScroll, unclampedTarget));
+      this.progressViewport.scrollTo({
+        left: targetLeft,
+        behavior,
+      });
+      this.progressCenterFrame = null;
+      this.updateProgressScrollButtons();
     });
+  }
+
+  scrollProgressViewport(direction) {
+    const itemWidth = this.progressSteps[0]?.offsetWidth || 72;
+    const distance = Math.max(
+      itemWidth * 2,
+      this.progressViewport.clientWidth * 0.65,
+    );
+    this.progressViewport.scrollBy({
+      left: direction * distance,
+      behavior: "smooth",
+    });
+  }
+
+  updateProgressScrollButtons() {
+    const maxScroll =
+      this.progressViewport.scrollWidth - this.progressViewport.clientWidth;
+    this.progressScrollPrevious.disabled =
+      maxScroll <= 1 || this.progressViewport.scrollLeft <= 2;
+    this.progressScrollNext.disabled =
+      maxScroll <= 1 || this.progressViewport.scrollLeft >= maxScroll - 2;
   }
 
   renderStep() {
