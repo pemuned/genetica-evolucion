@@ -231,6 +231,7 @@ function initSimFullscreen() {
   const overlay = document.getElementById("sim-fullscreen");
   const closeBtn = document.getElementById("sim-close-btn");
   const frame = document.getElementById("sim-fullscreen-frame");
+  const orientationDialog = document.getElementById("orientation-dialog");
   const LAB_SRC = "app/lab/index.html";
   const ANIM_MS = 520;
 
@@ -317,6 +318,20 @@ function initSimFullscreen() {
     }, ANIM_MS);
   }
 
+  function requestOpenSim() {
+    const isMobile =
+      window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches ||
+      window.matchMedia("(max-width: 1024px) and (pointer: coarse)").matches;
+
+    if (isMobile && orientationDialog) {
+      orientationDialog.returnValue = "";
+      orientationDialog.showModal();
+      return;
+    }
+
+    openSim();
+  }
+
   function closeSim() {
     if (overlay.hidden) return;
 
@@ -344,8 +359,15 @@ function initSimFullscreen() {
     }, ANIM_MS);
   }
 
-  openBtn.addEventListener("click", openSim);
+  openBtn.addEventListener("click", requestOpenSim);
   closeBtn.addEventListener("click", closeSim);
+
+  orientationDialog?.addEventListener("close", () => {
+    if (orientationDialog.returnValue === "continue") {
+      window.requestAnimationFrame(openSim);
+    }
+    orientationDialog.returnValue = "";
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !overlay.hidden) {

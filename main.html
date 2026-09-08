@@ -602,6 +602,23 @@
         <a href="#credits" id="footer-credits-link">Créditos</a>
     </footer>
 
+    <dialog class="orientation-dialog" id="orientation-dialog" aria-labelledby="orientation-dialog-title"
+        aria-describedby="orientation-dialog-description">
+        <form method="dialog">
+            <span class="orientation-dialog-icon" aria-hidden="true">
+                <span></span>
+            </span>
+            <h2 id="orientation-dialog-title">Visualización horizontal</h2>
+            <p id="orientation-dialog-description">
+                Para visualizar correctamente la simulación, gira tu dispositivo y úsalo en posición horizontal.
+            </p>
+            <div class="orientation-dialog-actions">
+                <button class="orientation-cancel-btn" type="submit" value="cancel">Cancelar</button>
+                <button class="primary-button" type="submit" value="continue">Entendido, abrir simulación</button>
+            </div>
+        </form>
+    </dialog>
+
     <!-- Fullscreen simulation overlay (stays on this page) -->
     <div class="sim-fullscreen" id="sim-fullscreen" role="dialog" aria-modal="true"
         aria-labelledby="sim-fullscreen-title" hidden>

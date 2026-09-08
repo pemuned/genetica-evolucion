@@ -1061,6 +1061,107 @@ body.a11y-high-contrast .sim-preview-media {
     color: #ffffff;
 }
 
+.orientation-dialog {
+    width: min(440px, calc(100% - 32px));
+    margin: auto;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 18px;
+    background: #0b2733;
+    color: #ffffff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.58);
+}
+
+.orientation-dialog::backdrop {
+    background: rgba(2, 12, 17, 0.78);
+    backdrop-filter: blur(5px);
+}
+
+.orientation-dialog form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 24px 24px;
+    text-align: center;
+}
+
+.orientation-dialog-icon {
+    width: 82px;
+    height: 62px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(101, 200, 211, 0.12);
+}
+
+.orientation-dialog-icon span {
+    width: 54px;
+    height: 32px;
+    display: block;
+    border: 3px solid var(--color-accent);
+    border-radius: 7px;
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+}
+
+.orientation-dialog-icon span::after {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    margin: 11px 3px 0 auto;
+    border-radius: 50%;
+    background: var(--color-accent);
+}
+
+.orientation-dialog h2 {
+    font-size: 1.3rem;
+    color: #ffffff;
+}
+
+.orientation-dialog p {
+    max-width: 36ch;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.93rem;
+}
+
+.orientation-dialog-actions {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.orientation-dialog-actions .primary-button {
+    width: 100%;
+}
+
+.orientation-cancel-btn {
+    min-height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 12px;
+    background: transparent;
+    color: #ffffff;
+    font: 600 0.9rem var(--font-main);
+    cursor: pointer;
+}
+
+.orientation-cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.orientation-cancel-btn:focus-visible,
+.orientation-dialog .primary-button:focus-visible {
+    outline: 3px solid #f8ff9a;
+    outline-offset: 3px;
+}
+
+body.a11y-high-contrast .orientation-dialog {
+    border: 2px solid #ffffff;
+    background: #07131d;
+}
+
 .sim-fullscreen {
     --sim-from-top: 40%;
     --sim-from-left: 40%;
