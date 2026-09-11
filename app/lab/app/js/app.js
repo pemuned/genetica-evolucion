@@ -394,6 +394,8 @@ class UIController {
     this.feedbackFrame = null;
     this.progressCenterFrame = null;
     this.drag = null;
+    this.pendingTouchDrag = null;
+    this.lastPointerPosition = null;
     this.pendingBackStep = null;
     this.cacheElements();
     this.bindEvents();
@@ -445,6 +447,7 @@ class UIController {
     this.backDialog = document.querySelector("#back-dialog");
     this.backStepName = document.querySelector("#back-step-name");
     this.stageDim = document.querySelector("#stage-dim");
+    this.labFrame = document.querySelector("#lab-frame");
   }
 
   setCloseButtonState(state) {
@@ -509,6 +512,13 @@ class UIController {
     );
     document.addEventListener("pointerup", (event) => this.onPointerUp(event));
     document.addEventListener("pointercancel", () => this.cancelDrag());
+    document.addEventListener("lostpointercapture", (event) => {
+      if (
+        event.pointerId === this.drag?.pointerId ||
+        event.pointerId === this.pendingTouchDrag?.pointerId
+      )
+        this.cancelDrag();
+    });
     document.addEventListener("keydown", (event) => this.onKeyDown(event));
     document
       .querySelector("[data-action='birth']")
@@ -784,6 +794,7 @@ class UIController {
 
   onPointerDown(event) {
     if (event.button !== undefined && event.button !== 0) return;
+    if (this.drag || this.pendingTouchDrag) return;
     const source = event.target.closest("[data-draggable]");
     if (!source) return;
     const action = source.dataset.draggable;
@@ -792,6 +803,31 @@ class UIController {
       return;
     }
     event.preventDefault();
+    this.lastPointerPosition = {
+      x: event.clientX,
+      y: event.clientY,
+    };
+    if (event.pointerType === "touch") {
+      this.pendingTouchDrag = {
+        source,
+        action,
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+      };
+      source.setPointerCapture?.(event.pointerId);
+      return;
+    }
+    this.startDrag(
+      source,
+      action,
+      event.pointerId,
+      event.clientX,
+      event.clientY,
+    );
+  }
+
+  startDrag(source, action, pointerId, x, y) {
     const ghost = source.cloneNode(true);
     const rect = source.getBoundingClientRect();
     ghost.removeAttribute("id");
@@ -800,21 +836,67 @@ class UIController {
     ghost.classList.add("drag-ghost");
     document.body.append(ghost);
     source.classList.add("dragging-source");
-    this.drag = { source, action, ghost, pointerId: event.pointerId };
+    this.drag = { source, action, ghost, pointerId };
     document.body.classList.add("is-dragging");
-    this.moveGhost(event.clientX, event.clientY);
-    source.setPointerCapture?.(event.pointerId);
+    this.labFrame.classList.add("drag-locked");
+    this.moveGhost(x, y);
+    source.setPointerCapture?.(pointerId);
   }
 
   onPointerMove(event) {
+    if (
+      this.pendingTouchDrag &&
+      event.pointerId === this.pendingTouchDrag.pointerId
+    ) {
+      this.lastPointerPosition = {
+        x: event.clientX,
+        y: event.clientY,
+      };
+      const distance = Math.hypot(
+        event.clientX - this.pendingTouchDrag.startX,
+        event.clientY - this.pendingTouchDrag.startY,
+      );
+      if (distance < 9) return;
+      const { source, action, pointerId } = this.pendingTouchDrag;
+      this.pendingTouchDrag = null;
+      this.startDrag(
+        source,
+        action,
+        pointerId,
+        event.clientX,
+        event.clientY,
+      );
+    }
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
     event.preventDefault();
+    this.lastPointerPosition = {
+      x: event.clientX,
+      y: event.clientY,
+    };
     this.moveGhost(event.clientX, event.clientY);
   }
 
   onPointerUp(event) {
+    if (
+      this.pendingTouchDrag &&
+      event.pointerId === this.pendingTouchDrag.pointerId
+    ) {
+      const { source, pointerId } = this.pendingTouchDrag;
+      this.pendingTouchDrag = null;
+      if (source.hasPointerCapture?.(pointerId))
+        source.releasePointerCapture(pointerId);
+      this.lastPointerPosition = null;
+      return;
+    }
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
-    const hit = document.elementFromPoint(event.clientX, event.clientY);
+    const hasUsableCoordinates =
+      Number.isFinite(event.clientX) &&
+      Number.isFinite(event.clientY) &&
+      (event.clientX !== 0 || event.clientY !== 0);
+    const point = hasUsableCoordinates
+      ? { x: event.clientX, y: event.clientY }
+      : this.lastPointerPosition;
+    const hit = point ? document.elementFromPoint(point.x, point.y) : null;
     let target = hit?.closest("[data-drop-zone]");
     const { action, source } = this.drag;
 
@@ -841,14 +923,26 @@ class UIController {
   }
 
   cancelDrag() {
-    if (!this.drag) return;
+    if (this.pendingTouchDrag) {
+      const { source, pointerId } = this.pendingTouchDrag;
+      this.pendingTouchDrag = null;
+      if (source.hasPointerCapture?.(pointerId))
+        source.releasePointerCapture(pointerId);
+    }
+    if (!this.drag) {
+      this.lastPointerPosition = null;
+      this.labFrame.classList.remove("drag-locked");
+      return;
+    }
     const { source, ghost, pointerId } = this.drag;
+    this.drag = null;
     source.classList.remove("dragging-source");
     if (source.hasPointerCapture?.(pointerId))
       source.releasePointerCapture(pointerId);
     ghost.remove();
-    this.drag = null;
+    this.lastPointerPosition = null;
     document.body.classList.remove("is-dragging");
+    this.labFrame.classList.remove("drag-locked");
   }
 
   moveGhost(x, y) {
@@ -858,6 +952,14 @@ class UIController {
   }
 
   onKeyDown(event) {
+    if (event.key === "Escape") {
+      this.cancelDrag();
+      if (this.selectedAction) {
+        this.selectedAction.source.removeAttribute("aria-pressed");
+        this.selectedAction = null;
+      }
+      return;
+    }
     if (!event.target.matches("[data-draggable], [data-drop-zone]")) return;
     if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
@@ -867,6 +969,7 @@ class UIController {
       if (this.game.isValidDrop(this.selectedAction.action, target)) {
         const selection = this.selectedAction;
         this.selectedAction = null;
+        selection.source.removeAttribute("aria-pressed");
         this.handleDrop(selection.action, target, selection.source);
       } else {
         this.invalidFeedback(event.target, "Esa no es la zona correcta.");
@@ -880,6 +983,7 @@ class UIController {
           "Ese elemento todavía no se utiliza.",
         );
       this.selectedAction = { action, source: event.target };
+      event.target.setAttribute("aria-pressed", "true");
       this.toast("Elemento seleccionado. Activa ahora la zona iluminada.");
       return;
     }
@@ -955,6 +1059,9 @@ class UIController {
       "13:injection-needle:micro-oocyte": () => {
         this.game.flags.nucleusTransferred = true;
         this.updateInteractiveStates();
+        document
+          .querySelector(".micro-oocyte")
+          .classList.add("injection-position");
         //fadeout micro-somatic cell after suction animation completes
         document.querySelector(".micro-somatic").style.opacity = "0";
         document.querySelector(".micro-somatic").style.transition =
@@ -1024,7 +1131,7 @@ class UIController {
     this.setCloseButtonState("waiting");
     oocyte.style.display = "block";
     oocyte.style.opacity = "1";
-    oocyte.classList.remove("activated", "cleaving");
+    oocyte.classList.remove("activated", "cleaving", "injection-position");
     oocyte.querySelector(".blastomere-field")?.remove();
     somatic.style.display = mode === "transfer" ? "block" : "none";
     document
@@ -1340,6 +1447,7 @@ class UIController {
 
   resetExperience({ returnToIntro = true } = {}) {
     this.cancelDrag();
+    this.selectedAction?.source.removeAttribute("aria-pressed");
     this.selectedAction = null;
     this.pendingBackStep = null;
     clearInterval(this._typeInterval);
@@ -1352,6 +1460,10 @@ class UIController {
     this.sequenceTimers = [];
     this.animations.reset();
     document.body.classList.remove("is-dragging");
+    this.labFrame.classList.remove("drag-locked");
+    document
+      .querySelectorAll("[aria-pressed='true']")
+      .forEach((element) => element.removeAttribute("aria-pressed"));
     document
       .querySelectorAll(".shake, .dragging-source")
       .forEach((element) =>
@@ -1407,7 +1519,13 @@ class UIController {
     const oocyte = document.querySelector(".micro-oocyte");
     const somatic = document.querySelector(".micro-somatic");
     [oocyte, somatic].forEach((cell) => {
-      cell.classList.remove("held", "held-retract", "activated", "cleaving");
+      cell.classList.remove(
+        "held",
+        "held-retract",
+        "activated",
+        "cleaving",
+        "injection-position",
+      );
       cell.style.removeProperty("animation");
       cell.style.removeProperty("display");
       cell.style.removeProperty("left");
