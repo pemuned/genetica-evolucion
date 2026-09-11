@@ -230,12 +230,13 @@ function initSimFullscreen() {
   const openBtn = document.getElementById("sim-open-btn");
   const overlay = document.getElementById("sim-fullscreen");
   const closeBtn = document.getElementById("sim-close-btn");
+  const fullscreenBtn = document.getElementById("sim-fullscreen-toggle-btn");
   const frame = document.getElementById("sim-fullscreen-frame");
   const orientationDialog = document.getElementById("orientation-dialog");
   const LAB_SRC = "app/lab/index.html";
   const ANIM_MS = 520;
 
-  if (!openBtn || !overlay || !closeBtn || !frame) return;
+  if (!openBtn || !overlay || !closeBtn || !fullscreenBtn || !frame) return;
 
   let lastFocus = null;
   let animTimer = null;
@@ -295,6 +296,15 @@ function initSimFullscreen() {
     overlay.hidden = false;
     document.body.classList.add("sim-fullscreen-open");
 
+    if (
+      !document.fullscreenElement &&
+      typeof overlay.requestFullscreen === "function"
+    ) {
+      overlay.requestFullscreen().catch(() => {
+        updateFullscreenButton();
+      });
+    }
+
     if (prefersReducedMotion) {
       overlay.classList.add("is-open");
       closeBtn.focus();
@@ -332,10 +342,44 @@ function initSimFullscreen() {
     openSim();
   }
 
-  function closeSim() {
+  function updateFullscreenButton() {
+    const isFullscreen = document.fullscreenElement === overlay;
+    fullscreenBtn.setAttribute("aria-pressed", String(isFullscreen));
+    fullscreenBtn.setAttribute(
+      "aria-label",
+      isFullscreen
+        ? "Salir de pantalla completa"
+        : "Activar pantalla completa",
+    );
+    fullscreenBtn.textContent = isFullscreen
+      ? "Salir de pantalla completa"
+      : "Pantalla completa";
+  }
+
+  async function toggleBrowserFullscreen() {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await overlay.requestFullscreen();
+      }
+    } catch {
+      updateFullscreenButton();
+    }
+  }
+
+  async function closeSim() {
     if (overlay.hidden) return;
 
     clearAnimTimer();
+
+    if (document.fullscreenElement === overlay) {
+      try {
+        await document.exitFullscreen();
+      } catch {
+        // Continue closing the in-page overlay if fullscreen exit fails.
+      }
+    }
 
     if (prefersReducedMotion || !overlay.classList.contains("is-open")) {
       overlay.classList.remove("is-open");
@@ -360,7 +404,16 @@ function initSimFullscreen() {
   }
 
   openBtn.addEventListener("click", requestOpenSim);
+  fullscreenBtn.addEventListener("click", toggleBrowserFullscreen);
   closeBtn.addEventListener("click", closeSim);
+  document.addEventListener("fullscreenchange", updateFullscreenButton);
+
+  if (
+    typeof overlay.requestFullscreen !== "function" ||
+    typeof document.exitFullscreen !== "function"
+  ) {
+    fullscreenBtn.hidden = true;
+  }
 
   orientationDialog?.addEventListener("close", () => {
     if (orientationDialog.returnValue === "continue") {
@@ -371,6 +424,7 @@ function initSimFullscreen() {
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !overlay.hidden) {
+      if (document.fullscreenElement === overlay) return;
       event.preventDefault();
       closeSim();
     }

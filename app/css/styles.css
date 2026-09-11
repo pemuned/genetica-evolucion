@@ -276,6 +276,7 @@ a {
 .nav-btn:focus-visible,
 .hamburger-btn:focus-visible,
 .sim-close-btn:focus-visible,
+.sim-fullscreen-toggle-btn:focus-visible,
 .sim-fullscreen-btn:focus-visible {
     outline: 3px solid #f8ff9a;
     outline-offset: 2px;
@@ -329,13 +330,15 @@ body.a11y-high-contrast .btn-enter:hover {
     color: #000000;
 }
 
-body.a11y-high-contrast .sim-close-btn {
+body.a11y-high-contrast .sim-close-btn,
+body.a11y-high-contrast .sim-fullscreen-toggle-btn {
     color: #ffffff;
     border-color: #ffffff;
     background: #07131d;
 }
 
-body.a11y-high-contrast .sim-close-btn:hover {
+body.a11y-high-contrast .sim-close-btn:hover,
+body.a11y-high-contrast .sim-fullscreen-toggle-btn:hover {
     background: #ffffff;
     color: #000000;
 }
@@ -1250,7 +1253,15 @@ body.a11y-high-contrast .orientation-dialog {
     letter-spacing: 0.04em;
 }
 
-.sim-close-btn {
+.sim-fullscreen-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.sim-close-btn,
+.sim-fullscreen-toggle-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1270,9 +1281,15 @@ body.a11y-high-contrast .orientation-dialog {
         color var(--transition-speed) ease;
 }
 
-.sim-close-btn:hover {
+.sim-close-btn:hover,
+.sim-fullscreen-toggle-btn:hover,
+.sim-fullscreen-toggle-btn[aria-pressed="true"] {
     background-color: var(--color-accent);
     color: var(--color-bg-start);
+}
+
+.sim-fullscreen-toggle-btn[hidden] {
+    display: none;
 }
 
 .sim-fullscreen-frame {
@@ -1770,6 +1787,26 @@ body.sim-fullscreen-open {
    RESPONSIVE  —  ≤ 480px
    ============================================================ */
 @media (max-width: 480px) {
+
+    .sim-fullscreen-bar {
+        gap: 8px;
+        padding: 8px 10px;
+    }
+
+    .sim-fullscreen-title {
+        font-size: 0.82rem;
+    }
+
+    .sim-fullscreen-actions {
+        gap: 6px;
+    }
+
+    .sim-close-btn,
+    .sim-fullscreen-toggle-btn {
+        padding: 7px 10px;
+        font-size: 0.7rem;
+        letter-spacing: 0.03em;
+    }
 
     .prelab-slider-controls {
         gap: 8px;

@@ -624,9 +624,15 @@
         aria-labelledby="sim-fullscreen-title" hidden>
         <div class="sim-fullscreen-bar">
             <h2 class="sim-fullscreen-title" id="sim-fullscreen-title">Simulación</h2>
-            <button class="sim-close-btn" id="sim-close-btn" type="button" aria-label="Cerrar simulación">
-                Cerrar
-            </button>
+            <div class="sim-fullscreen-actions">
+                <button class="sim-fullscreen-toggle-btn" id="sim-fullscreen-toggle-btn" type="button"
+                    aria-label="Activar pantalla completa" aria-pressed="false">
+                    Pantalla completa
+                </button>
+                <button class="sim-close-btn" id="sim-close-btn" type="button" aria-label="Cerrar simulación">
+                    Cerrar
+                </button>
+            </div>
         </div>
         <iframe class="sim-fullscreen-frame" id="sim-fullscreen-frame"
             title="Simulación de clonación en pantalla completa" src="about:blank"></iframe>
