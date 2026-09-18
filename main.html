@@ -15,8 +15,8 @@
     <meta property="og:title" content="Genética y Evolución - Clona tu propio ratón">
     <meta property="og:description"
         content="Este material está diseñado especialmente para personas docentes de biología, brindando una herramienta dinámica y enriquecedora para la enseñanza de conceptos clave de genética y evolución. Su propósito es brindar un espacio interactivo en el que las personas educadoras puedan explorar, experimentar y descubrir métodos innovadores para abordar la genética y evolución en el contexto de la vida cotidiana.">
-    <meta property="og:image" content="https://multimedia.uned.ac.cr/pem/genetica-y-evolucion/og-image.png">
-    <meta property="og:url" content="https://multimedia.uned.ac.cr/pem/genetica-y-evolucion/">
+    <meta property="og:image" content="https://multimedia.uned.ac.cr/pem/genetica-evolucion/og-image.png">
+    <meta property="og:url" content="https://multimedia.uned.ac.cr/pem/genetica-evolucion/">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_ES">
     <meta property="og:site_name" content="Genética y Evolución - Clona tu propio ratón">
@@ -309,8 +309,7 @@
                             </div>
                         </article>
 
-                        <div class="prelab-slider-controls" role="navigation"
-                            aria-label="Controles del prelaboratorio">
+                        <div class="prelab-slider-controls" role="navigation" aria-label="Controles del prelaboratorio">
                             <div class="prelab-arrow-container">
                                 <button class="prelab-arrow-btn spray-border" type="button" data-prelab-nav="prev"
                                     aria-label="Ir a subsección anterior" title="Anterior">
@@ -446,13 +445,13 @@
                             <h3 class="card-heading">Simulación: Clona tu propio ratón.</h3>
                             <div class="card-body">
                                 <div class="sim-preview">
-                                    <div class="sim-preview-media" role="img"
-                                        aria-label="Espacio para una imagen representativa del simulador">
-                                        <span>Vista previa del simulador</span>
+                                    <div class="sim-preview-media" role="img" aria-label="Vista previa del simulador">
+                                        <img src="app/img/web/preview-simulator.png" alt="Vista previa del simulador"
+                                            class="img-preview">
                                     </div>
                                     <button class="primary-button" id="sim-open-btn" type="button"
                                         aria-haspopup="dialog" aria-controls="sim-fullscreen">
-                                        Abrir en pantalla completa
+                                        Ingresar al simulador
                                     </button>
                                 </div>
                             </div>
@@ -633,6 +632,10 @@
                     Cerrar
                 </button>
             </div>
+        </div>
+        <div class="sim-loading" id="sim-loading" role="status" aria-live="polite">
+            <span class="sim-loading-spinner" aria-hidden="true"></span>
+            <span>Cargando simulación</span>
         </div>
         <iframe class="sim-fullscreen-frame" id="sim-fullscreen-frame"
             title="Simulación de clonación en pantalla completa" src="about:blank"></iframe>

@@ -232,6 +232,7 @@ function initSimFullscreen() {
   const closeBtn = document.getElementById("sim-close-btn");
   const fullscreenBtn = document.getElementById("sim-fullscreen-toggle-btn");
   const frame = document.getElementById("sim-fullscreen-frame");
+  const loadingIndicator = document.getElementById("sim-loading");
   const orientationDialog = document.getElementById("orientation-dialog");
   const LAB_SRC = "app/lab/index.html";
   const ANIM_MS = 520;
@@ -240,6 +241,7 @@ function initSimFullscreen() {
 
   let lastFocus = null;
   let animTimer = null;
+  let isFrameLoaded = false;
   let prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
@@ -261,7 +263,10 @@ function initSimFullscreen() {
     const rect = openBtn.getBoundingClientRect();
     overlay.style.setProperty("--sim-from-top", `${rect.top}px`);
     overlay.style.setProperty("--sim-from-left", `${rect.left}px`);
-    overlay.style.setProperty("--sim-from-width", `${Math.max(rect.width, 48)}px`);
+    overlay.style.setProperty(
+      "--sim-from-width",
+      `${Math.max(rect.width, 48)}px`,
+    );
     overlay.style.setProperty(
       "--sim-from-height",
       `${Math.max(rect.height, 40)}px`,
@@ -271,6 +276,7 @@ function initSimFullscreen() {
   function finishClose() {
     clearAnimTimer();
     overlay.hidden = true;
+    overlay.classList.remove("is-ready");
     document.body.classList.remove("sim-fullscreen-open");
     if (lastFocus && typeof lastFocus.focus === "function") {
       lastFocus.focus();
@@ -285,6 +291,8 @@ function initSimFullscreen() {
     clearAnimTimer();
     lastFocus = document.activeElement;
     setOriginFromButton();
+    overlay.classList.toggle("is-ready", isFrameLoaded);
+    loadingIndicator?.classList.toggle("is-hidden", isFrameLoaded);
 
     if (
       !frame.getAttribute("src") ||
@@ -295,15 +303,6 @@ function initSimFullscreen() {
 
     overlay.hidden = false;
     document.body.classList.add("sim-fullscreen-open");
-
-    if (
-      !document.fullscreenElement &&
-      typeof overlay.requestFullscreen === "function"
-    ) {
-      overlay.requestFullscreen().catch(() => {
-        updateFullscreenButton();
-      });
-    }
 
     if (prefersReducedMotion) {
       overlay.classList.add("is-open");
@@ -347,9 +346,7 @@ function initSimFullscreen() {
     fullscreenBtn.setAttribute("aria-pressed", String(isFullscreen));
     fullscreenBtn.setAttribute(
       "aria-label",
-      isFullscreen
-        ? "Salir de pantalla completa"
-        : "Activar pantalla completa",
+      isFullscreen ? "Salir de pantalla completa" : "Activar pantalla completa",
     );
     fullscreenBtn.textContent = isFullscreen
       ? "Salir de pantalla completa"
@@ -404,6 +401,11 @@ function initSimFullscreen() {
   }
 
   openBtn.addEventListener("click", requestOpenSim);
+  frame.addEventListener("load", () => {
+    isFrameLoaded = true;
+    overlay.classList.add("is-ready");
+    loadingIndicator?.classList.add("is-hidden");
+  });
   fullscreenBtn.addEventListener("click", toggleBrowserFullscreen);
   closeBtn.addEventListener("click", closeSim);
   document.addEventListener("fullscreenchange", updateFullscreenButton);

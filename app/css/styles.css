@@ -64,7 +64,7 @@
 }
 
 html {
-    font-size: 16px;
+    font-size: 1rem;
     scroll-behavior: smooth;
     /* Gradient base */
     background-color: var(--color-bg-mid);
@@ -256,7 +256,7 @@ a {
     background: rgba(255, 255, 255, 0.05);
     color: #ffffff;
     font-family: var(--font-main);
-    font-size: 0.82rem;
+    font-size: 0.88rem;
     font-weight: 600;
     cursor: pointer;
 }
@@ -283,7 +283,7 @@ a {
 }
 
 .a11y-label {
-    font-size: 0.78rem;
+    font-size: 0.84rem;
 }
 
 .a11y-icon {
@@ -407,14 +407,13 @@ body.a11y-high-contrast .prelab-tab-btn.is-active {
     -webkit-mask-composite: xor;
 }
 
-.nav-btn.spray-border.active::after,
-.nav-btn.spray-border[aria-current="page"]::after,
-.content-card.spray-border::after,
+
+/*.content-card.spray-border::after,
 .prelab-slider.spray-border::after,
 .prelab-arrow-btn.spray-border::after {
     filter: url(#spray-hand-drawn);
-    padding: 2px;
-}
+    padding: 1px;
+}*/
 
 /* Replace decorative spray edges with clear solid borders in high contrast. */
 body.a11y-high-contrast .spray-border::after {
@@ -479,7 +478,7 @@ h3 {
 }
 
 .brand-subtitle {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -532,7 +531,7 @@ h3 {
     border-radius: var(--radius-nav);
     color: var(--color-nav-text);
     font-family: var(--font-main);
-    font-size: 0.92rem;
+    font-size: 1rem;
     font-weight: 600;
     text-align: center;
     cursor: pointer;
@@ -758,7 +757,7 @@ body.a11y-high-contrast .site-footer {
 
 .card-body p {
     margin-bottom: 16px;
-    font-size: 0.97rem;
+    font-size: 1.05rem;
     color: var(--color-card-text);
 }
 
@@ -781,7 +780,7 @@ body.a11y-high-contrast .site-footer {
     padding: 12px 14px;
     text-align: left;
     vertical-align: top;
-    font-size: 0.94rem;
+    font-size: 1rem;
     color: var(--color-card-text);
 }
 
@@ -862,7 +861,7 @@ body.a11y-high-contrast .site-footer {
     background: rgb(101 200 211 / 26%);
     color: #ffffff;
     font-family: var(--font-main);
-    font-size: 0.9rem;
+    font-size: 0.98rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     cursor: pointer;
@@ -922,7 +921,7 @@ body.a11y-high-contrast .site-footer {
 
 .prelab-arrow-label {
     display: block;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 1.2;
     letter-spacing: 0.02em;
@@ -959,7 +958,7 @@ body.a11y-high-contrast .site-footer {
     background: rgba(0, 0, 0, 0.58);
     color: rgba(255, 255, 255, 0.88);
     font-family: var(--font-main);
-    font-size: 0.9rem;
+    font-size: 0.98rem;
     font-weight: 700;
     line-height: 1.2;
     text-align: center;
@@ -1015,6 +1014,7 @@ body.a11y-high-contrast .site-footer {
 }
 
 .sim-preview-media {
+    position: relative;
     min-height: clamp(220px, 34vw, 390px);
     display: grid;
     place-items: center;
@@ -1030,6 +1030,45 @@ body.a11y-high-contrast .site-footer {
     letter-spacing: 0.05em;
     text-align: center;
     text-transform: uppercase;
+}
+
+/* CRT scanlines + vignette overlay for the retro TV look on the preview image */
+.sim-preview-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.45) 100%),
+        repeating-linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.16) 0px,
+            rgba(0, 0, 0, 0.16) 1px,
+            transparent 2px,
+            transparent 3px);
+    mix-blend-mode: multiply;
+    animation: tv-retro-flicker 6s ease-in-out infinite;
+}
+
+@keyframes tv-retro-flicker {
+
+    0%,
+    100% {
+        opacity: 0.9;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    62% {
+        opacity: 0.82;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sim-preview-media::after {
+        animation: none;
+    }
 }
 
 .sim-preview-media img {
@@ -1053,7 +1092,7 @@ body.a11y-high-contrast .site-footer {
     align-self: center;
     width: min(100%, 330px);
     padding: 12px 28px;
-    font-size: 0.85rem;
+    font-size: 0.92rem;
     animation: none;
 }
 
@@ -1125,7 +1164,7 @@ body.a11y-high-contrast .sim-preview-media {
 .orientation-dialog p {
     max-width: 36ch;
     color: rgba(255, 255, 255, 0.82);
-    font-size: 0.93rem;
+    font-size: 1rem;
 }
 
 .orientation-dialog-actions {
@@ -1146,7 +1185,7 @@ body.a11y-high-contrast .sim-preview-media {
     border-radius: 12px;
     background: transparent;
     color: #ffffff;
-    font: 600 0.9rem var(--font-main);
+    font: 600 0.98rem var(--font-main);
     cursor: pointer;
 }
 
@@ -1225,6 +1264,8 @@ body.a11y-high-contrast .orientation-dialog {
 }
 
 .sim-fullscreen-bar {
+    position: relative;
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1243,6 +1284,44 @@ body.a11y-high-contrast .orientation-dialog {
 .sim-fullscreen.is-open .sim-fullscreen-bar {
     opacity: 1;
     transform: translateY(0);
+}
+
+.sim-loading {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    gap: 14px;
+    color: var(--color-card-text);
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.sim-loading.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.sim-loading-spinner {
+    width: 2.6rem;
+    aspect-ratio: 1;
+    margin: auto;
+    border: 0.2rem solid rgba(255, 255, 255, 0.2);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: sim-loading-spin 0.8s linear infinite;
+}
+
+@keyframes sim-loading-spin {
+    to {
+        transform: rotate(1turn);
+    }
 }
 
 .sim-fullscreen-title {
@@ -1271,7 +1350,7 @@ body.a11y-high-contrast .orientation-dialog {
     border-radius: var(--radius-nav);
     color: var(--color-accent);
     font-family: var(--font-main);
-    font-size: 0.85rem;
+    font-size: 0.92rem;
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -1293,16 +1372,18 @@ body.a11y-high-contrast .orientation-dialog {
 }
 
 .sim-fullscreen-frame {
+    position: relative;
+    z-index: 2;
     flex: 1 1 auto;
     width: 100%;
     height: 100%;
     border: 0;
     background: #000;
     opacity: 0;
-    transition: opacity 0.32s ease 0.22s;
+    transition: opacity 0.32s ease;
 }
 
-.sim-fullscreen.is-open .sim-fullscreen-frame {
+.sim-fullscreen.is-ready .sim-fullscreen-frame {
     opacity: 1;
 }
 
@@ -1329,7 +1410,7 @@ body.sim-fullscreen-open {
 .ref-list li,
 .bullet-list li,
 .number-list li:not(.left-indent-list li) {
-    font-size: 0.95rem;
+    font-size: 1.02rem;
     color: var(--color-card-text);
     padding-left: 16px;
     position: relative;
@@ -1435,7 +1516,7 @@ body.sim-fullscreen-open {
     border-radius: var(--radius-nav);
     color: var(--color-accent);
     font-family: var(--font-main);
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -1507,6 +1588,10 @@ body.sim-fullscreen-open {
         opacity: 1;
         transform: none;
     }
+
+    .sim-loading-spinner {
+        animation: none;
+    }
 }
 
 .mouse-pattern-strip {
@@ -1572,6 +1657,11 @@ body.sim-fullscreen-open {
     }
 }
 
+.img-preview {
+    /* keep hand-drawn wobble, layer retro TV color/scanline filter, then overlay opacity */
+    filter: url("#hand-drawn-filter") url("#tv-retro-filter") contrast(1.08) saturate(0.85) opacity(0.88);
+}
+
 /* ============================================================
    RESPONSIVE  —  ≤ 980px
    ============================================================ */
@@ -1594,7 +1684,7 @@ body.sim-fullscreen-open {
         height: auto;
         padding: 10px 12px;
         border-radius: 6px;
-        font-size: 0.78rem;
+        font-size: 0.88rem;
         transform: none;
     }
 }
@@ -1702,7 +1792,7 @@ body.sim-fullscreen-open {
     .nav-btn {
         width: 100%;
         padding: 12px 20px;
-        font-size: 0.88rem;
+        font-size: 0.94rem;
         text-align: left;
         border-radius: 10px;
     }
@@ -1764,7 +1854,7 @@ body.sim-fullscreen-open {
     }
 
     .a11y-btn {
-        font-size: 0.78rem;
+        font-size: 0.84rem;
         padding: 6px 8px;
     }
 
@@ -1794,7 +1884,7 @@ body.sim-fullscreen-open {
     }
 
     .sim-fullscreen-title {
-        font-size: 0.82rem;
+        font-size: 0.88rem;
     }
 
     .sim-fullscreen-actions {
@@ -1804,7 +1894,7 @@ body.sim-fullscreen-open {
     .sim-close-btn,
     .sim-fullscreen-toggle-btn {
         padding: 7px 10px;
-        font-size: 0.7rem;
+        font-size: 0.78rem;
         letter-spacing: 0.03em;
     }
 

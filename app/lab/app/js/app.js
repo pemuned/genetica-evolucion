@@ -393,6 +393,7 @@ class UIController {
     this.sequenceTimers = [];
     this.feedbackFrame = null;
     this.progressCenterFrame = null;
+    this.typeAnimationFrame = null;
     this.drag = null;
     this.pendingTouchDrag = null;
     this.lastPointerPosition = null;
@@ -403,18 +404,14 @@ class UIController {
 
   cacheElements() {
     this.stepLabel = document.querySelector("#step-label");
-    this.progressSteps = [
-      ...document.querySelectorAll("[data-progress-step]"),
-    ];
+    this.progressSteps = [...document.querySelectorAll("[data-progress-step]")];
     this.finalProgressStep = document.querySelector("[data-progress-final]");
     this.stepProgress = document.querySelector(".step-progress");
     this.progressViewport = document.querySelector("#progress-viewport");
     this.progressScrollPrevious = document.querySelector(
       "#progress-scroll-previous",
     );
-    this.progressScrollNext = document.querySelector(
-      "#progress-scroll-next",
-    );
+    this.progressScrollNext = document.querySelector("#progress-scroll-next");
     this.previousStepButton = document.querySelector("#previous-step-button");
     this.instructionNumber = document.querySelector("#instruction-number");
     this.instructionPanel = document.querySelector(".instruction-panel");
@@ -488,12 +485,10 @@ class UIController {
       this.game.advance();
     });
 
-    document
-      .querySelector("#reset-button")
-      .addEventListener("click", () => {
-        this.resetDialog.returnValue = "";
-        this.resetDialog.showModal();
-      });
+    document.querySelector("#reset-button").addEventListener("click", () => {
+      this.resetDialog.returnValue = "";
+      this.resetDialog.showModal();
+    });
     this.resetDialog.addEventListener("close", () => {
       const shouldReset = this.resetDialog.returnValue === "confirm";
       this.resetDialog.returnValue = "";
@@ -576,8 +571,7 @@ class UIController {
       const stepNumber = index + 1;
       const isDone =
         stepNumber < displayStep ||
-        (this.game.flags.completed &&
-          stepNumber === TOTAL_VISIBLE_STEPS);
+        (this.game.flags.completed && stepNumber === TOTAL_VISIBLE_STEPS);
       const isCurrent = stepNumber === displayStep && !isDone;
       element.classList.toggle("done", isDone);
       element.classList.toggle("current", isCurrent);
@@ -593,10 +587,7 @@ class UIController {
       else element.removeAttribute("aria-current");
     });
 
-    this.finalProgressStep.classList.toggle(
-      "done",
-      this.game.flags.completed,
-    );
+    this.finalProgressStep.classList.toggle("done", this.game.flags.completed);
     this.finalProgressStep.classList.remove("current");
     this.finalProgressStep.removeAttribute("aria-current");
     if (this.game.flags.completed)
@@ -606,10 +597,9 @@ class UIController {
       : displayStep;
     this.previousStepButton.disabled = currentPosition <= 1;
 
-    const currentStep =
-      this.game.flags.completed
-        ? this.finalProgressStep
-        : this.progressSteps[displayStep - 1];
+    const currentStep = this.game.flags.completed
+      ? this.finalProgressStep
+      : this.progressSteps[displayStep - 1];
     this.centerProgressStep(currentStep);
   }
 
@@ -704,21 +694,32 @@ class UIController {
 
   // Simulates keystrokes appearing left-to-right, ending with a blinking text cursor.
   typeInstructionText(text) {
-    clearInterval(this._typeInterval);
+    cancelAnimationFrame(this.typeAnimationFrame);
     this.instructionPanel.classList.remove("step-attention");
     void this.instructionPanel.offsetWidth;
     this.instructionPanel.classList.add("step-attention");
     this.instructionText.classList.add("is-typing");
     this.instructionText.textContent = "";
-    let i = 0;
-    this._typeInterval = setInterval(() => {
-      i += 1;
-      this.instructionText.textContent = text.slice(0, i);
-      if (i >= text.length) {
-        clearInterval(this._typeInterval);
+    const charactersPerSecond = 56;
+    const startedAt = performance.now();
+
+    const typeNextFrame = (now) => {
+      const characterCount = Math.min(
+        text.length,
+        Math.floor(((now - startedAt) * charactersPerSecond) / 1000),
+      );
+      this.instructionText.textContent = text.slice(0, characterCount);
+
+      if (characterCount >= text.length) {
+        this.typeAnimationFrame = null;
         this.instructionText.classList.remove("is-typing");
+        return;
       }
-    }, 18);
+
+      this.typeAnimationFrame = requestAnimationFrame(typeNextFrame);
+    };
+
+    this.typeAnimationFrame = requestAnimationFrame(typeNextFrame);
   }
 
   // Cell tokens are hidden until their step, then "emerge" from inside the donor mouse.
@@ -859,13 +860,7 @@ class UIController {
       if (distance < 9) return;
       const { source, action, pointerId } = this.pendingTouchDrag;
       this.pendingTouchDrag = null;
-      this.startDrag(
-        source,
-        action,
-        pointerId,
-        event.clientX,
-        event.clientY,
-      );
+      this.startDrag(source, action, pointerId, event.clientX, event.clientY);
     }
     if (!this.drag || event.pointerId !== this.drag.pointerId) return;
     event.preventDefault();
@@ -1002,13 +997,17 @@ class UIController {
     const handlers = {
       "4:somatic-cell:petri1": () => {
         document.querySelector("[data-drop-zone='petri1']").append(source);
-        document.querySelector("[data-drop-zone='petri1']").querySelector(".cell-label").style.display = "none";
+        document
+          .querySelector("[data-drop-zone='petri1']")
+          .querySelector(".cell-label").style.display = "none";
         this.game.flags.somaticCellCollected = true;
         this.completeStep();
       },
       "5:oocyte:petri2": () => {
         document.querySelector("[data-drop-zone='petri2']").append(source);
-        document.querySelector("[data-drop-zone='petri2']").querySelector(".cell-label").style.display = "none";
+        document
+          .querySelector("[data-drop-zone='petri2']")
+          .querySelector(".cell-label").style.display = "none";
         this.game.flags.oocyteCollected = true;
         this.completeStep();
       },
@@ -1325,8 +1324,7 @@ class UIController {
 
     const gameStep = visibleStep + VISIBLE_STEP_OFFSET;
     this.pendingBackStep = visibleStep;
-    this.backStepName.textContent =
-      `paso ${visibleStep}: ${STEP_CONFIG[gameStep].title}`;
+    this.backStepName.textContent = `paso ${visibleStep}: ${STEP_CONFIG[gameStep].title}`;
     this.backDialog.returnValue = "";
     this.backDialog.showModal();
   }
@@ -1402,9 +1400,7 @@ class UIController {
       this.openMicroscope("transfer");
       if (gameStep >= 13) {
         microSomatic.classList.add("held", "held-retract");
-        microSomatic
-          .querySelector(".micro-nucleus")
-          .classList.add("extracted");
+        microSomatic.querySelector(".micro-nucleus").classList.add("extracted");
         injectionNeedle.classList.add("loaded");
       }
       if (gameStep >= 14) {
@@ -1415,8 +1411,7 @@ class UIController {
         microOocyte.style.transform = "translateX(-140px)";
         microOocyte.style.transition = "transform 1s ease";
         microSomatic.style.opacity = "0";
-        microSomatic.style.transition =
-          "opacity 0.2s ease, transform 1s ease";
+        microSomatic.style.transition = "opacity 0.2s ease, transform 1s ease";
         this.setCloseButtonState("waiting");
       }
     }
@@ -1450,8 +1445,8 @@ class UIController {
     this.selectedAction?.source.removeAttribute("aria-pressed");
     this.selectedAction = null;
     this.pendingBackStep = null;
-    clearInterval(this._typeInterval);
-    this._typeInterval = null;
+    cancelAnimationFrame(this.typeAnimationFrame);
+    this.typeAnimationFrame = null;
     cancelAnimationFrame(this.feedbackFrame);
     this.feedbackFrame = null;
     clearTimeout(this.toastTimer);

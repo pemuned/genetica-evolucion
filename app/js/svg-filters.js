@@ -6,8 +6,9 @@
   var hasHandDrawn = document.getElementById("hand-drawn-filter");
   var hasSprayNoise = document.getElementById("spray-noise");
   var hasSprayHandDrawn = document.getElementById("spray-hand-drawn");
+  var hasTvRetro = document.getElementById("tv-retro-filter");
 
-  if (hasHandDrawn && hasSprayNoise && hasSprayHandDrawn) {
+  if (hasHandDrawn && hasSprayNoise && hasSprayHandDrawn && hasTvRetro) {
     return;
   }
 
@@ -49,6 +50,25 @@
     "    </feTurbulence>",
     '    <feDisplacementMap in="SourceGraphic" in2="wobbleField" scale="8.5" xChannelSelector="R" yChannelSelector="G" result="wobbledGraphic"></feDisplacementMap>',
     '    <feComposite in="sprayMask" in2="wobbledGraphic" operator="in"></feComposite>',
+    "  </filter>",
+    '  <filter id="tv-retro-filter" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">',
+    /* channel split (chromatic aberration) for a worn CRT look */
+    '    <feColorMatrix in="SourceGraphic" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="tvRed"></feColorMatrix>',
+    '    <feOffset in="tvRed" dx="-1.6" dy="0" result="tvRedOffset"></feOffset>',
+    '    <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="tvGreen"></feColorMatrix>',
+    '    <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="tvBlue"></feColorMatrix>',
+    '    <feOffset in="tvBlue" dx="1.6" dy="0" result="tvBlueOffset"></feOffset>',
+    '    <feBlend in="tvRedOffset" in2="tvGreen" mode="screen" result="tvRG"></feBlend>',
+    '    <feBlend in="tvRG" in2="tvBlueOffset" mode="screen" result="tvFringed"></feBlend>',
+    /* horizontal noise band used as a scanline mask */
+    '    <feTurbulence type="turbulence" baseFrequency="0 0.85" numOctaves="1" seed="7" result="tvScanNoise"></feTurbulence>',
+    '    <feColorMatrix in="tvScanNoise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0.35 0.35 0.35 0 0" result="tvScanAlpha"></feColorMatrix>',
+    '    <feComponentTransfer in="tvScanAlpha" result="tvScanLines">',
+    '      <feFuncA type="discrete" tableValues="0 0.22 0 0.22"></feFuncA>',
+    "    </feComponentTransfer>",
+    '    <feComposite in="tvScanLines" in2="tvFringed" operator="over" result="tvWithScan"></feComposite>',
+    /* faded, warm-tinted retro color grade */
+    '    <feColorMatrix in="tvWithScan" type="matrix" values="1.12 0.05 0 0 -0.03  0.02 1.02 0 0 -0.02  0 0.02 0.88 0 0.02  0 0 0 1 0"></feColorMatrix>',
     "  </filter>",
     "</defs>",
   ].join("");
