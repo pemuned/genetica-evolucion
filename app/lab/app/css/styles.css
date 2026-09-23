@@ -234,7 +234,6 @@ button:focus-visible,
   color: var(--muted);
   font-size: 0.6875rem;
   text-transform: uppercase;
-  letter-spacing: .1em;
 }
 
 .progress-wrap {
@@ -441,7 +440,6 @@ button:focus-visible,
 .step-progress .progress-final .progress-step-marker {
   border-style: dashed;
   font-size: .62rem;
-  letter-spacing: .04em
 }
 
 .step-progress .progress-final.current .progress-step-marker,
@@ -568,7 +566,6 @@ button:focus-visible,
   color: var(--color-accent-dim);
   font-size: 0.8rem;
   font-weight: 850;
-  letter-spacing: .05em;
   text-transform: uppercase;
   text-shadow: 2px 2px 2px rgb(0, 0, 0);
   padding: 4px 8px;
@@ -1430,7 +1427,6 @@ button:focus-visible,
   font-size: clamp(2.5rem, 3vw + 1rem, 4rem);
   line-height: 1;
   font-weight: 600;
-  letter-spacing: -.04em;
 }
 
 .intro-hero h1 em {
@@ -2683,7 +2679,6 @@ button:focus-visible,
   font-size: .67rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: .14em
 }
 
 .gestation-calendar strong {
