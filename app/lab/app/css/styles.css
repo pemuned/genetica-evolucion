@@ -146,27 +146,12 @@ button:focus-visible,
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: white;
+  border: 1px solid white;
+  background: transparent;
   filter: url(#spray-noise);
   opacity: .75;
   mix-blend-mode: screen;
   pointer-events: none;
-  /*
-    máscara:
-    crea un borde completo
-  */
-  padding: 1px;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-
-  mask-composite: exclude;
-
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-
-  -webkit-mask-composite: xor;
 }
 
 .app-shell {
