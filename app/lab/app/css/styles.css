@@ -1628,32 +1628,31 @@ button:focus-visible,
   pointer-events: none;
 }
 
-.materials-track .materials-petri {
-  flex-direction: column;
-}
-
-.materials-track .materials-petri img {
-  width: 65%;
-  height: 30%;
-}
-
 .materials-track .materials-reagent img {
-  width: 84%;
-  height: 82%;
+  width: 76%;
+  height: 74%;
 }
 
+.materials-track .materials-petri,
 .materials-track .materials-mice {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
 
+.materials-track .materials-petri {
+  grid-template-rows: repeat(2, minmax(0, 24%));
+  align-content: center;
+}
+
+.materials-track .materials-petri img,
 .materials-track .materials-mice img {
   grid-column: span 2;
   min-width: 0;
   min-height: 0;
 }
 
+.materials-track .materials-petri img:last-child,
 .materials-track .materials-mice img:last-child {
   grid-column: 2 / 4;
 }
