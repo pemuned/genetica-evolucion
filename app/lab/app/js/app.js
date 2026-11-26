@@ -46,16 +46,16 @@ const STEP_CONFIG = {
   7: {
     title: "Sujeta el ovocito",
     instruction:
-      "Arrastra la pipeta de sostén y suéltala sobre el ovocito para estabilizarlo.",
+      "Arrastra la pipeta de sostén y suéltala dentro de la lente para estabilizar el ovocito.",
     drags: ["holding-pipette"],
-    targets: ["micro-oocyte"],
+    targets: ["lens"],
   },
   8: {
     title: "Retira el núcleo del ovocito",
     instruction:
-      "Arrastra la aguja de inyección y suéltala sobre el ovocito para extraer su núcleo.",
+      "Arrastra la aguja de inyección y suéltala dentro de la lente para extraer el núcleo del ovocito.",
     drags: ["injection-needle"],
-    targets: ["micro-oocyte"],
+    targets: ["lens"],
   },
   9: {
     title: "Prepara la transferencia",
@@ -74,23 +74,23 @@ const STEP_CONFIG = {
   11: {
     title: "Regresa al microscopio",
     instruction:
-      "Arrastra la caja de Petri 3 y suéltala sobre el microscopio para iniciar la transferencia nuclear.",
+      "Arrastra la caja de Petri 3 y suéltala en la zona resaltada del microscopio para iniciar la transferencia nuclear.",
     drags: ["petri3"],
     targets: ["microscope"],
   },
   12: {
     title: "Extrae el núcleo somático",
     instruction:
-      "Arrastra la pipeta de sostén y suéltala sobre la célula somática para estabilizarla.",
+      "Arrastra la pipeta de sostén y suéltala dentro de la lente para estabilizar la célula somática.",
     drags: ["holding-pipette"],
-    targets: ["micro-somatic"],
+    targets: ["lens"],
   },
   13: {
     title: "Transfiere el núcleo",
     instruction:
-      "Arrastra la aguja de inyección y suéltala sobre el ovocito enucleado para transferir el núcleo.",
+      "Arrastra la aguja de inyección y suéltala dentro de la lente para transferir el núcleo al ovocito.",
     drags: ["injection-needle"],
-    targets: ["micro-oocyte"],
+    targets: ["lens"],
   },
   14: {
     title: "Activa el desarrollo",
@@ -155,7 +155,7 @@ class GameState {
     this.toastElement = document.querySelector("#toast");
     this.toastElement.classList.remove("show");
     if (this.step === 12 && this.flags.somaticCellHeld) {
-      return action === "injection-needle" && target === "micro-somatic";
+      return action === "injection-needle" && target === "lens";
     }
     return Boolean(
       config.drags?.includes(action) && config.targets?.includes(target),
@@ -312,7 +312,9 @@ class AnimationEngine {
   }
 
   startCleavage(oocyte, onComplete) {
-    oocyte.classList.remove("activated");
+    oocyte.classList.remove("activated", "injection-position");
+    oocyte.style.removeProperty("left");
+    oocyte.style.removeProperty("transform");
     oocyte.classList.add("cleaving");
 
     const field = document.createElement("span");
@@ -336,37 +338,51 @@ class AnimationEngine {
     showStage();
   }
 
-  // Irregular packing: golden-angle spiral with jitter so blastomeres look organic and may overlap.
   placeBlastomeres(field, count) {
     field.dataset.count = String(count);
-    field.replaceChildren();
+    const layouts = {
+      1: { size: 72, rings: [[1, 0, 0]] },
+      2: { size: 52, rings: [[2, 20, 0]], parentIndices: [0, 0] },
+      4: { size: 44, rings: [[4, 23, -45]], parentIndices: [0, 0, 1, 1] },
+      8: {
+        size: 33,
+        rings: [[2, 10, 0], [6, 30, 30]],
+        parentIndices: [0, 2, 1, 1, 2, 3, 3, 0],
+      },
+      16: {
+        size: 25,
+        rings: [[5, 15, -18], [11, 36, -8]],
+        parentIndices: [0, 3, 1, 1, 0, 7, 2, 2, 3, 4, 4, 5, 5, 6, 6, 7],
+      },
+    };
+    const positions = (layout) =>
+      layout.rings.flatMap(([cells, radius, rotation]) =>
+        Array.from({ length: cells }, (_, index) => {
+          const angle = ((rotation + index * 360 / cells) * Math.PI) / 180;
+          return {
+            x: 50 + Math.cos(angle) * radius,
+            y: 50 + Math.sin(angle) * radius,
+          };
+        }),
+      );
 
-    const baseSize = count <= 2 ? 44 : count <= 4 ? 36 : count <= 8 ? 27 : 20;
-    const maxRadius = count <= 2 ? 22 : count <= 4 ? 28 : count <= 8 ? 34 : 38;
-
-    for (let index = 0; index < count; index += 1) {
-      const angle = index * 2.399963229728653 + (Math.random() - 0.5) * 0.55;
-      const radius =
-        count === 1
-          ? 0
-          : Math.min(
-              maxRadius,
-              6 +
-                Math.sqrt(index + 0.35) * (maxRadius / Math.sqrt(count)) +
-                (Math.random() - 0.5) * 9,
-            );
-      const x = 50 + Math.cos(angle) * radius + (Math.random() - 0.5) * 7;
-      const y = 50 + Math.sin(angle) * radius + (Math.random() - 0.5) * 7;
-      const size = baseSize + (Math.random() - 0.5) * (baseSize * 0.28);
-
+    const layout = layouts[count];
+    const parentLayout = layouts[count / 2];
+    const parents = positions(parentLayout);
+    // Each parent index occurs twice and links to two nearby destinations.
+    const blastomeres = positions(layout).map(({ x, y }, index) => {
+      const parent = parents[layout.parentIndices[index]];
       const blastomere = document.createElement("i");
-      blastomere.style.setProperty("--i", String(index));
-      blastomere.style.left = `${Math.max(10, Math.min(90, x))}%`;
-      blastomere.style.top = `${Math.max(10, Math.min(90, y))}%`;
-      blastomere.style.width = `${Math.max(18, size)}%`;
-      blastomere.style.zIndex = String(1 + Math.floor(Math.random() * 6));
-      field.append(blastomere);
-    }
+      blastomere.style.left = `${x}%`;
+      blastomere.style.top = `${y}%`;
+      blastomere.style.width = `${layout.size}%`;
+      blastomere.style.setProperty("--split-x", `${((parent.x - x) / layout.size) * 100}%`);
+      blastomere.style.setProperty("--split-y", `${((parent.y - y) / layout.size) * 100}%`);
+      blastomere.style.setProperty("--parent-scale", String(parentLayout.size / layout.size));
+      return blastomere;
+    });
+
+    field.replaceChildren(...blastomeres);
   }
 
   reset() {
@@ -866,7 +882,7 @@ class UIController {
       allowedDrags.clear();
       allowedDrags.add("injection-needle");
       this.typeInstructionText(
-        "La célula está estable. Ahora arrastra la aguja de inyección y suéltala sobre la célula somática para extraer su núcleo.",
+        "La célula está estable. Ahora arrastra la aguja de inyección y suéltala dentro de la lente para extraer el núcleo de la célula somática.",
       );
     }
 
@@ -1017,13 +1033,23 @@ class UIController {
     let target = hit?.closest("[data-drop-zone]");
     const { action, source } = this.drag;
 
-    // Step 14: the whole lens (grid + cell) accepts the reagent drop.
-    if (
-      action === "reagent" &&
-      this.game.step === 14 &&
-      hit?.closest("#lens")
-    ) {
-      target = document.querySelector("#lens");
+    // A cell inside an active lens also counts as part of the lens.
+    if (this.game.config.targets?.includes("lens")) {
+      target = hit?.closest("#lens") ?? target;
+    }
+
+    // The visible outline extends beyond the microscope's pointer target.
+    if (!target && point && this.game.step === 11 && action === "petri3") {
+      const microscope = document.querySelector("[data-drop-zone='microscope']");
+      const bounds = microscope.getBoundingClientRect();
+      const style = getComputedStyle(microscope);
+      const margin = parseFloat(style.outlineWidth) + parseFloat(style.outlineOffset);
+      if (
+        point.x >= bounds.left - margin && point.x <= bounds.right + margin &&
+        point.y >= bounds.top - margin && point.y <= bounds.bottom + margin
+      ) {
+        target = microscope;
+      }
     }
 
     this.cancelDrag();
@@ -1137,12 +1163,12 @@ class UIController {
         this.openMicroscope("oocyte");
         this.completeStep();
       },
-      "7:holding-pipette:micro-oocyte": () => {
+      "7:holding-pipette:lens": () => {
         document.querySelector(".micro-oocyte").classList.add("held");
         this.game.flags.oocyteHeld = true;
         this.completeStep();
       },
-      "8:injection-needle:micro-oocyte": () => {
+      "8:injection-needle:lens": () => {
         this.animations.suction(document.querySelector(".micro-oocyte"));
         this.game.flags.oocyteEnucleated = true;
         document.querySelector("[data-draggable='oocyte']").hidden = true;
@@ -1161,14 +1187,14 @@ class UIController {
         this.openMicroscope("transfer");
         this.completeStep();
       },
-      "12:holding-pipette:micro-somatic": () => {
+      "12:holding-pipette:lens": () => {
         document.querySelector(".somatic-token").style.display = "none";
         document.querySelector(".enucleated-sample").style.display = "none";
         document.querySelector(".micro-somatic").classList.add("held");
         this.game.flags.somaticCellHeld = true;
         this.updateInteractiveStates();
       },
-      "12:injection-needle:micro-somatic": () => {
+      "12:injection-needle:lens": () => {
         this.animations.suction(document.querySelector(".micro-somatic"));
         this.game.flags.somaticNucleusExtracted = true;
         this.updateInteractiveStates();
@@ -1177,7 +1203,7 @@ class UIController {
           .classList.add("loaded");
         this.schedule(() => this.completeStep(), 6950);
       },
-      "13:injection-needle:micro-oocyte": () => {
+      "13:injection-needle:lens": () => {
         this.game.flags.nucleusTransferred = true;
         this.updateInteractiveStates();
         document
@@ -1290,6 +1316,7 @@ class UIController {
   }
 
   openGestationView() {
+    delete this.gestationOverlay.dataset.fetalStage;
     this.gestationOverlay.classList.remove(
       "hidden",
       "is-gestating",
@@ -1357,6 +1384,8 @@ class UIController {
     void this.gestationCalendar.offsetWidth;
     this.gestationDay.textContent = String(day);
     this.gestationCalendar.classList.add("turning");
+    if (day === 12) this.gestationOverlay.dataset.fetalStage = "early";
+    if (day === 16) this.gestationOverlay.dataset.fetalStage = "late";
   }
 
   setGestationProgress(activeStep) {
@@ -1664,6 +1693,7 @@ class UIController {
     document.querySelector(".baby-mouse").classList.remove("revealed");
     document.querySelector(".belly-target").tabIndex = -1;
     this.gestationOverlay.className = "gestation-overlay hidden";
+    delete this.gestationOverlay.dataset.fetalStage;
     this.gestationDay.textContent = "1";
     this.gestationCalendar.classList.remove("turning");
     this.gestationStartButton.disabled = false;
