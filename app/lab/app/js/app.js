@@ -383,6 +383,122 @@ class AnimationEngine {
   }
 }
 
+function initMaterialsCarousel(carousel) {
+  const viewport = carousel.querySelector(".materials-viewport");
+  const track = carousel.querySelector(".materials-track");
+  const materials = [...track.children];
+  const dots = carousel.querySelector(".materials-dots");
+  const status = carousel.querySelector(".materials-status");
+  const previous = carousel.querySelector("#materials-previous");
+  const next = carousel.querySelector("#materials-next");
+  const continueButton = document.querySelector("#materials-button");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let selectedIndex = 0;
+  let startIndex = 0;
+  let animation;
+  let swipeStart;
+
+  const names = materials.map((material) =>
+    material.querySelector("figcaption").textContent.trim(),
+  );
+
+  const dotButtons = names.map((name, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "materials-dot";
+    button.setAttribute("aria-controls", track.id);
+    button.setAttribute("aria-label", `${name}, ${index + 1} de ${names.length}`);
+    button.addEventListener("click", () => selectMaterial(index, true));
+    return button;
+  });
+  dots.append(...dotButtons);
+
+  function trackPosition(index) {
+    const offset = -index;
+    return `translateX(calc(${offset} * (100% + var(--materials-gap)) / var(--materials-visible)))`;
+  }
+
+  function settleTrack() {
+    animation?.cancel();
+    animation = null;
+  }
+
+  function selectMaterial(index, slide = false) {
+    const visible = Number(getComputedStyle(track).getPropertyValue("--materials-visible"));
+    const lastStart = Math.max(0, names.length - visible);
+    const targetStart = Math.min(index, lastStart);
+    const shouldSlide = slide && targetStart !== startIndex && !reducedMotion.matches;
+    const start = shouldSlide ? getComputedStyle(track).transform : null;
+    settleTrack();
+    dotButtons[selectedIndex].removeAttribute("aria-current");
+    selectedIndex = index;
+    startIndex = targetStart;
+    const activeDot = dotButtons[selectedIndex];
+    activeDot.setAttribute("aria-current", "true");
+    status.textContent = activeDot.getAttribute("aria-label");
+    const end = trackPosition(startIndex);
+    track.style.transform = end;
+
+    const focused = document.activeElement;
+    previous.disabled = startIndex === 0;
+    next.disabled = startIndex === lastStart;
+    dots.hidden = lastStart === 0;
+    const arrowDisappeared =
+      (focused === previous && previous.disabled) || (focused === next && next.disabled);
+    if (dots.hidden && (arrowDisappeared || dots.contains(focused))) {
+      continueButton.focus({ preventScroll: true });
+    } else if (arrowDisappeared) {
+      activeDot.focus({ preventScroll: true });
+    }
+
+    if (shouldSlide) {
+      animation = track.animate(
+        [{ transform: start }, { transform: end }],
+        { duration: 320, easing: "ease-out" },
+      );
+    }
+  }
+
+  function step(direction) {
+    if (direction < 0 ? previous.disabled : next.disabled) return;
+    selectMaterial(startIndex + direction, true);
+  }
+
+  previous.addEventListener("click", () => step(-1));
+  next.addEventListener("click", () => step(1));
+  carousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault();
+      const direction = event.key === "ArrowLeft" ? -1 : 1;
+      step(direction);
+    }
+  });
+
+  viewport.addEventListener("pointerdown", (event) => {
+    if (event.pointerType !== "touch" || !event.isPrimary) return;
+
+    swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
+    viewport.setPointerCapture(event.pointerId);
+  });
+  viewport.addEventListener("pointerup", (event) => {
+    if (event.pointerId !== swipeStart?.id) return;
+
+    const dx = event.clientX - swipeStart.x;
+    const dy = event.clientY - swipeStart.y;
+    if (Math.abs(dx) >= 35 && Math.abs(dx) > Math.abs(dy)) {
+      step(dx < 0 ? 1 : -1);
+    }
+  });
+  viewport.addEventListener("lostpointercapture", (event) => {
+    if (event.pointerId === swipeStart?.id) swipeStart = null;
+  });
+
+  new ResizeObserver(() => selectMaterial(selectedIndex)).observe(viewport);
+  reducedMotion.addEventListener("change", settleTrack);
+  selectMaterial(0);
+  return () => selectMaterial(0);
+}
+
 // The controller translates pointer, touch and keyboard input into validated actions.
 class UIController {
   constructor(game, animations) {
@@ -466,11 +582,17 @@ class UIController {
   }
 
   bindEvents() {
+    const resetMaterialsCarousel = initMaterialsCarousel(
+      this.materials.querySelector(".materials-carousel"),
+    );
+
     document.querySelector("#start-button").addEventListener("click", () => {
       this.intro.classList.add("hidden");
       this.materials.classList.remove("hidden");
+      resetMaterialsCarousel();
+      this.materials.scrollTop = 0;
       this.game.goTo(2);
-      document.querySelector("#materials-button").focus();
+      document.querySelector("#materials-title").focus({ preventScroll: true });
     });
 
     document
