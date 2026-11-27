@@ -60,7 +60,7 @@ const STEP_CONFIG = {
   9: {
     title: "Prepara la transferencia",
     instruction:
-      "Pulsa «Regresar al laboratorio»; después arrastra el ovocito enucleado y suéltalo en la caja de Petri 3.",
+      "Pulsa «Regresar al laboratorio».",
     drags: ["enucleated-oocyte"],
     targets: ["petri3"],
   },
@@ -555,18 +555,9 @@ class UIController {
     this.microOverlay = document.querySelector("#microscope-overlay");
     this.gestationOverlay = document.querySelector("#gestation-overlay");
     this.gestationPhase = document.querySelector("#gestation-phase");
-    this.gestationBirthButton = document.querySelector(
-      "#gestation-birth-button",
-    );
-    this.gestationStartButton = document.querySelector(
-      "#gestation-start-button",
-    );
-    this.gestationCompleteMessage = document.querySelector(
-      "#gestation-complete-message",
-    );
-    this.gestationCompleteButton = document.querySelector(
-      "#gestation-complete-button",
-    );
+    this.gestationAction = document.querySelector("#gestation-action");
+    this.gestationActionLabel = document.querySelector("#gestation-action-label");
+    this.instructionResetButton = document.querySelector("#instruction-reset-button");
     this.gestationCalendar = document.querySelector(".gestation-calendar");
     this.gestationDay = document.querySelector("#gestation-day");
     this.closeMicroButton = document.querySelector("#close-micro");
@@ -656,13 +647,11 @@ class UIController {
     document
       .querySelector("[data-action='birth']")
       .addEventListener("click", () => this.handleBirth());
-    this.gestationBirthButton.addEventListener("click", () =>
-      this.handleBirth(),
-    );
-    this.gestationStartButton.addEventListener("click", () =>
-      this.startGestationProcess(),
-    );
-    this.gestationCompleteButton.addEventListener("click", () =>
+    this.gestationAction.addEventListener("click", () => {
+      if (this.game.flags.birthReady) this.handleBirth();
+      else this.startGestationProcess();
+    });
+    this.instructionResetButton.addEventListener("click", () =>
       this.resetExperience(),
     );
     this.progressSteps.forEach((element) => {
@@ -1236,7 +1225,7 @@ class UIController {
             this.game.flags.embryoDivisionComplete = true;
             this.setCloseButtonState("ready");
             this.typeInstructionText(
-              "La división celular llegó a 16 células. Pulsa Regresar al laboratorio para continuar.",
+              "La división celular llegó a 16 células. Pulsa «Regresar al laboratorio» para continuar.",
             );
           },
         );
@@ -1274,7 +1263,6 @@ class UIController {
   openMicroscope(mode) {
     const oocyte = document.querySelector(".micro-oocyte");
     const somatic = document.querySelector(".micro-somatic");
-    this.microOverlay.classList.remove("hidden");
     this.setCloseButtonState("waiting");
     oocyte.style.display = "block";
     oocyte.style.opacity = "1";
@@ -1290,7 +1278,13 @@ class UIController {
       .classList.toggle("dual-cell", mode === "transfer");
     if (mode === "transfer") {
       oocyte.style.left = "52%";
-      oocyte.querySelector(".micro-nucleus").classList.add("extracted");
+      const nucleus = oocyte.querySelector(".micro-nucleus");
+      const previousTransition = nucleus.style.transition;
+      nucleus.style.transition = "none";
+      nucleus.classList.add("extracted");
+      // Apply the already-extracted state before restoring the transition for injection.
+      void getComputedStyle(nucleus).transform;
+      nucleus.style.transition = previousTransition;
       // Clear the first micromanipulation's leftover pipette/needle state before reusing the cells.
       [oocyte, somatic].forEach((cell) => {
         cell.classList.remove("held", "held-retract");
@@ -1302,12 +1296,17 @@ class UIController {
     } else {
       oocyte.style.left = "31%";
     }
+    this.microOverlay.classList.remove("hidden");
   }
 
   closeMicroscope() {
     this.microOverlay.classList.add("hidden");
-    if (this.game.step === 9)
+    if (this.game.step === 9) {
       document.querySelector(".enucleated-sample").classList.add("visible");
+      this.typeInstructionText(
+        "Arrastra el ovocito enucleado y suéltalo en la caja de Petri 3.",
+      );
+    }
     if (this.game.step === 14 && this.game.flags.embryoDivisionComplete) {
       document.querySelector(".embryo-sample").classList.add("visible");
       this.game.advance();
@@ -1324,17 +1323,14 @@ class UIController {
       "completed",
     );
     this.typeInstructionText(
-      "El embrión fue implantado. Pulsa Visualizar gestación para continuar.",
+      "El embrión fue implantado. Pulsa «Visualizar gestación» para observar el desarrollo del clon durante 19 días.",
     );
     this.gestationDay.textContent = "1";
     this.gestationCalendar.classList.remove("turning");
-    this.gestationStartButton.disabled = false;
-    this.gestationStartButton.classList.remove("hidden");
-    this.gestationBirthButton.disabled = true;
-    this.gestationCompleteMessage.classList.remove("visible");
+    this.setGestationAction("start");
     this.setGestationProgress("development");
     this.updateInteractiveStates();
-    this.gestationStartButton.focus();
+    this.gestationAction.focus({ preventScroll: true });
   }
 
   startGestationProcess() {
@@ -1344,32 +1340,51 @@ class UIController {
     )
       return;
 
-    this.gestationStartButton.disabled = true;
-    this.gestationStartButton.classList.add("hidden");
+    this.setGestationAction("processing");
     this.gestationOverlay.classList.add("is-gestating");
-    this.typeInstructionText(
-      "La gestación está en curso. Observa el desarrollo del clon durante 19 días.",
-    );
+    cancelAnimationFrame(this.typeAnimationFrame);
+    this.typeAnimationFrame = null;
+    this.instructionPanel.classList.remove("step-attention");
+    this.instructionText.classList.remove("is-typing");
+    this.instructionText.textContent = "";
     this.setGestationProgress("development");
     this.startGestationCalendar();
+    this.schedule(() => {
+      this.gestationOverlay.dataset.fetalStage = "early";
+    }, 6050);
+    this.schedule(() => {
+      this.gestationOverlay.dataset.fetalStage = "late";
+    }, 8250);
 
     this.schedule(() => {
       this.game.flags.birthReady = true;
       this.updateMainProgress();
       this.gestationOverlay.classList.add("birth-ready");
       this.setGestationProgress("birth");
+      this.setGestationAction("ready");
       this.typeInstructionText(
-        "La gestación se completó. Pulsa Revelar el nacimiento para conocer a la cría.",
+        "Pulsa «Revelar el nacimiento» para conocer a la cría.",
       );
-      this.gestationBirthButton.disabled = false;
-      this.gestationBirthButton.focus();
+      this.gestationAction.focus({ preventScroll: true });
     }, 11000);
+  }
+
+  setGestationAction(state) {
+    const labels = {
+      start: "Visualizar gestación",
+      processing: "Gestación en proceso",
+      ready: "Revelar el nacimiento",
+      completed: "Nacimiento revelado",
+    };
+    this.gestationAction.dataset.state = state;
+    this.gestationAction.disabled = state === "processing" || state === "completed";
+    this.gestationActionLabel.textContent = labels[state];
   }
 
   startGestationCalendar() {
     this.gestationDay.textContent = "1";
     this.gestationCalendar.classList.remove("turning");
-    for (let day = 2; day <= 19; day += 1) {
+    for (let day = 4; day <= 19; day += 3) {
       this.schedule(
         () => {
           this.turnGestationCalendar(day);
@@ -1384,8 +1399,6 @@ class UIController {
     void this.gestationCalendar.offsetWidth;
     this.gestationDay.textContent = String(day);
     this.gestationCalendar.classList.add("turning");
-    if (day === 12) this.gestationOverlay.dataset.fetalStage = "early";
-    if (day === 16) this.gestationOverlay.dataset.fetalStage = "late";
   }
 
   setGestationProgress(activeStep) {
@@ -1410,11 +1423,7 @@ class UIController {
     this.game.flags.completed = true;
     this.updateMainProgress();
     this.gestationOverlay.classList.add("completed");
-    this.gestationBirthButton.disabled = true;
-    this.gestationBirthButton.textContent = "Nacimiento revelado";
-    this.schedule(() => {
-      this.gestationCompleteMessage.classList.add("visible");
-    }, 1300);
+    this.setGestationAction("completed");
     this.setGestationProgress("birth");
     const birthProgress = document.querySelector(
       "[data-gestation-step='birth']",
@@ -1424,8 +1433,11 @@ class UIController {
     this.instructionTitle.textContent =
       "¡Simulación completada! Ha nacido una cría gris";
     this.typeInstructionText(
-      "Su pelaje confirma que es genéticamente idéntica a la donante del núcleo, no a la donante del ovocito ni a la madre sustituta.",
+      "Has completado la simulación de clonación de un ratón. Su pelaje confirma que es genéticamente idéntica a la donante del núcleo, no a la donante del ovocito ni a la madre sustituta.",
     );
+    this.instructionPanel.classList.add("simulation-complete");
+    this.instructionResetButton.hidden = false;
+    this.instructionResetButton.focus({ preventScroll: true });
   }
 
   toast(message, type = "") {
@@ -1592,6 +1604,8 @@ class UIController {
   }
 
   resetExperience({ returnToIntro = true } = {}) {
+    this.instructionPanel.classList.remove("simulation-complete");
+    this.instructionResetButton.hidden = true;
     this.cancelDrag();
     this.selectedAction?.source.removeAttribute("aria-pressed");
     this.selectedAction = null;
@@ -1696,11 +1710,7 @@ class UIController {
     delete this.gestationOverlay.dataset.fetalStage;
     this.gestationDay.textContent = "1";
     this.gestationCalendar.classList.remove("turning");
-    this.gestationStartButton.disabled = false;
-    this.gestationStartButton.classList.remove("hidden");
-    this.gestationBirthButton.disabled = true;
-    this.gestationBirthButton.textContent = "Revelar el nacimiento";
-    this.gestationCompleteMessage.classList.remove("visible");
+    this.setGestationAction("start");
     this.setGestationProgress("implantation");
     document
       .querySelector("[data-draggable='injection-needle']")

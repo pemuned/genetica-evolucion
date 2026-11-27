@@ -540,12 +540,21 @@ button:focus-visible,
   padding-top: 2px
 }
 
-.instruction-panel .previous-step-button {
+.instruction-actions {
   grid-column: 2;
   grid-row: 2;
+  display: flex;
+  gap: 8px;
   justify-self: start;
+  margin-top: 2px;
+}
+
+.instruction-panel .previous-step-button {
   min-width: 142px;
-  margin-top: 2px
+}
+
+.instruction-actions [hidden] {
+  display: none;
 }
 
 .eyebrow {
@@ -562,6 +571,10 @@ button:focus-visible,
   color: #ffffff;
   font-size: clamp(0.8125rem, 1.2vw, 1rem);
   line-height: 1.35;
+}
+
+#instruction-text:empty:not(.is-typing) {
+  display: none;
 }
 
 /* Blinking text cursor after the instruction copy, simulating a typed caret. */
@@ -1000,7 +1013,6 @@ button:focus-visible,
 .primary-button {
   color: white;
   background: linear-gradient(135deg, var(--blue-dark), var(--blue));
-  box-shadow: 0 10px 20px rgba(31, 121, 153, .26);
   transition: transform .2s, box-shadow .2s;
 }
 
@@ -1878,7 +1890,7 @@ button:focus-visible,
   top: -80px;
   width: 100%;
   height: 48px;
-  border: 2px solid var(--line);
+  border: 2px solid var(--ink);
   border-radius: 10px;
   color: white;
   background: linear-gradient(135deg, var(--blue-dark), var(--blue));
@@ -2511,43 +2523,27 @@ button:focus-visible,
 }
 
 
-.gestation-start-button,
-.gestation-birth-button {
-  position: absolute;
-  z-index: 14;
-  left: 50%;
-  top: 50%;
-  min-width: 220px;
-  min-height: 58px;
-  font-size: 1.1rem;
-  transform: translate(-50%, -50%);
-  box-shadow:
-    0 14px 34px rgba(28, 82, 94, .3),
-    0 0 0 10px rgba(255, 255, 255, .42);
-  transition: opacity .35s ease, transform .35s ease, visibility .35s ease;
-  animation: cloneCallout 1.6s ease-in-out infinite;
+.gestation-action {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-inline: 10px;
+  font-size: 0.9em;
+  border: solid 2px var(--mint);
 }
 
-.gestation-start-button.hidden,
-.gestation-birth-button {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translate(-50%, -42%) scale(.85);
-  animation: none
+.gestation-action:disabled {
+  background: #ccc;
+  color: #444;
+  cursor: default;
+  box-shadow: none;
 }
 
-.gestation-start-button:hover,
-.gestation-birth-button:hover {
-  transform: translate(-50%, -50%);
-  box-shadow:
-    0 17px 38px rgba(28, 82, 94, .34),
-    0 0 0 12px rgba(255, 255, 255, .3)
-}
-
-.gestation-start-button:active,
-.gestation-birth-button:active {
-  transform: translate(-50%, -50%) scale(.98)
+.gestation-action[data-state="processing"] .close-micro-spinner {
+  display: block;
+  flex: 0 0 auto;
 }
 
 .gestation-mother {
@@ -2945,12 +2941,8 @@ button:focus-visible,
   font-weight: 750
 }
 
-.gestation-calendar.turning .calendar-face {
-  animation: calendarNumberReveal .52s cubic-bezier(.3, .02, .2, 1)
-}
-
-.gestation-calendar.turning .calendar-sheet:nth-child(3) {
-  animation: calendarSheetPeel .52s cubic-bezier(.35, .02, .22, 1)
+.gestation-calendar.turning strong {
+  animation: calendarNumberReveal .32s ease-out;
 }
 
 .gestation-progress {
@@ -3032,35 +3024,6 @@ button:focus-visible,
   font-size: 1rem
 }
 
-.gestation-birth-button {
-  top: auto;
-  bottom: clamp(6px, 2vh, 24px);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateX(-50%) scale(.85);
-}
-
-.gestation-birth-button:disabled {
-  opacity: .42;
-  cursor: not-allowed;
-  filter: grayscale(.6)
-}
-
-.gestation-overlay.birth-ready .gestation-birth-button:not(:disabled) {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateX(-50%);
-  animation: cloneCallout 1.5s ease-in-out infinite
-}
-
-.gestation-overlay.completed .gestation-birth-button {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none
-}
-
 .gestation-newborn {
   position: absolute;
   z-index: 8;
@@ -3085,56 +3048,6 @@ button:focus-visible,
 
 .gestation-overlay.completed .gestation-newborn {
   animation: gestationNewbornReveal 1s cubic-bezier(.2, 1.25, .35, 1) forwards
-}
-
-.gestation-complete-message {
-  position: absolute;
-  z-index: 16;
-  left: 50%;
-  top: 40%;
-  width: min(560px, calc(100% - 36px));
-  transform: translate(-50%, 18px);
-  max-height: 0;
-  margin-top: 0;
-  padding: 0 14px;
-  overflow: hidden;
-  display: grid;
-  gap: 20px;
-  border: 1px solid transparent;
-  border-radius: 14px;
-  opacity: 0;
-  transition:
-    max-height .55s ease,
-    padding .55s ease,
-    border-color .35s ease,
-    background-color .35s ease,
-    opacity .45s ease,
-    transform .55s cubic-bezier(.22, 1, .36, 1);
-  text-align: center;
-  will-change: opacity, transform;
-}
-
-.gestation-complete-message.visible {
-  max-height: 400px;
-  margin-top: 0;
-  padding: 16px 20px;
-  border-color: #e7f6f1;
-  background: rgb(13 27 25 / 83%);
-  color: #ffffff;
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-.gestation-complete-message span {
-  font-size: .72rem;
-  line-height: 1.45
-}
-
-.gestation-complete-message .icon-button {
-  width: fit-content;
-  min-width: 150px;
-  justify-self: center;
-  justify-content: center
 }
 
 @keyframes gestationTargetPulse {
@@ -3371,36 +3284,12 @@ button:focus-visible,
 }
 
 @keyframes calendarNumberReveal {
-  0% {
-    transform: rotateX(-72deg);
-    opacity: .25
+  from {
+    opacity: .68;
   }
 
-  58% {
-    transform: rotateX(8deg);
-    opacity: 1
-  }
-
-  100% {
-    transform: rotateX(0);
-    opacity: 1
-  }
-}
-
-@keyframes calendarSheetPeel {
-  0% {
+  to {
     opacity: 1;
-    transform: rotateX(0) translateY(0)
-  }
-
-  68% {
-    opacity: .92;
-    transform: rotateX(-112deg) translateY(5px)
-  }
-
-  100% {
-    opacity: 0;
-    transform: rotateX(-168deg) translateY(18px)
   }
 }
 
@@ -3484,12 +3373,6 @@ button:focus-visible,
     height: calc(50% + 13px)
   }
 
-  .gestation-start-button,
-  .gestation-birth-button {
-    min-width: 190px;
-    min-height: 52px
-  }
-
   .gestation-newborn {
     width: 68%
   }
@@ -3561,6 +3444,10 @@ dialog form {
   justify-content: center;
   gap: 10px;
   margin-top: 22px
+}
+
+dialog h2 {
+  line-height: 1.4 !important;
 }
 
 @keyframes nav-active-glow {
@@ -4500,20 +4387,35 @@ dialog form {
     margin-left: 3px
   }
 
-  .instruction-panel .previous-step-button {
+  .instruction-actions {
     grid-column: 3;
     grid-row: 1;
     align-self: center;
+    margin: 0;
+  }
+
+  .instruction-actions .icon-button {
     width: 40px;
     min-width: 40px;
     min-height: 42px;
-    margin: 0;
     padding: 0;
-    pointer-events: auto
+    pointer-events: auto;
   }
 
-  .instruction-panel .previous-step-button .button-word {
-    display: none
+  .instruction-actions .button-word {
+    display: none;
+  }
+
+  .instruction-panel.simulation-complete {
+    width: min(380px, 72vw);
+    max-height: none;
+    grid-template-columns: 36px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .simulation-complete .instruction-actions {
+    grid-column: 2;
+    grid-row: 2;
   }
 
   .lab-frame {
@@ -4844,6 +4746,10 @@ dialog form {
   }
 
   .gestation-tools {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    align-items: start;
     max-height: none;
     padding: 7px;
     gap: 5px;
@@ -4893,58 +4799,16 @@ dialog form {
     height: calc(50% + 6px)
   }
 
-  .gestation-start-button,
-  .gestation-birth-button {
-    min-width: 168px;
+  .gestation-action {
+    grid-column: 1 / -1;
     min-height: 42px;
-    padding-inline: 13px;
-    font-size: .75rem;
-    box-shadow:
-      0 8px 18px rgba(28, 82, 94, .3),
-      0 0 0 5px rgba(255, 255, 255, .3)
+    font-size: .72rem;
   }
 
   .gestation-newborn {
     right: -4%;
     bottom: 2%;
     width: 45%
-  }
-
-  .gestation-complete-message {
-    top: 50%;
-    width: min(340px, calc(100% - 12px));
-    transform: translate(-50%, calc(-50% + 10px))
-  }
-
-  .gestation-complete-message.visible {
-    max-height: calc(100% - 14px);
-    padding: 9px 12px;
-    gap: 7px;
-    background: rgba(8, 28, 34, .94);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transform: translate(-50%, -50%)
-  }
-
-  .gestation-complete-message strong {
-    font-size: .9rem;
-    line-height: 1.15
-  }
-
-  .gestation-complete-message small {
-    font-size: .61rem;
-    line-height: 1.3
-  }
-
-  .gestation-complete-message .icon-button {
-    min-width: 128px;
-    min-height: 38px;
-    padding-inline: 12px;
-    font-size: .66rem
-  }
-
-  .gestation-complete-message .button-word {
-    display: inline
   }
 
   .toast {

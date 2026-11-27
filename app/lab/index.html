@@ -77,11 +77,17 @@
         <p id="instruction-text">Descubre cómo el núcleo de una célula puede dirigir la formación de un nuevo
           organismo.</p>
       </div>
-      <button class="icon-button previous-step-button" id="previous-step-button" type="button"
-        aria-label="Volver al paso anterior" disabled>
-        <span aria-hidden="true"><img src="app/img/back.svg" alt=""></span><span
-          class="button-word">Anterior</span>
-      </button>
+      <div class="instruction-actions">
+        <button class="icon-button previous-step-button" id="previous-step-button" type="button"
+          aria-label="Volver al paso anterior" disabled>
+          <span aria-hidden="true"><img src="app/img/back.svg" alt=""></span><span
+            class="button-word">Anterior</span>
+        </button>
+        <button class="icon-button" id="instruction-reset-button" type="button" aria-label="Reiniciar simulación"
+          title="Reiniciar" hidden>
+          <span aria-hidden="true"><img src="app/img/restart.svg" alt=""></span><span class="button-word">Reiniciar</span>
+        </button>
+      </div>
     </aside>
 
     <section class="lab-frame" id="lab-frame" aria-label="Laboratorio interactivo">
@@ -338,14 +344,6 @@
 
     <div class="gestation-layout">
       <section class="gestation-stage" aria-label="Vista ampliada de la madre sustituta">
-        <button class="primary-button gestation-start-button" id="gestation-start-button" type="button">
-          Visualizar gestación
-        </button>
-
-        <button class="primary-button gestation-birth-button" id="gestation-birth-button" type="button" disabled>
-          Revelar el nacimiento
-        </button>
-
         <div class="gestation-mother" aria-label="Madre sustituta durante la gestación">
           <img class="gestation-mother-image hand-drawn-filter" src="app/img/raton-blanco.png"
             alt="Madre sustituta blanca">
@@ -369,18 +367,14 @@
           </div>
         </div>
 
-        <div class="gestation-complete-message" id="gestation-complete-message" role="status" aria-live="polite">
-          <strong>¡Simulación completada!</strong>
-          <small>Has completado la simulación de clonación de un ratón. Puedes reiniciarlo para repetir el
-            procedimiento.</small>
-          <button class="icon-button" id="gestation-complete-button" type="button" aria-label="Reiniciar simulación"
-            title="Reiniciar">
-            <span aria-hidden="true"><img src="app/img/restart.svg" alt="Reiniciar"></span><span class="button-word">Reiniciar</span>
-          </button>
-        </div>
       </section>
 
       <aside class="gestation-tools" aria-label="Progreso y calendario de gestación">
+        <button class="primary-button gestation-action" id="gestation-action" type="button">
+          <span class="close-micro-spinner" aria-hidden="true"></span>
+          <span id="gestation-action-label">Visualizar gestación</span>
+        </button>
+
         <div class="gestation-calendar" aria-label="Días transcurridos de gestación">
           <div class="calendar-pages">
             <i class="calendar-sheet" aria-hidden="true"></i>
